@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Nuevo paciente{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-lg">
+      <div class="card-body">
+        <h3 class="text-center mb-4">Registrar paciente</h3>
+
+        <form method="POST">
+          {{ form.hidden_tag() }}
+
+          <div class="mb-3">
+            {{ form.nombre.label(class="form-label") }}
+            {{ form.nombre(class="form-control") }}
+          </div>
+
+          <div class="mb-3">
+            {{ form.edad.label(class="form-label") }}
+            {{ form.edad(class="form-control") }}
+          </div>
+
+          <div class="mb-3">
+            {{ form.genero.label(class="form-label") }}
+            {{ form.genero(class="form-select") }}
+          </div>
+
+          <div class="d-grid">
+            {{ form.submit(class="btn btn-success") }}
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

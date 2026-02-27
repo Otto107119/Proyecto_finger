@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% if current_user.rol == "admin" %}
+    <div class="alert alert-danger mt-3">
+        Acceso total al sistema.
+    </div>
+
+    <a href="{{ url_for('main.crear_usuario') }}" class="btn btn-danger mt-2">
+        Crear Nuevo Usuario
+    </a>
+{% endif %}
+
+
+{% block content %}
+<div class="text-center">
+    <h2 class="mb-4">Panel Principal</h2>
+
+    <div class="card shadow p-4">
+        <h4>Bienvenido {{ current_user.nombre }} 👋</h4>
+        <p>Rol: <strong>{{ current_user.rol }}</strong></p>
+
+        {% if current_user.rol == "admin" %}
+            <div class="alert alert-danger mt-3">
+                Acceso total al sistema.
+            </div>
+        {% elif current_user.rol == "medico" %}
+            <div class="alert alert-primary mt-3">
+                Acceso a evaluaciones médicas.
+            </div>
+        {% elif current_user.rol == "capturista" %}
+            <div class="alert alert-success mt-3">
+                Acceso a captura de datos.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
