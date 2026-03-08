@@ -33,9 +33,9 @@ def registro():
     if form.validate_on_submit():
         hashed_password = generate_password_hash(form.password.data)
         nuevo_usuario = Usuario(
-             nombre=form.nombre.data,
-             correo=form.correo.data,
-             password=hashed_password,
+            nombre=form.nombre.data,
+            correo=form.correo.data,
+            password=hashed_password,
             rol="capturista"
             )
         db.session.add(nuevo_usuario)
@@ -178,4 +178,8 @@ def actividad_fisica_eliminar(actividad_id):
     db.session.commit()
     flash("Actividad eliminada 🗑️")
     return redirect(url_for("main.actividad_fisica_lista", paciente_id=paciente_id))
+
+@main.route('/paciente')
+def paciente():
+    return render_template('paciente.html')
 
