@@ -1,66 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expediente del Paciente</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 30px;
-            background-color: #f4f6f9;
-        }
-
-        h1 {
-            color: #1f3c88;
-        }
-
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            padding: 12px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .tab:hover {
-            background-color: #e8f0fe;
-        }
-
-        .contenido {
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 20px;
-            min-height: 150px;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>Expediente del Paciente - Prueba Render</h1>
-
-    <div class="tabs">
-        <div class="tab">Actividad Física</div>
-        <div class="tab">Actividad Cognitiva</div>
-        <div class="tab">Actividad Nutricional</div>
-        <div class="tab">Actividad Médica</div>
-        <div class="tab">Actividad Social</div>
-        <div class="tab">Historial Clínico</div>
-    </div>
-
-    <div class="contenido">
-        <h2>Bienvenido al expediente</h2>
-        <p>Aquí aparecerá la información correspondiente al área seleccionada del paciente.</p>
-    </div>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <div class="alert alert-info">
+    Vista no utilizada actualmente.
+  </div>
+</div>
+{% endblock %}

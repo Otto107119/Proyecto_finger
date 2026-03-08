@@ -178,8 +178,3 @@ def actividad_fisica_eliminar(actividad_id):
     db.session.commit()
     flash("Actividad eliminada 🗑️")
     return redirect(url_for("main.actividad_fisica_lista", paciente_id=paciente_id))
-
-@main.route('/paciente')
-def paciente():
-    return render_template('paciente.html')
-

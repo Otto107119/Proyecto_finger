@@ -1,25 +1,55 @@
 {% extends "base.html" %}
 {% block title %}Detalle paciente{% endblock %}
 
-<td>{{ p.usuario.nombre }}</td>
-
 {% block content %}
-<div class="card shadow-sm">
-  <div class="card-body">
-    <h3 class="mb-3">{{ paciente.nombre }}</h3>
-    <p class="mb-1"><strong>Edad:</strong> {{ paciente.edad }}</p>
-    <p class="mb-1"><strong>Género:</strong> {{ paciente.genero }}</p>
-    <p class="mb-3"><strong>Registrado por:</strong> {{ paciente.usuario.nombre }}</p>
-    <p class="mb-3"><strong>Registrado:</strong>
-    
-      {{ paciente.fecha_registro.strftime("%Y-%m-%d %H:%M") if paciente.fecha_registro else "" }}
-    </p>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-body">
 
-    <a class="btn btn-secondary" href="{{ url_for('main.pacientes_lista') }}">Volver</a>
-    <a class="btn btn-primary me-2" href="{{ url_for('main.actividad_fisica_lista', paciente_id=paciente.id) }}">
-  
-  Actividad física
-  </a>  
+      <h3 class="mb-3">{{ paciente.nombre }}</h3>
+
+      <p class="mb-1"><strong>Edad:</strong> {{ paciente.edad }}</p>
+      <p class="mb-1"><strong>Género:</strong> {{ paciente.genero }}</p>
+      <p class="mb-1"><strong>Registrado por:</strong> {{ paciente.usuario.nombre }}</p>
+      <p class="mb-3">
+        <strong>Registrado:</strong>
+        {{ paciente.fecha_registro.strftime("%Y-%m-%d %H:%M") if paciente.fecha_registro else "" }}
+      </p>
+
+      <div class="d-flex flex-wrap gap-2 mt-3">
+
+        <a class="btn btn-secondary" href="{{ url_for('main.pacientes_lista') }}">
+          Volver
+        </a>
+
+        <a class="btn btn-primary"
+           href="{{ url_for('main.actividad_fisica_lista', paciente_id=paciente.id) }}">
+          Actividad física
+        </a>
+
+        <button class="btn btn-outline-primary" disabled>
+          Actividad cognitiva
+        </button>
+
+        <button class="btn btn-outline-primary" disabled>
+          Actividad nutricional
+        </button>
+
+        <button class="btn btn-outline-primary" disabled>
+          Actividad médica
+        </button>
+
+        <button class="btn btn-outline-primary" disabled>
+          Actividad social
+        </button>
+
+        <button class="btn btn-outline-primary" disabled>
+          Historial clínico
+        </button>
+
+      </div>
+
+    </div>
   </div>
 </div>
 {% endblock %}
