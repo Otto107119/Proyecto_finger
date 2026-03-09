@@ -183,7 +183,7 @@ def actividad_fisica_eliminar(actividad_id):
 @login_required
 def historial_clinico_lista(paciente_id):
     paciente = Paciente.query.get_or_404(paciente_id)
-    historiales = HistorialClinico.query.filter_by(paciente_id=paciente_id).order_by(HistorialClinico.fecha.desc()).all()
+    historiales = HistorialClinico.query.filter_by(paciente_id=paciente_id).order_by(HistorialClinico.fecha_registro.desc()).all()
     return render_template("historial_clinico_lista.html", paciente=paciente, historiales=historiales)
 
 @main.route("/pacientes/<int:paciente_id>/historial_clinico/nuevo", methods=["GET", "POST"])
@@ -194,13 +194,53 @@ def historial_clinico_nuevo(paciente_id):
 
     if form.validate_on_submit():
         nuevo = HistorialClinico(
-            motivo_consulta=form.motivo_consulta.data,
-            antecedentes_personales=form.antecedentes_personales.data,
-            antecedentes_familiares=form.antecedentes_familiares.data,
-            padecimientos_actuales=form.padecimientos_actuales.data,
-            medicamentos=form.medicamentos.data,
-            alergias=form.alergias.data,
-            observaciones=form.observaciones.data,
+            fecha_formulario=form.fecha_formulario.data,
+            fecha_nacimiento=form.fecha_nacimiento.data,
+            estado_civil=form.estado_civil.data,
+            numero_contacto=form.numero_contacto.data,
+            domicilio=form.domicilio.data,
+            grado_escolaridad=form.grado_escolaridad.data,
+            familiar_confianza_nombre=form.familiar_confianza_nombre.data,
+            familiar_confianza_telefono=form.familiar_confianza_telefono.data,
+            expectativas_participacion=form.expectativas_participacion.data,
+
+            padece_enfermedad_actual=form.padece_enfermedad_actual.data,
+            enfermedad_actual_detalle=form.enfermedad_actual_detalle.data,
+
+            consume_medicamentos=form.consume_medicamentos.data,
+            medicamentos_detalle=form.medicamentos_detalle.data,
+
+            cirugias_previas=form.cirugias_previas.data,
+            cirugias_detalle=form.cirugias_detalle.data,
+
+            problemas_vision=form.problemas_vision.data,
+            problemas_audicion=form.problemas_audicion.data,
+
+            impedimento_actividad_fisica=form.impedimento_actividad_fisica.data,
+            impedimento_detalle=form.impedimento_detalle.data,
+
+            usa_dispositivo_apoyo=form.usa_dispositivo_apoyo.data,
+            dispositivo_apoyo_detalle=form.dispositivo_apoyo_detalle.data,
+
+            situacion_laboral_actual=form.situacion_laboral_actual.data,
+            ocupacion_profesion_anterior=form.ocupacion_profesion_anterior.data,
+            fuente_principal_ingresos=form.fuente_principal_ingresos.data,
+            situacion_economica_actual=form.situacion_economica_actual.data,
+
+            cuenta_seguro_salud=form.cuenta_seguro_salud.data,
+            recibe_ayuda_economica=form.recibe_ayuda_economica.data,
+
+            tipo_vivienda=form.tipo_vivienda.data,
+            condicion_vivienda=form.condicion_vivienda.data,
+            personas_hogar=form.personas_hogar.data,
+            rol_hogar=form.rol_hogar.data,
+
+            participa_actividades_sociales=form.participa_actividades_sociales.data,
+            frecuencia_actividad_fisica=form.frecuencia_actividad_fisica.data,
+            situacion_sociodemografica_adicional=form.situacion_sociodemografica_adicional.data,
+
+            observaciones_entrevista=form.observaciones_entrevista.data,
+
             paciente_id=paciente.id,
             usuario_id=current_user.id
         )
@@ -211,6 +251,7 @@ def historial_clinico_nuevo(paciente_id):
 
     return render_template("historial_clinico_nuevo.html", paciente=paciente, form=form)
 
+
 @main.route("/historial_clinico/<int:historial_id>/editar", methods=["GET", "POST"])
 @role_required("admin", "gerontologia")
 def historial_clinico_editar(historial_id):
@@ -218,16 +259,70 @@ def historial_clinico_editar(historial_id):
     form = HistorialClinicoForm(obj=historial)
 
     if form.validate_on_submit():
-        historial.motivo_consulta = form.motivo_consulta.data
-        historial.antecedentes_personales = form.antecedentes_personales.data
-        historial.antecedentes_familiares = form.antecedentes_familiares.data
-        historial.padecimientos_actuales = form.padecimientos_actuales.data
-        historial.medicamentos = form.medicamentos.data
-        historial.alergias = form.alergias.data
-        historial.observaciones = form.observaciones.data
+        historial.fecha_formulario = form.fecha_formulario.data
+        historial.fecha_nacimiento = form.fecha_nacimiento.data
+        historial.estado_civil = form.estado_civil.data
+        historial.numero_contacto = form.numero_contacto.data
+        historial.domicilio = form.domicilio.data
+        historial.grado_escolaridad = form.grado_escolaridad.data
+        historial.familiar_confianza_nombre = form.familiar_confianza_nombre.data
+        historial.familiar_confianza_telefono = form.familiar_confianza_telefono.data
+        historial.expectativas_participacion = form.expectativas_participacion.data
+
+        historial.padece_enfermedad_actual = form.padece_enfermedad_actual.data
+        historial.enfermedad_actual_detalle = form.enfermedad_actual_detalle.data
+
+        historial.consume_medicamentos = form.consume_medicamentos.data
+        historial.medicamentos_detalle = form.medicamentos_detalle.data
+
+        historial.cirugias_previas = form.cirugias_previas.data
+        historial.cirugias_detalle = form.cirugias_detalle.data
+
+        historial.problemas_vision = form.problemas_vision.data
+        historial.problemas_audicion = form.problemas_audicion.data
+
+        historial.impedimento_actividad_fisica = form.impedimento_actividad_fisica.data
+        historial.impedimento_detalle = form.impedimento_detalle.data
+
+        historial.usa_dispositivo_apoyo = form.usa_dispositivo_apoyo.data
+        historial.dispositivo_apoyo_detalle = form.dispositivo_apoyo_detalle.data
+
+        historial.situacion_laboral_actual = form.situacion_laboral_actual.data
+        historial.ocupacion_profesion_anterior = form.ocupacion_profesion_anterior.data
+        historial.fuente_principal_ingresos = form.fuente_principal_ingresos.data
+        historial.situacion_economica_actual = form.situacion_economica_actual.data
+
+        historial.cuenta_seguro_salud = form.cuenta_seguro_salud.data
+        historial.recibe_ayuda_economica = form.recibe_ayuda_economica.data
+
+        historial.tipo_vivienda = form.tipo_vivienda.data
+        historial.condicion_vivienda = form.condicion_vivienda.data
+        historial.personas_hogar = form.personas_hogar.data
+        historial.rol_hogar = form.rol_hogar.data
+
+        historial.participa_actividades_sociales = form.participa_actividades_sociales.data
+        historial.frecuencia_actividad_fisica = form.frecuencia_actividad_fisica.data
+        historial.situacion_sociodemografica_adicional = form.situacion_sociodemografica_adicional.data
+
+        historial.observaciones_entrevista = form.observaciones_entrevista.data
 
         db.session.commit()
         flash("Historial clínico actualizado correctamente ✅")
         return redirect(url_for("main.historial_clinico_lista", paciente_id=historial.paciente_id))
 
     return render_template("historial_clinico_editar.html", form=form, historial=historial)
+
+
+@main.route("/historial_clinico/<int:historial_id>/eliminar", methods=["POST"])
+@role_required("admin")
+def historial_clinico_eliminar(historial_id):
+
+    historial = HistorialClinico.query.get_or_404(historial_id)
+    paciente_id = historial.paciente_id
+
+    db.session.delete(historial)
+    db.session.commit()
+
+    flash("Historial clínico eliminado correctamente 🗑️")
+
+    return redirect(url_for("main.historial_clinico_lista", paciente_id=paciente_id))

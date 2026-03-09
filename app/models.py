@@ -97,16 +97,60 @@ class ActividadSocial(db.Model):
 
 class HistorialClinico(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fecha = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+    fecha_registro = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
-    motivo_consulta = db.Column(db.String(300))
-    antecedentes_personales = db.Column(db.Text)
-    antecedentes_familiares = db.Column(db.Text)
-    padecimientos_actuales = db.Column(db.Text)
-    medicamentos = db.Column(db.Text)
-    alergias = db.Column(db.Text)
-    observaciones = db.Column(db.Text)
+    # ===== DATOS GENERALES =====
+    fecha_formulario = db.Column(db.Date)
+    fecha_nacimiento = db.Column(db.Date)
+    estado_civil = db.Column(db.String(30))
+    numero_contacto = db.Column(db.String(20))
+    domicilio = db.Column(db.String(250))
+    grado_escolaridad = db.Column(db.String(50))
+    familiar_confianza_nombre = db.Column(db.String(120))
+    familiar_confianza_telefono = db.Column(db.String(20))
+    expectativas_participacion = db.Column(db.Text)
 
+    # ===== ANTECEDENTES PERSONALES PATOLÓGICOS =====
+    padece_enfermedad_actual = db.Column(db.Boolean, default=False)
+    enfermedad_actual_detalle = db.Column(db.Text)
+
+    consume_medicamentos = db.Column(db.Boolean, default=False)
+    medicamentos_detalle = db.Column(db.Text)
+
+    cirugias_previas = db.Column(db.Boolean, default=False)
+    cirugias_detalle = db.Column(db.Text)
+
+    problemas_vision = db.Column(db.Boolean, default=False)
+    problemas_audicion = db.Column(db.Boolean, default=False)
+
+    impedimento_actividad_fisica = db.Column(db.Boolean, default=False)
+    impedimento_detalle = db.Column(db.Text)
+
+    usa_dispositivo_apoyo = db.Column(db.Boolean, default=False)
+    dispositivo_apoyo_detalle = db.Column(db.Text)
+
+    # ===== SOCIODEMOGRÁFICO =====
+    situacion_laboral_actual = db.Column(db.String(50))
+    ocupacion_profesion_anterior = db.Column(db.String(120))
+    fuente_principal_ingresos = db.Column(db.String(80))
+    situacion_economica_actual = db.Column(db.String(50))
+
+    cuenta_seguro_salud = db.Column(db.Boolean, default=False)
+    recibe_ayuda_economica = db.Column(db.Boolean, default=False)
+
+    tipo_vivienda = db.Column(db.String(50))
+    condicion_vivienda = db.Column(db.String(50))
+    personas_hogar = db.Column(db.Integer)
+    rol_hogar = db.Column(db.String(80))
+
+    participa_actividades_sociales = db.Column(db.Boolean, default=False)
+    frecuencia_actividad_fisica = db.Column(db.String(50))
+    situacion_sociodemografica_adicional = db.Column(db.Text)
+
+    # ===== OBSERVACIONES =====
+    observaciones_entrevista = db.Column(db.Text)
+
+    # ===== RELACIONES =====
     paciente_id = db.Column(db.Integer, db.ForeignKey("paciente.id"), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
 

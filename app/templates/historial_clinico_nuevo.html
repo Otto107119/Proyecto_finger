@@ -3,52 +3,65 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="card shadow-sm">
-    <div class="card-body">
-        <h3 class="mb-3">Nuevo historial clínico para {{ paciente.nombre }}</h3>
 
-        <form method="POST">
-        {{ form.hidden_tag() }}
+<h2>Nuevo historial clínico de {{ paciente.nombre }}</h2>
 
-        <div class="mb-3">
-            {{ form.motivo_consulta.label(class="form-label") }}
-            {{ form.motivo_consulta(class="form-control") }}
-        </div>
+<form method="POST">
+{{ form.hidden_tag() }}
 
-        <div class="mb-3">
-            {{ form.antecedentes_personales.label(class="form-label") }}
-            {{ form.antecedentes_personales(class="form-control", rows="3") }}
-        </div>
+<div class="card mt-3">
+<div class="card-header">
+Datos generales
+</div>
+<div class="card-body">
 
-        <div class="mb-3">
-            {{ form.antecedentes_familiares.label(class="form-label") }}
-            {{ form.antecedentes_familiares(class="form-control", rows="3") }}
-        </div>
+<div class="mb-3">
+{{ form.fecha_formulario.label(class="form-label") }}
+{{ form.fecha_formulario(class="form-control") }}
+</div>
 
-        <div class="mb-3">
-            {{ form.padecimientos_actuales.label(class="form-label") }}
-            {{ form.padecimientos_actuales(class="form-control", rows="3") }}
-        </div>
+<div class="mb-3">
+{{ form.fecha_nacimiento.label(class="form-label") }}
+{{ form.fecha_nacimiento(class="form-control") }}
+</div>
 
-        <div class="mb-3">
-            {{ form.medicamentos.label(class="form-label") }}
-            {{ form.medicamentos(class="form-control", rows="3") }}
-        </div>
+<div class="mb-3">
+{{ form.estado_civil.label(class="form-label") }}
+{{ form.estado_civil(class="form-select") }}
+</div>
 
-        <div class="mb-3">
-            {{ form.alergias.label(class="form-label") }}
-            {{ form.alergias(class="form-control", rows="3") }}
-        </div>
+<div class="mb-3">
+{{ form.numero_contacto.label(class="form-label") }}
+{{ form.numero_contacto(class="form-control") }}
+</div>
 
-        <div class="mb-3">
-            {{ form.observaciones.label(class="form-label") }}
-            {{ form.observaciones(class="form-control", rows="3") }}
-        </div>
+</div>
+</div>
 
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a href="{{ url_for('main.historial_clinico_lista', paciente_id=paciente.id) }}" class="btn btn-secondary">Cancelar</a>
-        </form>
-    </div>
-    </div>
+<div class="card mt-3">
+<div class="card-header">
+Red de apoyo
+</div>
+<div class="card-body">
+
+<div class="mb-3">
+{{ form.familiar_confianza_nombre.label(class="form-label") }}
+{{ form.familiar_confianza_nombre(class="form-control") }}
+</div>
+
+<div class="mb-3">
+{{ form.familiar_confianza_telefono.label(class="form-label") }}
+{{ form.familiar_confianza_telefono(class="form-control") }}
+</div>
+
+</div>
+</div>
+
+<button type="submit" class="btn btn-success mt-4">
+Guardar historial clínico
+</button>
+
+</form>
+
 </div>
 {% endblock %}

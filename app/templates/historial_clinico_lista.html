@@ -7,37 +7,88 @@
     <div class="card-body">
         <h3 class="mb-3">Historial clínico de {{ paciente.nombre }}</h3>
 
-    <a class="btn btn-secondary mb-3"
-        href="{{ url_for('main.pacientes_detalle', paciente_id=paciente.id) }}">
-        Volver al expediente
-    </a>
+        <a class="btn btn-secondary mb-3"
+            href="{{ url_for('main.pacientes_detalle', paciente_id=paciente.id) }}">
+            Volver al expediente
+        </a>
 
-    {% if current_user.rol in ['admin', 'gerontologia'] %}
-    <a class="btn btn-success mb-3"
-        href="{{ url_for('main.historial_clinico_nuevo', paciente_id=paciente.id) }}">
-        Nuevo historial clínico
-    </a>
-    {% endif %}
+        {% if current_user.rol in ['admin', 'gerontologia'] %}
+        <a class="btn btn-success mb-3"
+            href="{{ url_for('main.historial_clinico_nuevo', paciente_id=paciente.id) }}">
+            Nuevo historial clínico
+        </a>
+        {% endif %}
 
-    {% if historiales %}
+        {% if historiales %}
         {% for historial in historiales %}
         <div class="card mb-3 border">
-        <div class="card-body">
-            <p><strong>Fecha:</strong> {{ historial.fecha.strftime("%Y-%m-%d %H:%M") }}</p>
-            <p><strong>Motivo de consulta:</strong> {{ historial.motivo_consulta }}</p>
-            <p><strong>Antecedentes personales:</strong> {{ historial.antecedentes_personales }}</p>
-            <p><strong>Antecedentes familiares:</strong> {{ historial.antecedentes_familiares }}</p>
-            <p><strong>Padecimientos actuales:</strong> {{ historial.padecimientos_actuales }}</p>
-            <p><strong>Medicamentos:</strong> {{ historial.medicamentos }}</p>
-            <p><strong>Alergias:</strong> {{ historial.alergias }}</p>
-            <p><strong>Observaciones:</strong> {{ historial.observaciones }}</p>
+            <div class="card-body">
+            <p><strong>Fecha de registro:</strong> {{ historial.fecha_registro.strftime("%Y-%m-%d %H:%M") }}</p>
+            <p><strong>Fecha del formulario:</strong> {{ historial.fecha_formulario or '' }}</p>
+            <p><strong>Fecha de nacimiento:</strong> {{ historial.fecha_nacimiento or '' }}</p>
+            <p><strong>Estado civil:</strong> {{ historial.estado_civil or '' }}</p>
+            <p><strong>Número de contacto:</strong> {{ historial.numero_contacto or '' }}</p>
+            <p><strong>Domicilio:</strong> {{ historial.domicilio or '' }}</p>
+            <p><strong>Grado de escolaridad:</strong> {{ historial.grado_escolaridad or '' }}</p>
+            <p><strong>Familiar de confianza:</strong> {{ historial.familiar_confianza_nombre or '' }}</p>
+            <p><strong>Teléfono del familiar:</strong> {{ historial.familiar_confianza_telefono or '' }}</p>
+            <p><strong>Expectativas de participación:</strong> {{ historial.expectativas_participacion or '' }}</p>
+
+            <hr>
+
+            <p><strong>¿Padece enfermedad actual?:</strong> {{ "Sí" if historial.padece_enfermedad_actual else "No" }}</p>
+            <p><strong>Detalle enfermedad:</strong> {{ historial.enfermedad_actual_detalle or '' }}</p>
+            <p><strong>¿Consume medicamentos?:</strong> {{ "Sí" if historial.consume_medicamentos else "No" }}</p>
+            <p><strong>Detalle medicamentos:</strong> {{ historial.medicamentos_detalle or '' }}</p>
+            <p><strong>¿Cirugías previas?:</strong> {{ "Sí" if historial.cirugias_previas else "No" }}</p>
+            <p><strong>Detalle cirugías:</strong> {{ historial.cirugias_detalle or '' }}</p>
+            <p><strong>Problemas de visión:</strong> {{ "Sí" if historial.problemas_vision else "No" }}</p>
+            <p><strong>Problemas de audición:</strong> {{ "Sí" if historial.problemas_audicion else "No" }}</p>
+            <p><strong>¿Impedimento para actividad física?:</strong> {{ "Sí" if historial.impedimento_actividad_fisica else "No" }}</p>
+            <p><strong>Detalle impedimento:</strong> {{ historial.impedimento_detalle or '' }}</p>
+            <p><strong>¿Usa dispositivo de apoyo?:</strong> {{ "Sí" if historial.usa_dispositivo_apoyo else "No" }}</p>
+            <p><strong>Detalle dispositivo:</strong> {{ historial.dispositivo_apoyo_detalle or '' }}</p>
+
+            <hr>
+
+            <p><strong>Situación laboral actual:</strong> {{ historial.situacion_laboral_actual or '' }}</p>
+            <p><strong>Ocupación o profesión anterior:</strong> {{ historial.ocupacion_profesion_anterior or '' }}</p>
+            <p><strong>Fuente principal de ingresos:</strong> {{ historial.fuente_principal_ingresos or '' }}</p>
+            <p><strong>Situación económica actual:</strong> {{ historial.situacion_economica_actual or '' }}</p>
+            <p><strong>¿Cuenta con seguro de salud?:</strong> {{ "Sí" if historial.cuenta_seguro_salud else "No" }}</p>
+            <p><strong>¿Recibe ayuda económica?:</strong> {{ "Sí" if historial.recibe_ayuda_economica else "No" }}</p>
+            <p><strong>Tipo de vivienda:</strong> {{ historial.tipo_vivienda or '' }}</p>
+            <p><strong>Condición de vivienda:</strong> {{ historial.condicion_vivienda or '' }}</p>
+            <p><strong>Personas en el hogar:</strong> {{ historial.personas_hogar or '' }}</p>
+            <p><strong>Rol en el hogar:</strong> {{ historial.rol_hogar or '' }}</p>
+            <p><strong>¿Participa en actividades sociales?:</strong> {{ "Sí" if historial.participa_actividades_sociales else "No" }}</p>
+            <p><strong>Frecuencia de actividad física:</strong> {{ historial.frecuencia_actividad_fisica or '' }}</p>
+            <p><strong>Situación sociodemográfica adicional:</strong> {{ historial.situacion_sociodemografica_adicional or '' }}</p>
+
+            <hr>
+
+            <p><strong>Observaciones de la entrevista:</strong> {{ historial.observaciones_entrevista or '' }}</p>
 
             {% if current_user.rol in ['admin', 'gerontologia'] %}
-            <a class="btn btn-primary btn-sm"
+                <a class="btn btn-primary btn-sm"
                 href="{{ url_for('main.historial_clinico_editar', historial_id=historial.id) }}">
                 Editar
             </a>
             {% endif %}
+
+            {% if current_user.rol == 'admin' %}
+            <form action="{{ url_for('main.historial_clinico_eliminar', historial_id=historial.id) }}"
+                method="POST"
+                style="display:inline;"
+                onsubmit="return confirm('¿Seguro que deseas eliminar este historial clínico?');">
+
+                <button type="submit" class="btn btn-danger btn-sm">
+                Eliminar
+                </button>
+
+            </form>
+            {% endif %}
+
             </div>
         </div>
         {% endfor %}
@@ -46,8 +97,7 @@
             Aún no hay historial clínico registrado para este paciente.
         </div>
         {% endif %}
-
-        </div>
+    </div>
     </div>
 </div>
 {% endblock %}
