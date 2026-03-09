@@ -23,7 +23,7 @@
         </a>
 
         <a class="btn btn-primary"
-           href="{{ url_for('main.actividad_fisica_lista', paciente_id=paciente.id) }}">
+          href="{{ url_for('main.actividad_fisica_lista', paciente_id=paciente.id) }}">
           Actividad física
         </a>
 
@@ -43,9 +43,10 @@
           Actividad social
         </button>
 
-        <button class="btn btn-outline-primary" disabled>
+        <a class="btn btn-primary"
+          href="{{ url_for('main.historial_clinico_lista', paciente_id=paciente.id) }}">
           Historial clínico
-        </button>
+        </a>
 
       </div>
 

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Editar historial clínico{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+    <div class="card-body">
+        <h3 class="mb-3">Editar historial clínico</h3>
+
+        <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.motivo_consulta.label(class="form-label") }}
+            {{ form.motivo_consulta(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.antecedentes_personales.label(class="form-label") }}
+            {{ form.antecedentes_personales(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.antecedentes_familiares.label(class="form-label") }}
+            {{ form.antecedentes_familiares(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.padecimientos_actuales.label(class="form-label") }}
+            {{ form.padecimientos_actuales(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.medicamentos.label(class="form-label") }}
+            {{ form.medicamentos(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.alergias.label(class="form-label") }}
+            {{ form.alergias(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.observaciones.label(class="form-label") }}
+            {{ form.observaciones(class="form-control", rows="3") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+        <a href="{{ url_for('main.historial_clinico_lista', paciente_id=historial.paciente_id) }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

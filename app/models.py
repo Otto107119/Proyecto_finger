@@ -98,10 +98,14 @@ class ActividadSocial(db.Model):
 class HistorialClinico(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fecha = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
-    diagnostico = db.Column(db.String(300), nullable=False)
-    tratamiento = db.Column(db.String(300))
-    medicamentos = db.Column(db.String(300))
-    observaciones = db.Column(db.String(300))
+
+    motivo_consulta = db.Column(db.String(300))
+    antecedentes_personales = db.Column(db.Text)
+    antecedentes_familiares = db.Column(db.Text)
+    padecimientos_actuales = db.Column(db.Text)
+    medicamentos = db.Column(db.Text)
+    alergias = db.Column(db.Text)
+    observaciones = db.Column(db.Text)
 
     paciente_id = db.Column(db.Integer, db.ForeignKey("paciente.id"), nullable=False)
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash
 from app import db
-from app.models import Usuario, Paciente, ActividadFisica
-from app.forms import RegistroForm, LoginForm, PacienteForm, ActividadFisicaForm
+from app.models import Usuario, Paciente, ActividadFisica, HistorialClinico
+from app.forms import RegistroForm, LoginForm, PacienteForm, ActividadFisicaForm, HistorialClinicoForm
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import abort
@@ -178,3 +178,56 @@ def actividad_fisica_eliminar(actividad_id):
     db.session.commit()
     flash("Actividad eliminada 🗑️")
     return redirect(url_for("main.actividad_fisica_lista", paciente_id=paciente_id))
+
+@main.route("/pacientes/<int:paciente_id>/historial_clinico")
+@login_required
+def historial_clinico_lista(paciente_id):
+    paciente = Paciente.query.get_or_404(paciente_id)
+    historiales = HistorialClinico.query.filter_by(paciente_id=paciente_id).order_by(HistorialClinico.fecha.desc()).all()
+    return render_template("historial_clinico_lista.html", paciente=paciente, historiales=historiales)
+
+@main.route("/pacientes/<int:paciente_id>/historial_clinico/nuevo", methods=["GET", "POST"])
+@role_required("admin", "gerontologia")
+def historial_clinico_nuevo(paciente_id):
+    paciente = Paciente.query.get_or_404(paciente_id)
+    form = HistorialClinicoForm()
+
+    if form.validate_on_submit():
+        nuevo = HistorialClinico(
+            motivo_consulta=form.motivo_consulta.data,
+            antecedentes_personales=form.antecedentes_personales.data,
+            antecedentes_familiares=form.antecedentes_familiares.data,
+            padecimientos_actuales=form.padecimientos_actuales.data,
+            medicamentos=form.medicamentos.data,
+            alergias=form.alergias.data,
+            observaciones=form.observaciones.data,
+            paciente_id=paciente.id,
+            usuario_id=current_user.id
+        )
+        db.session.add(nuevo)
+        db.session.commit()
+        flash("Historial clínico registrado correctamente ✅")
+        return redirect(url_for("main.historial_clinico_lista", paciente_id=paciente.id))
+
+    return render_template("historial_clinico_nuevo.html", paciente=paciente, form=form)
+
+@main.route("/historial_clinico/<int:historial_id>/editar", methods=["GET", "POST"])
+@role_required("admin", "gerontologia")
+def historial_clinico_editar(historial_id):
+    historial = HistorialClinico.query.get_or_404(historial_id)
+    form = HistorialClinicoForm(obj=historial)
+
+    if form.validate_on_submit():
+        historial.motivo_consulta = form.motivo_consulta.data
+        historial.antecedentes_personales = form.antecedentes_personales.data
+        historial.antecedentes_familiares = form.antecedentes_familiares.data
+        historial.padecimientos_actuales = form.padecimientos_actuales.data
+        historial.medicamentos = form.medicamentos.data
+        historial.alergias = form.alergias.data
+        historial.observaciones = form.observaciones.data
+
+        db.session.commit()
+        flash("Historial clínico actualizado correctamente ✅")
+        return redirect(url_for("main.historial_clinico_lista", paciente_id=historial.paciente_id))
+
+    return render_template("historial_clinico_editar.html", form=form, historial=historial)
