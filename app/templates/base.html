@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Sistema Cognitivo{% endblock %}</title>
+    <title>{% block title %}LatAm-FINGERS{% endblock %}</title>
 
     <!-- Bootstrap 5 CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +11,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="/">Sistema Cognitivo</a>
+        <a class="navbar-brand" href="#">LatAm-FINGERS</a>
 
         <div>
             {% if current_user.is_authenticated %}
@@ -21,7 +21,7 @@
                 <span class="text-white me-3">Hola, {{ current_user.nombre }}</span>
                 <a href="{{ url_for('main.logout') }}" class="btn btn-light btn-sm">
                 Salir
-                 </a>
+                </a>
             {% else %}
                 <a href="{{ url_for('main.login') }}" class="btn btn-light btn-sm me-2">Login</a>
                 <a href="{{ url_for('main.registro') }}" class="btn btn-warning btn-sm">Registro</a>
