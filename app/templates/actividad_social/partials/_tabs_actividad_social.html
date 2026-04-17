@@ -1,0 +1,31 @@
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a class="btn {% if seccion == 'datos_generales' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='datos_generales') }}">
+        Datos generales
+    </a>
+
+    <a class="btn {% if seccion == 'economia' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='economia') }}">
+        Economía
+    </a>
+
+    <a class="btn {% if seccion == 'padres' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='padres') }}">
+        Padres
+    </a>
+
+    <a class="btn {% if seccion == 'hermanos' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hermanos') }}">
+        Hermanos
+    </a>
+
+    <a class="btn {% if seccion == 'hijos' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hijos') }}">
+        Hijos
+    </a>
+
+    <a class="btn {% if seccion == 'resumen' %}btn-primary{% else %}btn-outline-primary{% endif %}"
+        href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='resumen') }}">
+        Resumen
+    </a>
+</div>

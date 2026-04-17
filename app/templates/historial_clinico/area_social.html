@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+{% block title %}Historial clínico - Área social{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h3 class="mb-3">Historial clínico - Área social</h3>
+
+      <div class="row">
+        <div class="col-md-6 mb-2">
+          <strong>Paciente:</strong> {{ paciente.nombre }}
+        </div>
+        <div class="col-md-6 mb-2">
+          <strong>Edad:</strong> {{ paciente.edad }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <h5 class="mb-3">Área social</h5>
+
+        <div class="mb-3">
+          <div class="form-check form-check-inline">
+            {{ form.tiene_hijos(class="form-check-input") }}
+            {{ form.tiene_hijos.label(class="form-check-label") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.hijas_mujeres.label(class="form-label") }}
+            {{ form.hijas_mujeres(class="form-control") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.hijos_hombres.label(class="form-label") }}
+            {{ form.hijos_hombres(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.vive_con.label(class="form-label") }}
+            {{ form.vive_con(class="form-control") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            <div class="form-check mt-4">
+              {{ form.pension(class="form-check-input") }}
+              {{ form.pension.label(class="form-check-label") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{ form.pension_cual.label(class="form-label") }}
+          {{ form.pension_cual(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.ingreso_familiar_mensual.label(class="form-label") }}
+          {{ form.ingreso_familiar_mensual(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label d-block">Redes de apoyo social</label>
+          <div class="form-check form-check-inline">
+            {{ form.red_apoyo_amigos(class="form-check-input") }}
+            {{ form.red_apoyo_amigos.label(class="form-check-label") }}
+          </div>
+          <div class="form-check form-check-inline">
+            {{ form.red_apoyo_familia(class="form-check-input") }}
+            {{ form.red_apoyo_familia.label(class="form-check-label") }}
+          </div>
+          <div class="form-check form-check-inline">
+            {{ form.red_apoyo_vecinos(class="form-check-input") }}
+            {{ form.red_apoyo_vecinos.label(class="form-check-label") }}
+          </div>
+          <div class="form-check form-check-inline">
+            {{ form.red_apoyo_nietos(class="form-check-input") }}
+            {{ form.red_apoyo_nietos.label(class="form-check-label") }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{ form.costumbres_tradiciones.label(class="form-label") }}
+          {{ form.costumbres_tradiciones(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.actividades_gusta.label(class="form-label") }}
+          {{ form.actividades_gusta(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.actividades_anteriores.label(class="form-label") }}
+          {{ form.actividades_anteriores(class="form-control", rows="3") }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.actividades_actuales.label(class="form-label") }}
+          {{ form.actividades_actuales(class="form-control", rows="3") }}
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-check mt-4">
+              {{ form.acude_taller(class="form-check-input") }}
+              {{ form.acude_taller.label(class="form-check-label") }}
+            </div>
+          </div>
+          <div class="col-md-8 mb-3">
+            {{ form.taller_cual.label(class="form-label") }}
+            {{ form.taller_cual(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.frecuencia_sale_semana.label(class="form-label") }}
+            {{ form.frecuencia_sale_semana(class="form-control") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.con_quien_sale.label(class="form-label") }}
+            {{ form.con_quien_sale(class="form-control") }}
+          </div>
+        </div>
+
+        <h6 class="mt-3 mb-3">Cuidador</h6>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-check mt-4">
+              {{ form.cuidador(class="form-check-input") }}
+              {{ form.cuidador.label(class="form-check-label") }}
+            </div>
+          </div>
+          <div class="col-md-8 mb-3">
+            {{ form.cuidador_quien.label(class="form-label") }}
+            {{ form.cuidador_quien(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-check mt-4">
+              {{ form.cuidador_remunerado(class="form-check-input") }}
+              {{ form.cuidador_remunerado.label(class="form-check-label") }}
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            {{ form.cuidador_antiguedad.label(class="form-label") }}
+            {{ form.cuidador_antiguedad(class="form-control") }}
+          </div>
+          <div class="col-md-4 mb-3">
+            {{ form.cuidador_telefono.label(class="form-label") }}
+            {{ form.cuidador_telefono(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{ form.cuidador_nombre.label(class="form-label") }}
+          {{ form.cuidador_nombre(class="form-control") }}
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <div class="form-check mt-4">
+              {{ form.decide_asuntos_familiares(class="form-check-input") }}
+              {{ form.decide_asuntos_familiares.label(class="form-check-label") }}
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.relacion_familia.label(class="form-label") }}
+            {{ form.relacion_familia(class="form-select") }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-check mt-4">
+              {{ form.problemas_familiares(class="form-check-input") }}
+              {{ form.problemas_familiares.label(class="form-check-label") }}
+            </div>
+          </div>
+          <div class="col-md-8 mb-3">
+            {{ form.tipo_problemas_familiares.label(class="form-label") }}
+            {{ form.tipo_problemas_familiares(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{ form.riesgos_entorno_social.label(class="form-label") }}
+          {{ form.riesgos_entorno_social(class="form-control", rows="3") }}
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.medio_transporte_habitual.label(class="form-label") }}
+            {{ form.medio_transporte_habitual(class="form-control") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.pasa_dia_con.label(class="form-label") }}
+            {{ form.pasa_dia_con(class="form-control") }}
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <a href="{{ url_for('main.historial_clinico_datos_generales', paciente_id=paciente.id) }}"
+             class="btn btn-secondary">
+            Anterior
+          </a>
+          {{ form.submit(class="btn btn-primary") }}
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

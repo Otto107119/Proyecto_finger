@@ -8,6 +8,10 @@
 
       <h3 class="mb-3">{{ paciente.nombre }}</h3>
 
+      <p class="mb-1">
+        <strong>Fecha de nacimiento:</strong>
+        {{ paciente.fecha_nacimiento.strftime("%Y-%m-%d") if paciente.fecha_nacimiento else "" }}
+      </p>
       <p class="mb-1"><strong>Edad:</strong> {{ paciente.edad }}</p>
       <p class="mb-1"><strong>Género:</strong> {{ paciente.genero }}</p>
       <p class="mb-1"><strong>Registrado por:</strong> {{ paciente.usuario.nombre }}</p>
@@ -36,15 +40,16 @@
         </button>
 
         <button class="btn btn-outline-primary" disabled>
-          Actividad médica
-        </button>
-
-        <button class="btn btn-outline-primary" disabled>
-          Actividad social
+            Actividad médica
         </button>
 
         <a class="btn btn-primary"
-          href="{{ url_for('main.historial_clinico_lista', paciente_id=paciente.id) }}">
+          href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id) }}">
+            Actividad social
+        </a>
+
+        <a class="btn btn-primary"
+          href="{{ url_for('main.historial_clinico_datos_generales', paciente_id=paciente.id) }}">
           Historial clínico
         </a>
 
