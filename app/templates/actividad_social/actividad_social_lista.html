@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Actividad social{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0">Capturas de Actividad Social - {{ paciente.nombre }}</h3>
+
+                {% if current_user.rol in ["admin", "capturista"] %}
+                <form method="POST"
+                        action="{{ url_for('actividad_social.actividad_social_nueva', paciente_id=paciente.id) }}">
+                    <button type="submit" class="btn btn-success">
+                        + Nueva captura
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <a class="btn btn-secondary mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                Volver al expediente
+            </a>
+
+            {% if actividades %}
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha creación</th>
+                            <th>Estado</th>
+                            <th>Fecha finalizado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for actividad in actividades %}
+                        <tr>
+                            <td>{{ actividad.id }}</td>
+                            <td>{{ actividad.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                            <td>
+                                {% if actividad.finalizado %}
+                                    <span class="badge bg-success">Finalizada</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">En captura</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ actividad.fecha_finalizado.strftime("%Y-%m-%d %H:%M") if actividad.fecha_finalizado else "" }}
+                            </td>
+                            <td>
+                                <a class="btn btn-primary btn-sm"
+                                    href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id) }}">
+                                    Abrir
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="text-muted mb-0">Aún no hay capturas de actividad social.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

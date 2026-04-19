@@ -211,8 +211,8 @@
         </div>
 
         <div class="d-flex gap-2">
-          <a href="{{ url_for('main.historial_clinico_datos_generales', paciente_id=paciente.id) }}"
-             class="btn btn-secondary">
+          <a href="{{ url_for('historial_clinico.historial_clinico_datos_generales', paciente_id=paciente.id) }}"
+              class="btn btn-secondary">
             Anterior
           </a>
           {{ form.submit(class="btn btn-primary") }}

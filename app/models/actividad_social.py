@@ -10,7 +10,7 @@ class ActividadSocial(db.Model):
         db.Integer,
         db.ForeignKey("paciente.id", ondelete="CASCADE"),
         nullable=False,
-        unique=True
+        
     )
 
     seguridad_social = db.Column(db.String(20), nullable=True)
@@ -30,7 +30,7 @@ class ActividadSocial(db.Model):
         nullable=False
     )
 
-    paciente = db.relationship("Paciente", back_populates="actividad_social")
+    paciente = db.relationship("Paciente", back_populates="actividades_sociales")
 
     economia = db.relationship(
         "ActividadSocialEconomia",

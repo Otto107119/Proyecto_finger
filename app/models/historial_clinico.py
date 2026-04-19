@@ -109,3 +109,63 @@ class HistorialClinico(db.Model):
 
     creado_en = db.Column(db.DateTime, default=datetime.utcnow)
     actualizado_en = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+    # Área física
+    incontinencia = db.Column(db.Boolean, default=False)
+    incontinencia_urinaria = db.Column(db.Boolean, default=False)
+    incontinencia_fecal = db.Column(db.Boolean, default=False)
+    panal = db.Column(db.Boolean, default=False)
+
+    estado_general = db.Column(db.String(20), nullable=True)
+    biotipo = db.Column(db.String(20), nullable=True)
+
+    miembros_superiores = db.Column(db.Boolean, default=False)
+    miembros_inferiores = db.Column(db.Boolean, default=False)
+    edema = db.Column(db.Boolean, default=False)
+
+    deformidades = db.Column(db.Boolean, default=False)
+    deformidades_localizacion = db.Column(db.String(255), nullable=True)
+
+    ulceras_vasculares = db.Column(db.Boolean, default=False)
+    ulceras_vasculares_localizacion = db.Column(db.String(255), nullable=True)
+
+    ulceras_presion = db.Column(db.Boolean, default=False)
+    ulceras_presion_localizacion = db.Column(db.String(255), nullable=True)
+
+    talla = db.Column(db.String(50), nullable=True)
+    peso = db.Column(db.String(50), nullable=True)
+
+    inmunizaciones = db.Column(db.Boolean, default=False)
+    inmunizaciones_cuales = db.Column(db.Text, nullable=True)
+
+    miembros_amputados = db.Column(db.Boolean, default=False)
+    miembros_amputados_cuales = db.Column(db.String(255), nullable=True)
+
+    horas_durmiendo = db.Column(db.String(50), nullable=True)
+    insomnio = db.Column(db.Boolean, default=False)
+
+    cirugias = db.Column(db.Boolean, default=False)
+    cirugias_nombre = db.Column(db.String(255), nullable=True)
+    cirugias_anio = db.Column(db.String(50), nullable=True)
+
+    antecedentes = db.Column(db.Boolean, default=False)
+    antecedentes_de_que = db.Column(db.Text, nullable=True)
+
+    acepta = db.Column(db.Boolean, default=False)
+    tipo_sangre = db.Column(db.String(20), nullable=True)
+
+    transfusiones = db.Column(db.Boolean, default=False)
+    transfusiones_cuales = db.Column(db.Text, nullable=True)
+
+    alergias = db.Column(db.Boolean, default=False)
+    alergias_cuales = db.Column(db.Text, nullable=True)
+
+    fc_max = db.Column(db.String(50), nullable=True)
+    temperatura_corporal = db.Column(db.String(50), nullable=True)
+    frecuencia_cardiaca = db.Column(db.String(50), nullable=True)
+    frecuencia_respiratoria = db.Column(db.String(50), nullable=True)
+    glucemia_capilar = db.Column(db.String(50), nullable=True)
+    tension_arterial = db.Column(db.String(50), nullable=True)
+
+    actividad_fisica = db.Column(db.Boolean, default=False)

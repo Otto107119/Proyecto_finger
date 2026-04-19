@@ -12,7 +12,7 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/")
 def index():
     if current_user.is_authenticated:
-        return render_template("index.html")
+        return redirect(url_for("pacientes.pacientes_lista"))
     return redirect(url_for("auth.login"))
 
 
@@ -38,7 +38,7 @@ def register():
         flash("Usuario registrado correctamente.", "success")
         return redirect(url_for("auth.login"))
 
-    return render_template("register.html", form=form)
+    return render_template("auth/register.html", form=form)
 
 
 @auth_bp.route("/login", methods=["GET", "POST"])
@@ -55,7 +55,7 @@ def login():
 
         flash("Correo o contraseña incorrectos.", "danger")
 
-    return render_template("login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @auth_bp.route("/logout")

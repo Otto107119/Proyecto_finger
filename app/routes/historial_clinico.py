@@ -34,7 +34,9 @@ def historial_clinico_datos_generales(paciente_id):
         form.populate_obj(historial)
         db.session.commit()
         flash("Datos generales guardados correctamente.", "success")
-        return redirect(url_for("historial_clinico.historial_clinico_area_social", paciente_id=paciente.id))
+        return redirect(
+            url_for("historial_clinico.historial_clinico_area_social", paciente_id=paciente.id)
+        )
 
     return render_template(
         "historial_clinico/datos_generales.html",
@@ -54,7 +56,9 @@ def historial_clinico_area_social(paciente_id):
         form.populate_obj(historial)
         db.session.commit()
         flash("Área social guardada correctamente.", "success")
-        return redirect(url_for("historial_clinico.historial_clinico_area_espiritual", paciente_id=paciente.id))
+        return redirect(
+            url_for("historial_clinico.historial_clinico_area_espiritual", paciente_id=paciente.id)
+        )
 
     return render_template(
         "historial_clinico/area_social.html",
@@ -74,7 +78,9 @@ def historial_clinico_area_espiritual(paciente_id):
         form.populate_obj(historial)
         db.session.commit()
         flash("Área espiritual guardada correctamente.", "success")
-        return redirect(url_for("historial_clinico.historial_clinico_area_psicologica", paciente_id=paciente.id))
+        return redirect(
+            url_for("historial_clinico.historial_clinico_area_psicologica", paciente_id=paciente.id)
+        )
 
     return render_template(
         "historial_clinico/area_espiritual.html",
@@ -94,10 +100,34 @@ def historial_clinico_area_psicologica(paciente_id):
         form.populate_obj(historial)
         db.session.commit()
         flash("Área psicológica guardada correctamente.", "success")
-        return redirect(url_for("historial_clinico.historial_clinico_area_psicologica", paciente_id=paciente.id))
+        return redirect(
+            url_for("historial_clinico.historial_clinico_area_psicologica", paciente_id=paciente.id)
+        )
 
     return render_template(
         "historial_clinico/area_psicologica.html",
+        paciente=paciente,
+        historial=historial,
+        form=form
+    )
+
+
+@historial_clinico_bp.route("/area-fisica", methods=["GET", "POST"])
+@login_required
+def historial_clinico_area_fisica(paciente_id):
+    paciente, historial = obtener_historial(paciente_id)
+    form = HistorialClinicoForm(obj=historial)
+
+    if form.validate_on_submit():
+        form.populate_obj(historial)
+        db.session.commit()
+        flash("Área física guardada correctamente.", "success")
+        return redirect(
+            url_for("historial_clinico.historial_clinico_area_fisica", paciente_id=paciente.id)
+        )
+
+    return render_template(
+        "historial_clinico/area_fisica.html",
         paciente=paciente,
         historial=historial,
         form=form

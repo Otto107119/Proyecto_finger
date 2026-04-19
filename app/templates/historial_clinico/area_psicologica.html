@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+{% block title %}Área psicológica{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Área psicológica de {{ paciente.nombre }}</h3>
+
+            <div class="mb-3">
+                <a class="btn btn-secondary"
+                   href="{{ url_for('historial_clinico.historial_clinico_area_espiritual', paciente_id=paciente.id) }}">
+                    Volver a área espiritual
+                </a>
+            </div>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.episodios_positivos.label(class="form-label") }}
+                    {{ form.episodios_positivos(class="form-control", rows="3") }}
+                    {% for err in form.episodios_positivos.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.estado_animo.label(class="form-label") }}
+                    {{ form.estado_animo(class="form-select") }}
+                    {% for err in form.estado_animo.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.estado_animo_otro.label(class="form-label") }}
+                    {{ form.estado_animo_otro(class="form-control") }}
+                    {% for err in form.estado_animo_otro.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.perdidas(class="form-check-input") }}
+                    {{ form.perdidas.label(class="form-check-label") }}
+                    {% for err in form.perdidas.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.perdidas_cuales.label(class="form-label") }}
+                    {{ form.perdidas_cuales(class="form-control", rows="2") }}
+                    {% for err in form.perdidas_cuales.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.duelo(class="form-check-input") }}
+                    {{ form.duelo.label(class="form-check-label") }}
+                    {% for err in form.duelo.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.duelo_tiempo.label(class="form-label") }}
+                    {{ form.duelo_tiempo(class="form-control") }}
+                    {% for err in form.duelo_tiempo.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.tipo_duelo.label(class="form-label") }}
+                    {{ form.tipo_duelo(class="form-control") }}
+                    {% for err in form.tipo_duelo.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.estres(class="form-check-input") }}
+                    {{ form.estres.label(class="form-check-label") }}
+                    {% for err in form.estres.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.afronta_estres.label(class="form-label") }}
+                    {{ form.afronta_estres(class="form-control", rows="2") }}
+                    {% for err in form.afronta_estres.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.ejercita_memoria(class="form-check-input") }}
+                    {{ form.ejercita_memoria.label(class="form-check-label") }}
+                    {% for err in form.ejercita_memoria.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.ejercita_memoria_como.label(class="form-label") }}
+                    {{ form.ejercita_memoria_como(class="form-control", rows="2") }}
+                    {% for err in form.ejercita_memoria_como.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.olvidos_frecuentes(class="form-check-input") }}
+                    {{ form.olvidos_frecuentes.label(class="form-check-label") }}
+                    {% for err in form.olvidos_frecuentes.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.olvidos_cuales.label(class="form-label") }}
+                    {{ form.olvidos_cuales(class="form-control", rows="2") }}
+                    {% for err in form.olvidos_cuales.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.satisfecho_vida(class="form-check-input") }}
+                    {{ form.satisfecho_vida.label(class="form-check-label") }}
+                    {% for err in form.satisfecho_vida.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.satisfecho_vida_por_que.label(class="form-label") }}
+                    {{ form.satisfecho_vida_por_que(class="form-control", rows="2") }}
+                    {% for err in form.satisfecho_vida_por_que.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-check mb-3">
+                    {{ form.influye_opinion_demas(class="form-check-input") }}
+                    {{ form.influye_opinion_demas.label(class="form-check-label") }}
+                    {% for err in form.influye_opinion_demas.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.influye_opinion_por_que.label(class="form-label") }}
+                    {{ form.influye_opinion_por_que(class="form-control", rows="2") }}
+                    {% for err in form.influye_opinion_por_que.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.episodios_negativos.label(class="form-label") }}
+                    {{ form.episodios_negativos(class="form-control", rows="3") }}
+                    {% for err in form.episodios_negativos.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        {{ form.orientacion_persona.label(class="form-label") }}
+                        {{ form.orientacion_persona(class="form-control") }}
+                        {% for err in form.orientacion_persona.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.orientacion_espacio.label(class="form-label") }}
+                        {{ form.orientacion_espacio(class="form-control") }}
+                        {% for err in form.orientacion_espacio.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.orientacion_tiempo.label(class="form-label") }}
+                        {{ form.orientacion_tiempo(class="form-control") }}
+                        {% for err in form.orientacion_tiempo.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.orientacion_orientador.label(class="form-label") }}
+                        {{ form.orientacion_orientador(class="form-control") }}
+                        {% for err in form.orientacion_orientador.errors %}
+                            <div class="text-danger small">{{ err }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    {{ form.comunicacion_verbal.label(class="form-label") }}
+                    {{ form.comunicacion_verbal(class="form-control", rows="2") }}
+                    {% for err in form.comunicacion_verbal.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.comunicacion_no_verbal.label(class="form-label") }}
+                    {{ form.comunicacion_no_verbal(class="form-control", rows="2") }}
+                    {% for err in form.comunicacion_no_verbal.errors %}
+                        <div class="text-danger small">{{ err }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a class="btn btn-outline-secondary"
+                       href="{{ url_for('historial_clinico.historial_clinico_area_espiritual', paciente_id=paciente.id) }}">
+                        Anterior
+                    </a>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            Guardar
+                        </button>
+
+                        <a class="btn btn-success"
+                           href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                            Finalizar / Volver
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -7,7 +7,7 @@
 
   {% if current_user.rol in ["admin", "capturista"] %}
     <a class="btn btn-success"
-       href="{{ url_for('main.actividad_fisica_nueva', paciente_id=paciente.id) }}">
+       href="{{ url_for('actividad_fisica.actividad_fisica_nuevo', paciente_id=paciente.id) }}">
       + Nueva actividad
     </a>
   {% endif %}
@@ -26,11 +26,11 @@
               <th>Capturó</th>
               <th>Observaciones</th>
               <th class="text-end">Acciones</th>
-              </tr>
+            </tr>
           </thead>
           <tbody>
             {% for a in actividades %}
-            <tr>    
+            <tr>
               <td>{{ a.fecha.strftime("%Y-%m-%d %H:%M") }}</td>
               <td>{{ a.tipo }}</td>
               <td>{{ a.duracion_min }} min</td>
@@ -39,22 +39,21 @@
               <td class="text-end">
                 {% if current_user.rol in ["admin", "capturista"] %}
                   <a class="btn btn-outline-primary btn-sm"
-                    href="{{ url_for('main.actividad_fisica_editar', actividad_id=a.id) }}">
+                     href="{{ url_for('actividad_fisica.actividad_fisica_editar', paciente_id=paciente.id, actividad_id=a.id) }}">
                     Editar
-                    {% if current_user.rol == "admin" %}
-                     <form method="POST"
-                          action="{{ url_for('main.actividad_fisica_eliminar', actividad_id=a.id) }}"
-                          style="display:inline;"
-                          onsubmit="return confirm('¿Seguro que deseas eliminar esta actividad?');">
-                       <button type="submit" class="btn btn-outline-danger btn-sm">
-                         Eliminar
-                       </button>
-                     </form>
-                  {% endif %}
                   </a>
                 {% endif %}
 
-                
+                {% if current_user.rol == "admin" %}
+                  <form method="POST"
+                        action="{{ url_for('actividad_fisica.actividad_fisica_eliminar', paciente_id=paciente.id, actividad_id=a.id) }}"
+                        style="display:inline;"
+                        onsubmit="return confirm('¿Seguro que deseas eliminar esta actividad?');">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                      Eliminar
+                    </button>
+                  </form>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
@@ -67,5 +66,8 @@
   </div>
 </div>
 
-<a class="btn btn-secondary mt-3" href="{{ url_for('main.pacientes_detalle', paciente_id=paciente.id) }}">Volver</a>
+<a class="btn btn-secondary mt-3"
+   href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+  Volver
+</a>
 {% endblock %}

@@ -14,12 +14,12 @@ class Paciente(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
     usuario = db.relationship("Usuario", backref="pacientes")
 
-    actividad_social = db.relationship(
-        "ActividadSocial",
-        back_populates="paciente",
-        uselist=False,
-        cascade="all, delete-orphan"
-    )
+    actividades_sociales = db.relationship(
+    "ActividadSocial",
+    back_populates="paciente",
+    cascade="all, delete-orphan",
+    order_by="desc(ActividadSocial.created_at)"
+)
 
     @property
     def edad(self):

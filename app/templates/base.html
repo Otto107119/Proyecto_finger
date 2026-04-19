@@ -12,20 +12,20 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
         {% if current_user.is_authenticated %}
-            <a class="navbar-brand" href="{{ url_for('main.pacientes_lista') }}">LatAm-FINGERS</a>
+            <a class="navbar-brand" href="{{ url_for('pacientes.pacientes_lista') }}">LatAm-FINGERS</a>
         {% else %}
             <a class="navbar-brand" href="#">LatAm-FINGERS</a>
         {% endif %}
 
         <div>
             {% if current_user.is_authenticated %}
-                <a href="{{ url_for('main.pacientes_lista') }}" class="btn btn-outline-light btn-sm me-2">
+                <a href="{{ url_for('pacientes.pacientes_lista') }}" class="btn btn-outline-light btn-sm me-2">
                     Pacientes
                 </a>
 
                 <span class="text-white me-3">Hola, {{ current_user.nombre }}</span>
 
-                <a href="{{ url_for('main.logout') }}" class="btn btn-light btn-sm">
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-light btn-sm">
                     Salir
                 </a>
             {% endif %}

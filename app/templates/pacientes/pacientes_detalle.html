@@ -22,12 +22,12 @@
 
       <div class="d-flex flex-wrap gap-2 mt-3">
 
-        <a class="btn btn-secondary" href="{{ url_for('main.pacientes_lista') }}">
+        <a class="btn btn-secondary" href="{{ url_for('pacientes.pacientes_lista') }}">
           Volver
         </a>
 
         <a class="btn btn-primary"
-          href="{{ url_for('main.actividad_fisica_lista', paciente_id=paciente.id) }}">
+          href="{{ url_for('actividad_fisica.actividad_fisica_lista', paciente_id=paciente.id) }}">
           Actividad física
         </a>
 
@@ -44,12 +44,12 @@
         </button>
 
         <a class="btn btn-primary"
-          href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id) }}">
-            Actividad social
+          href="{{ url_for('actividad_social.actividad_social_lista', paciente_id=paciente.id) }}">
+          Actividad social
         </a>
 
         <a class="btn btn-primary"
-          href="{{ url_for('main.historial_clinico_datos_generales', paciente_id=paciente.id) }}">
+          href="{{ url_for('historial_clinico.historial_clinico_datos_generales', paciente_id=paciente.id) }}">
           Historial clínico
         </a>
 

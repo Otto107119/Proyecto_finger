@@ -9,7 +9,7 @@
 
             <div class="mb-3 d-flex justify-content-between align-items-center">
                 <a class="btn btn-secondary"
-                    href="{{ url_for('main.pacientes_detalle', paciente_id=paciente.id) }}">
+                   href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
                     Volver al expediente
                 </a>
 
@@ -25,81 +25,76 @@
                 <h5>Hermanos</h5>
 
                 {% if editable_social %}
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h6 class="mb-3">Agregar hermano</h6>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="mb-3">Agregar hermano</h6>
 
-                        <form method="POST">
-                            {{ hermano_form.hidden_tag() }}
+                            <form method="POST">
+                                {{ hermano_form.hidden_tag() }}
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    {{ hermano_form.nombre.label(class="form-label") }}
-                                    {{ hermano_form.nombre(class="form-control") }}
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        {{ hermano_form.nombre.label(class="form-label") }}
+                                        {{ hermano_form.nombre(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-2 mb-3">
+                                        {{ hermano_form.edad.label(class="form-label") }}
+                                        {{ hermano_form.edad(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        {{ hermano_form.relacion.label(class="form-label") }}
+                                        {{ hermano_form.relacion(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ hermano_form.donde_vive.label(class="form-label") }}
+                                        {{ hermano_form.donde_vive(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ hermano_form.enfermedad.label(class="form-label") }}
+                                        {{ hermano_form.enfermedad(class="form-control") }}
+                                    </div>
                                 </div>
 
-                                <div class="col-md-2 mb-3">
-                                    {{ hermano_form.edad.label(class="form-label") }}
-                                    {{ hermano_form.edad(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    {{ hermano_form.relacion.label(class="form-label") }}
-                                    {{ hermano_form.relacion(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    {{ hermano_form.donde_vive.label(class="form-label") }}
-                                    {{ hermano_form.donde_vive(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    {{ hermano_form.enfermedad.label(class="form-label") }}
-                                    {{ hermano_form.enfermedad(class="form-control") }}
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <div>
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='padres') }}"
-                                        class="btn btn-outline-secondary">
+                                <div class="d-flex justify-content-between mt-3">
+                                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
+                                       class="btn btn-outline-secondary">
                                         Anterior
                                     </a>
-                                </div>
 
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        Agregar hermano
-                                    </button>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            Agregar hermano
+                                        </button>
 
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hijos') }}"
-                                        class="btn btn-success">
-                                        Siguiente
-                                    </a>
+                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                                           class="btn btn-success">
+                                            Siguiente
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 {% else %}
-                <div class="alert alert-light border mb-4">
-                    Estás visualizando este apartado en modo solo lectura.
-                </div>
+                    <div class="alert alert-light border mb-4">
+                        Estás visualizando este apartado en modo solo lectura.
+                    </div>
 
-                <div class="d-flex justify-content-between mt-3 mb-4">
-                    <div>
-                        <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='padres') }}"
-                            class="btn btn-outline-secondary">
+                    <div class="d-flex justify-content-between mt-3 mb-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
+                           class="btn btn-outline-secondary">
                             Anterior
                         </a>
-                    </div>
-                    <div>
-                        <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hijos') }}"
-                            class="btn btn-success">
+
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                           class="btn btn-success">
                             Siguiente
                         </a>
                     </div>
-                </div>
                 {% endif %}
 
                 <h6 class="mb-3">Listado de hermanos</h6>
@@ -115,30 +110,30 @@
                                     <th>Dónde vive</th>
                                     <th>Enfermedad</th>
                                     {% if editable_social %}
-                                    <th>Acciones</th>
+                                        <th>Acciones</th>
                                     {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for hermano in hermanos %}
-                                <tr>
-                                    <td>{{ hermano.nombre or "" }}</td>
-                                    <td>{{ hermano.edad or "" }}</td>
-                                    <td>{{ hermano.relacion or "" }}</td>
-                                    <td>{{ hermano.donde_vive or "" }}</td>
-                                    <td>{{ hermano.enfermedad or "" }}</td>
-                                    {% if editable_social %}
-                                    <td>
-                                        <form method="POST"
-                                                action="{{ url_for('main.actividad_social_hermano_eliminar', hermano_id=hermano.id) }}"
-                                                onsubmit="return confirm('¿Eliminar este hermano?');">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                    </td>
-                                    {% endif %}
-                                </tr>
+                                    <tr>
+                                        <td>{{ hermano.nombre or "" }}</td>
+                                        <td>{{ hermano.edad or "" }}</td>
+                                        <td>{{ hermano.relacion or "" }}</td>
+                                        <td>{{ hermano.donde_vive or "" }}</td>
+                                        <td>{{ hermano.enfermedad or "" }}</td>
+                                        {% if editable_social %}
+                                            <td>
+                                                <form method="POST"
+                                                      action="{{ url_for('actividad_social.actividad_social_hermano_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hermano_id=hermano.id) }}"
+                                                      onsubmit="return confirm('¿Eliminar este hermano?');">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -152,91 +147,86 @@
                 <h5>Hijos</h5>
 
                 {% if editable_social %}
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h6 class="mb-3">Agregar hijo</h6>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="mb-3">Agregar hijo</h6>
 
-                        <form method="POST">
-                            {{ hijo_form.hidden_tag() }}
+                            <form method="POST">
+                                {{ hijo_form.hidden_tag() }}
 
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    {{ hijo_form.nombre.label(class="form-label") }}
-                                    {{ hijo_form.nombre(class="form-control") }}
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        {{ hijo_form.nombre.label(class="form-label") }}
+                                        {{ hijo_form.nombre(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-2 mb-3">
+                                        {{ hijo_form.edad.label(class="form-label") }}
+                                        {{ hijo_form.edad(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        {{ hijo_form.estado_civil.label(class="form-label") }}
+                                        {{ hijo_form.estado_civil(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-3 mb-3">
+                                        {{ hijo_form.relacion.label(class="form-label") }}
+                                        {{ hijo_form.relacion(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        {{ hijo_form.donde_vive.label(class="form-label") }}
+                                        {{ hijo_form.donde_vive(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-4 mb-3">
+                                        {{ hijo_form.enfermedad.label(class="form-label") }}
+                                        {{ hijo_form.enfermedad(class="form-control") }}
+                                    </div>
+
+                                    <div class="col-md-2 mb-3">
+                                        {{ hijo_form.numero_hijos.label(class="form-label") }}
+                                        {{ hijo_form.numero_hijos(class="form-control") }}
+                                    </div>
                                 </div>
 
-                                <div class="col-md-2 mb-3">
-                                    {{ hijo_form.edad.label(class="form-label") }}
-                                    {{ hijo_form.edad(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    {{ hijo_form.estado_civil.label(class="form-label") }}
-                                    {{ hijo_form.estado_civil(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-3 mb-3">
-                                    {{ hijo_form.relacion.label(class="form-label") }}
-                                    {{ hijo_form.relacion(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    {{ hijo_form.donde_vive.label(class="form-label") }}
-                                    {{ hijo_form.donde_vive(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-4 mb-3">
-                                    {{ hijo_form.enfermedad.label(class="form-label") }}
-                                    {{ hijo_form.enfermedad(class="form-control") }}
-                                </div>
-
-                                <div class="col-md-2 mb-3">
-                                    {{ hijo_form.numero_hijos.label(class="form-label") }}
-                                    {{ hijo_form.numero_hijos(class="form-control") }}
-                                </div>
-                            </div>
-
-                            <div class="d-flex justify-content-between mt-3">
-                                <div>
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hermanos') }}"
-                                        class="btn btn-outline-secondary">
+                                <div class="d-flex justify-content-between mt-3">
+                                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
+                                       class="btn btn-outline-secondary">
                                         Anterior
                                     </a>
-                                </div>
 
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        Agregar hijo
-                                    </button>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            Agregar hijo
+                                        </button>
 
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='resumen') }}"
-                                        class="btn btn-success">
-                                        Siguiente
-                                    </a>
+                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
+                                           class="btn btn-success">
+                                            Siguiente
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
-                </div>
                 {% else %}
-                <div class="alert alert-light border mb-4">
-                    Estás visualizando este apartado en modo solo lectura.
-                </div>
+                    <div class="alert alert-light border mb-4">
+                        Estás visualizando este apartado en modo solo lectura.
+                    </div>
 
-                <div class="d-flex justify-content-between mt-3 mb-4">
-                    <div>
-                        <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hermanos') }}"
-                            class="btn btn-outline-secondary">
+                    <div class="d-flex justify-content-between mt-3 mb-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
+                           class="btn btn-outline-secondary">
                             Anterior
                         </a>
-                    </div>
-                    <div>
-                        <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='resumen') }}"
-                            class="btn btn-success">
+
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
+                           class="btn btn-success">
                             Siguiente
                         </a>
                     </div>
-                </div>
                 {% endif %}
 
                 <h6 class="mb-3">Listado de hijos</h6>
@@ -254,32 +244,32 @@
                                     <th>Enfermedad</th>
                                     <th>Núm. hijos</th>
                                     {% if editable_social %}
-                                    <th>Acciones</th>
+                                        <th>Acciones</th>
                                     {% endif %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for hijo in hijos %}
-                                <tr>
-                                    <td>{{ hijo.nombre or "" }}</td>
-                                    <td>{{ hijo.edad or "" }}</td>
-                                    <td>{{ hijo.estado_civil or "" }}</td>
-                                    <td>{{ hijo.relacion or "" }}</td>
-                                    <td>{{ hijo.donde_vive or "" }}</td>
-                                    <td>{{ hijo.enfermedad or "" }}</td>
-                                    <td>{{ hijo.numero_hijos or "" }}</td>
-                                    {% if editable_social %}
-                                    <td>
-                                        <form method="POST"
-                                                action="{{ url_for('main.actividad_social_hijo_eliminar', hijo_id=hijo.id) }}"
-                                                onsubmit="return confirm('¿Eliminar este hijo?');">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                    </td>
-                                    {% endif %}
-                                </tr>
+                                    <tr>
+                                        <td>{{ hijo.nombre or "" }}</td>
+                                        <td>{{ hijo.edad or "" }}</td>
+                                        <td>{{ hijo.estado_civil or "" }}</td>
+                                        <td>{{ hijo.relacion or "" }}</td>
+                                        <td>{{ hijo.donde_vive or "" }}</td>
+                                        <td>{{ hijo.enfermedad or "" }}</td>
+                                        <td>{{ hijo.numero_hijos or "" }}</td>
+                                        {% if editable_social %}
+                                            <td>
+                                                <form method="POST"
+                                                      action="{{ url_for('actividad_social.actividad_social_hijo_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hijo_id=hijo.id) }}"
+                                                      onsubmit="return confirm('¿Eliminar este hijo?');">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        {% endif %}
+                                    </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -304,16 +294,16 @@
                 </div>
 
                 {% if actividad and actividad.economia %}
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h6 class="mb-3">Economía</h6>
-                        <p><strong>Ingreso entrevistado:</strong> {{ actividad.economia.ingreso_entrevistado }}</p>
-                        <p><strong>Otros ingresos:</strong> {{ actividad.economia.otros_ingresos }}</p>
-                        <p><strong>Total ingreso mensual:</strong> {{ actividad.economia.total_ingreso_mensual }}</p>
-                        <p><strong>Total egresos:</strong> {{ actividad.economia.total_egresos }}</p>
-                        <p><strong>Balance mensual:</strong> {{ actividad.economia.balance_mensual }}</p>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="mb-3">Economía</h6>
+                            <p><strong>Ingreso entrevistado:</strong> {{ actividad.economia.ingreso_entrevistado }}</p>
+                            <p><strong>Otros ingresos:</strong> {{ actividad.economia.otros_ingresos }}</p>
+                            <p><strong>Total ingreso mensual:</strong> {{ actividad.economia.total_ingreso_mensual }}</p>
+                            <p><strong>Total egresos:</strong> {{ actividad.economia.total_egresos }}</p>
+                            <p><strong>Balance mensual:</strong> {{ actividad.economia.balance_mensual }}</p>
+                        </div>
                     </div>
-                </div>
                 {% endif %}
 
                 <div class="row">
@@ -361,13 +351,13 @@
                                     </thead>
                                     <tbody>
                                         {% for hermano in hermanos %}
-                                        <tr>
-                                            <td>{{ hermano.nombre or "" }}</td>
-                                            <td>{{ hermano.edad or "" }}</td>
-                                            <td>{{ hermano.relacion or "" }}</td>
-                                            <td>{{ hermano.donde_vive or "" }}</td>
-                                            <td>{{ hermano.enfermedad or "" }}</td>
-                                        </tr>
+                                            <tr>
+                                                <td>{{ hermano.nombre or "" }}</td>
+                                                <td>{{ hermano.edad or "" }}</td>
+                                                <td>{{ hermano.relacion or "" }}</td>
+                                                <td>{{ hermano.donde_vive or "" }}</td>
+                                                <td>{{ hermano.enfermedad or "" }}</td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -397,15 +387,15 @@
                                     </thead>
                                     <tbody>
                                         {% for hijo in hijos %}
-                                        <tr>
-                                            <td>{{ hijo.nombre or "" }}</td>
-                                            <td>{{ hijo.edad or "" }}</td>
-                                            <td>{{ hijo.estado_civil or "" }}</td>
-                                            <td>{{ hijo.relacion or "" }}</td>
-                                            <td>{{ hijo.donde_vive or "" }}</td>
-                                            <td>{{ hijo.enfermedad or "" }}</td>
-                                            <td>{{ hijo.numero_hijos or "" }}</td>
-                                        </tr>
+                                            <tr>
+                                                <td>{{ hijo.nombre or "" }}</td>
+                                                <td>{{ hijo.edad or "" }}</td>
+                                                <td>{{ hijo.estado_civil or "" }}</td>
+                                                <td>{{ hijo.relacion or "" }}</td>
+                                                <td>{{ hijo.donde_vive or "" }}</td>
+                                                <td>{{ hijo.enfermedad or "" }}</td>
+                                                <td>{{ hijo.numero_hijos or "" }}</td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -417,36 +407,34 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <div>
-                        <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hijos') }}"
-                        class="btn btn-outline-secondary">
+                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                       class="btn btn-outline-secondary">
                         Anterior
-                        </a>
-                    </div>
+                    </a>
 
                     <div class="d-flex gap-2">
-                    {% if editable_social %}
-                        {% if actividad and not actividad.finalizado %}
-                            <form method="POST"
-                                action="{{ url_for('main.actividad_social_finalizar', actividad_id=actividad.id) }}">
-                                <button type="submit"
-                                    class="btn btn-success"
-                                    onclick="return confirm('¿Finalizar captura de Actividad Social?')">
-                                    Finalizar captura
-                                </button>
-                            </form>
-                        {% elif actividad and actividad.finalizado %}
-                            <span class="badge bg-success fs-6">
-                                Captura finalizada ✔
-                            </span>
+                        {% if editable_social %}
+                            {% if actividad and not actividad.finalizado %}
+                                <form method="POST"
+                                      action="{{ url_for('actividad_social.actividad_social_finalizar', paciente_id=paciente.id, actividad_id=actividad.id) }}">
+                                    <button type="submit"
+                                            class="btn btn-success"
+                                            onclick="return confirm('¿Finalizar captura de Actividad Social?')">
+                                        Finalizar captura
+                                    </button>
+                                </form>
+                            {% elif actividad and actividad.finalizado %}
+                                <span class="badge bg-success fs-6">
+                                    Captura finalizada ✔
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            {% if actividad and actividad.finalizado %}
+                                <span class="badge bg-success fs-6">
+                                    Captura finalizada ✔
+                                </span>
+                            {% endif %}
                         {% endif %}
-                    {% else %}
-                        {% if actividad and actividad.finalizado %}
-                            <span class="badge bg-success fs-6">
-                                Captura finalizada ✔
-                            </span>
-                        {% endif %}
-                    {% endif %}
                     </div>
                 </div>
 
@@ -509,101 +497,28 @@
                         <h6 class="mt-3">Egresos</h6>
 
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                {{ form.renta.label(class="form-label") }}
-                                {{ form.renta(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.colegiaturas.label(class="form-label") }}
-                                {{ form.colegiaturas(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.alimentacion.label(class="form-label") }}
-                                {{ form.alimentacion(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.gastos_medicos.label(class="form-label") }}
-                                {{ form.gastos_medicos(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.transporte.label(class="form-label") }}
-                                {{ form.transporte(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.diversion.label(class="form-label") }}
-                                {{ form.diversion(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.gasolina.label(class="form-label") }}
-                                {{ form.gasolina(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.pagos_tarjetas.label(class="form-label") }}
-                                {{ form.pagos_tarjetas(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.luz.label(class="form-label") }}
-                                {{ form.luz(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.ahorro.label(class="form-label") }}
-                                {{ form.ahorro(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.agua.label(class="form-label") }}
-                                {{ form.agua(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.deudas.label(class="form-label") }}
-                                {{ form.deudas(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.gas.label(class="form-label") }}
-                                {{ form.gas(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.ropa.label(class="form-label") }}
-                                {{ form.ropa(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.telefono.label(class="form-label") }}
-                                {{ form.telefono(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.calzado.label(class="form-label") }}
-                                {{ form.calzado(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.telefono_celular.label(class="form-label") }}
-                                {{ form.telefono_celular(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.alcohol_cigarros.label(class="form-label") }}
-                                {{ form.alcohol_cigarros(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.cable.label(class="form-label") }}
-                                {{ form.cable(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.internet.label(class="form-label") }}
-                                {{ form.internet(class="form-control", readonly=not editable_social) }}
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                {{ form.otros_gastos.label(class="form-label") }}
-                                {{ form.otros_gastos(class="form-control", readonly=not editable_social) }}
-                            </div>
-
-                            <div class="col-md-4 mb-3">
-                                {{ form.empleados_domesticos.label(class="form-label") }}
-                                {{ form.empleados_domesticos(class="form-control", readonly=not editable_social) }}
-                            </div>
+                            <div class="col-md-4 mb-3">{{ form.renta.label(class="form-label") }}{{ form.renta(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.colegiaturas.label(class="form-label") }}{{ form.colegiaturas(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.alimentacion.label(class="form-label") }}{{ form.alimentacion(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.gastos_medicos.label(class="form-label") }}{{ form.gastos_medicos(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.transporte.label(class="form-label") }}{{ form.transporte(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.diversion.label(class="form-label") }}{{ form.diversion(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.gasolina.label(class="form-label") }}{{ form.gasolina(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.pagos_tarjetas.label(class="form-label") }}{{ form.pagos_tarjetas(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.luz.label(class="form-label") }}{{ form.luz(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.ahorro.label(class="form-label") }}{{ form.ahorro(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.agua.label(class="form-label") }}{{ form.agua(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.deudas.label(class="form-label") }}{{ form.deudas(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.gas.label(class="form-label") }}{{ form.gas(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.ropa.label(class="form-label") }}{{ form.ropa(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.telefono.label(class="form-label") }}{{ form.telefono(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.calzado.label(class="form-label") }}{{ form.calzado(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.telefono_celular.label(class="form-label") }}{{ form.telefono_celular(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.alcohol_cigarros.label(class="form-label") }}{{ form.alcohol_cigarros(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.cable.label(class="form-label") }}{{ form.cable(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.internet.label(class="form-label") }}{{ form.internet(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.otros_gastos.label(class="form-label") }}{{ form.otros_gastos(class="form-control", readonly=not editable_social) }}</div>
+                            <div class="col-md-4 mb-3">{{ form.empleados_domesticos.label(class="form-label") }}{{ form.empleados_domesticos(class="form-control", readonly=not editable_social) }}</div>
                         </div>
 
                         <hr>
@@ -621,17 +536,8 @@
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <h6 class="mb-3">Padre</h6>
-
-                                        <div class="mb-3">
-                                            {{ form.padre_nombre.label(class="form-label") }}
-                                            {{ form.padre_nombre(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
-                                        <div class="mb-3">
-                                            {{ form.padre_edad_o_tiempo_vida.label(class="form-label") }}
-                                            {{ form.padre_edad_o_tiempo_vida(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
+                                        <div class="mb-3">{{ form.padre_nombre.label(class="form-label") }}{{ form.padre_nombre(class="form-control", readonly=not editable_social) }}</div>
+                                        <div class="mb-3">{{ form.padre_edad_o_tiempo_vida.label(class="form-label") }}{{ form.padre_edad_o_tiempo_vida(class="form-control", readonly=not editable_social) }}</div>
                                         <div class="form-check mb-3">
                                             {% if editable_social %}
                                                 {{ form.padre_vive(class="form-check-input") }}
@@ -640,16 +546,8 @@
                                             {% endif %}
                                             {{ form.padre_vive.label(class="form-check-label") }}
                                         </div>
-
-                                        <div class="mb-3">
-                                            {{ form.padre_causa_muerte.label(class="form-label") }}
-                                            {{ form.padre_causa_muerte(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
-                                        <div class="mb-3">
-                                            {{ form.padre_enfermedad.label(class="form-label") }}
-                                            {{ form.padre_enfermedad(class="form-control", readonly=not editable_social) }}
-                                        </div>
+                                        <div class="mb-3">{{ form.padre_causa_muerte.label(class="form-label") }}{{ form.padre_causa_muerte(class="form-control", readonly=not editable_social) }}</div>
+                                        <div class="mb-3">{{ form.padre_enfermedad.label(class="form-label") }}{{ form.padre_enfermedad(class="form-control", readonly=not editable_social) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -658,17 +556,8 @@
                                 <div class="card mb-4">
                                     <div class="card-body">
                                         <h6 class="mb-3">Madre</h6>
-
-                                        <div class="mb-3">
-                                            {{ form.madre_nombre.label(class="form-label") }}
-                                            {{ form.madre_nombre(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
-                                        <div class="mb-3">
-                                            {{ form.madre_edad_o_tiempo_vida.label(class="form-label") }}
-                                            {{ form.madre_edad_o_tiempo_vida(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
+                                        <div class="mb-3">{{ form.madre_nombre.label(class="form-label") }}{{ form.madre_nombre(class="form-control", readonly=not editable_social) }}</div>
+                                        <div class="mb-3">{{ form.madre_edad_o_tiempo_vida.label(class="form-label") }}{{ form.madre_edad_o_tiempo_vida(class="form-control", readonly=not editable_social) }}</div>
                                         <div class="form-check mb-3">
                                             {% if editable_social %}
                                                 {{ form.madre_vive(class="form-check-input") }}
@@ -677,16 +566,8 @@
                                             {% endif %}
                                             {{ form.madre_vive.label(class="form-check-label") }}
                                         </div>
-
-                                        <div class="mb-3">
-                                            {{ form.madre_causa_muerte.label(class="form-label") }}
-                                            {{ form.madre_causa_muerte(class="form-control", readonly=not editable_social) }}
-                                        </div>
-
-                                        <div class="mb-3">
-                                            {{ form.madre_enfermedad.label(class="form-label") }}
-                                            {{ form.madre_enfermedad(class="form-control", readonly=not editable_social) }}
-                                        </div>
+                                        <div class="mb-3">{{ form.madre_causa_muerte.label(class="form-label") }}{{ form.madre_causa_muerte(class="form-control", readonly=not editable_social) }}</div>
+                                        <div class="mb-3">{{ form.madre_enfermedad.label(class="form-label") }}{{ form.madre_enfermedad(class="form-control", readonly=not editable_social) }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -696,13 +577,13 @@
                     <div class="d-flex justify-content-between mt-4">
                         <div>
                             {% if seccion == "economia" %}
-                                <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='datos_generales') }}"
-                                    class="btn btn-outline-secondary">
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='datos_generales') }}"
+                                   class="btn btn-outline-secondary">
                                     Anterior
                                 </a>
                             {% elif seccion == "padres" %}
-                                <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='economia') }}"
-                                    class="btn btn-outline-secondary">
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='economia') }}"
+                                   class="btn btn-outline-secondary">
                                     Anterior
                                 </a>
                             {% endif %}
@@ -729,18 +610,18 @@
                                 {% endif %}
                             {% else %}
                                 {% if seccion == "datos_generales" %}
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='economia') }}"
-                                        class="btn btn-success">
+                                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='economia') }}"
+                                       class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% elif seccion == "economia" %}
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='padres') }}"
-                                        class="btn btn-success">
+                                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
+                                       class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% elif seccion == "padres" %}
-                                    <a href="{{ url_for('main.actividad_social_detalle', paciente_id=paciente.id, seccion='hermanos') }}"
-                                        class="btn btn-success">
+                                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
+                                       class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% endif %}
