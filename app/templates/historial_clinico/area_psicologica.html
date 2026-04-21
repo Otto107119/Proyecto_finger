@@ -221,7 +221,7 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <a class="btn btn-outline-secondary"
-                       href="{{ url_for('historial_clinico.historial_clinico_area_espiritual', paciente_id=paciente.id) }}">
+                        href="{{ url_for('historial_clinico.historial_clinico_area_espiritual', paciente_id=paciente.id) }}">
                         Anterior
                     </a>
 
@@ -231,8 +231,8 @@
                         </button>
 
                         <a class="btn btn-success"
-                           href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
-                            Finalizar / Volver
+                            href="{{ url_for('historial_clinico.historial_clinico_area_fisica', paciente_id=paciente.id) }}">
+                            Siguiente
                         </a>
                     </div>
                 </div>

@@ -110,7 +110,6 @@ class HistorialClinico(db.Model):
     creado_en = db.Column(db.DateTime, default=datetime.utcnow)
     actualizado_en = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-
     # Área física
     incontinencia = db.Column(db.Boolean, default=False)
     incontinencia_urinaria = db.Column(db.Boolean, default=False)

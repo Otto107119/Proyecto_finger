@@ -9,7 +9,7 @@
 
             <div class="mb-3">
                 <a class="btn btn-secondary"
-                    href="{{ url_for('historial_clinico.historial_clinico_area_psicologica', paciente_id=paciente.id) }}">
+                   href="{{ url_for('historial_clinico.historial_clinico_area_psicologica', paciente_id=paciente.id) }}">
                     Volver a área psicológica
                 </a>
             </div>
@@ -17,7 +17,8 @@
             <form method="POST">
                 {{ form.hidden_tag() }}
 
-                <h5 class="mt-3 mb-3">Incontinencia</h5>
+                <hr>
+                <h5 class="mb-3">Incontinencia</h5>
                 <div class="row">
                     <div class="col-md-3 mb-3 form-check">
                         {{ form.incontinencia(class="form-check-input") }}
@@ -38,7 +39,7 @@
                 </div>
 
                 <hr>
-                <h5 class="mt-3 mb-3">Estado general</h5>
+                <h5 class="mb-3">Estado general</h5>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         {{ form.estado_general.label(class="form-label") }}
@@ -51,16 +52,18 @@
                 </div>
 
                 <hr>
-                <h5 class="mt-3 mb-3">Condiciones físicas</h5>
+                <h5 class="mb-3">Condiciones físicas</h5>
                 <div class="row">
                     <div class="col-md-4 mb-3 form-check">
                         {{ form.miembros_superiores(class="form-check-input") }}
                         {{ form.miembros_superiores.label(class="form-check-label") }}
                     </div>
+
                     <div class="col-md-4 mb-3 form-check">
                         {{ form.miembros_inferiores(class="form-check-input") }}
                         {{ form.miembros_inferiores.label(class="form-check-label") }}
                     </div>
+
                     <div class="col-md-4 mb-3 form-check">
                         {{ form.edema(class="form-check-input") }}
                         {{ form.edema.label(class="form-check-label") }}
@@ -104,7 +107,7 @@
                 </div>
 
                 <hr>
-                <h5 class="mt-3 mb-3">Inmunizaciones y amputaciones</h5>
+                <h5 class="mb-3">Inmunizaciones y amputaciones</h5>
                 <div class="row">
                     <div class="col-md-4 mb-3 form-check">
                         {{ form.inmunizaciones(class="form-check-input") }}
@@ -126,12 +129,13 @@
                 </div>
 
                 <hr>
-                <h5 class="mt-3 mb-3">Sueño, cirugías y antecedentes</h5>
+                <h5 class="mb-3">Sueño, cirugías y antecedentes</h5>
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         {{ form.horas_durmiendo.label(class="form-label") }}
                         {{ form.horas_durmiendo(class="form-control") }}
                     </div>
+
                     <div class="col-md-6 mb-3 form-check mt-4">
                         {{ form.insomnio(class="form-check-input") }}
                         {{ form.insomnio.label(class="form-check-label") }}
@@ -161,20 +165,23 @@
                 </div>
 
                 <hr>
-                <h5 class="mt-3 mb-3">Datos clínicos</h5>
+                <h5 class="mb-3">Datos clínicos</h5>
                 <div class="row">
                     <div class="col-md-3 mb-3 form-check">
                         {{ form.acepta(class="form-check-input") }}
                         {{ form.acepta.label(class="form-check-label") }}
                     </div>
+
                     <div class="col-md-3 mb-3">
                         {{ form.tipo_sangre.label(class="form-label") }}
                         {{ form.tipo_sangre(class="form-control") }}
                     </div>
+
                     <div class="col-md-3 mb-3 form-check">
                         {{ form.transfusiones(class="form-check-input") }}
                         {{ form.transfusiones.label(class="form-check-label") }}
                     </div>
+
                     <div class="col-md-3 mb-3 form-check">
                         {{ form.alergias(class="form-check-input") }}
                         {{ form.alergias.label(class="form-check-label") }}
@@ -184,6 +191,7 @@
                         {{ form.transfusiones_cuales.label(class="form-label") }}
                         {{ form.transfusiones_cuales(class="form-control", rows="2") }}
                     </div>
+
                     <div class="col-md-6 mb-3">
                         {{ form.alergias_cuales.label(class="form-label") }}
                         {{ form.alergias_cuales(class="form-control", rows="2") }}
@@ -223,7 +231,7 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <a class="btn btn-outline-secondary"
-                        href="{{ url_for('historial_clinico.historial_clinico_area_psicologica', paciente_id=paciente.id) }}">
+                       href="{{ url_for('historial_clinico.historial_clinico_area_psicologica', paciente_id=paciente.id) }}">
                         Anterior
                     </a>
 
@@ -234,7 +242,7 @@
 
                         <a class="btn btn-success"
                             href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
-                            Finalizar / Volver
+                            Siguiente
                         </a>
                     </div>
                 </div>

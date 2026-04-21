@@ -4,6 +4,7 @@ from flask_login import login_required
 from app import db
 from app.models import Paciente, HistorialClinico
 from app.forms import HistorialClinicoForm
+from . import main
 
 historial_clinico_bp = Blueprint(
     "historial_clinico",

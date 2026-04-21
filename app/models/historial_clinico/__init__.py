@@ -1,0 +1,2 @@
+from .historial_clinico import HistorialClinico
+from .pares_craneales import ParesCraneales
