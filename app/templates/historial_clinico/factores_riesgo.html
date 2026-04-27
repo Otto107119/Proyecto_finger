@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Factores de riesgo{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Factores de riesgo de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id, historial_id=historial.id) }}">
+                Volver al expediente
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <hr>
+                <h5 class="mb-3">Consumo y hábitos</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="form-check mb-2">
+                            {{ form.alcohol(class="form-check-input") }}
+                            {{ form.alcohol.label(class="form-check-label") }}
+                        </div>
+                        {{ form.frecuencia_alcohol.label(class="form-label") }}
+                        {{ form.frecuencia_alcohol(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="form-check mb-2">
+                            {{ form.tabaco(class="form-check-input") }}
+                            {{ form.tabaco.label(class="form-check-label") }}
+                        </div>
+                        {{ form.frecuencia_tabaco.label(class="form-label") }}
+                        {{ form.frecuencia_tabaco(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="form-check mb-2">
+                            {{ form.drogas(class="form-check-input") }}
+                            {{ form.drogas.label(class="form-check-label") }}
+                        </div>
+                        {{ form.frecuencia_drogas.label(class="form-label") }}
+                        {{ form.frecuencia_drogas(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <div class="form-check mb-2">
+                            {{ form.vida_sexual_activa(class="form-check-input") }}
+                            {{ form.vida_sexual_activa.label(class="form-check-label") }}
+                        </div>
+                        {{ form.frecuencia_vida_sexual.label(class="form-label") }}
+                        {{ form.frecuencia_vida_sexual(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        {{ form.observaciones.label(class="form-label") }}
+                        {{ form.observaciones(class="form-control", rows="4") }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('historial_clinico.historial_clinico_app', paciente_id=paciente.id, historial_id=historial.id) }}"
+                        class="btn btn-secondary btn-sm">
+                        Anterior
+                    </a>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Guardar
+                        </button>
+
+                        <a href="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios', paciente_id=paciente.id, historial_id=historial.id) }}"
+                            class="btn btn-success btn-sm">
+                            Siguiente
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

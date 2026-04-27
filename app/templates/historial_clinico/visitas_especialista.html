@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Visitas a especialista{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Visitas a especialista de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id, historial_id=historial.id) }}">
+                Volver al expediente
+            </a>
+
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Visitas registradas</h5>
+                <a href="{{ url_for('historial_clinico.historial_clinico_visitas_especialista_agregar', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-success btn-sm">
+                    Agregar visita
+                </a>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Especialista</th>
+                            <th>Motivo</th>
+                            <th>Tratamiento</th>
+                            <th>Estudios requeridos</th>
+                            <th style="width: 160px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in visitas %}
+                        <tr>
+                            <td>{{ item.fecha_visita or '' }}</td>
+                            <td>{{ item.especialista or '' }}</td>
+                            <td>{{ item.motivo or '' }}</td>
+                            <td>{{ item.tratamiento or '' }}</td>
+                            <td>{{ item.estudios_requeridos or '' }}</td>
+                            <td>
+                                <a href="{{ url_for('historial_clinico.historial_clinico_visitas_especialista_editar', paciente_id=paciente.id, visita_id=item.id, historial_id=historial.id) }}"
+                                    class="btn btn-primary btn-sm">
+                                    Editar
+                                </a>
+
+                                <form method="POST"
+                                        action="{{ url_for('historial_clinico.historial_clinico_visitas_especialista_eliminar', paciente_id=paciente.id, visita_id=item.id, historial_id=historial.id) }}"
+                                        class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Eliminar esta visita?')">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                No hay visitas registradas.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-secondary btn-sm">
+                    Anterior
+                </a>
+
+                <a href="{{ url_for('historial_clinico.historial_clinico_resumen', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-success btn-sm">
+                    Finalizar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}A.P.P. - Patología{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">{{ titulo }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('historial_clinico.historial_clinico_app', paciente_id=paciente.id, historial_id=historial.id) }}">
+                Volver a A.P.P.
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        {{ form.patologia.label(class="form-label") }}
+                        {{ form.patologia(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.hace_cuanto.label(class="form-label") }}
+                        {{ form.hace_cuanto(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.diagnostico.label(class="form-label") }}
+                        {{ form.diagnostico(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.farmaco.label(class="form-label") }}
+                        {{ form.farmaco(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.dosis.label(class="form-label") }}
+                        {{ form.dosis(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

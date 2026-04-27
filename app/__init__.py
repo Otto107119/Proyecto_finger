@@ -24,6 +24,7 @@ def create_app():
         actividad_fisica_bp,
         actividad_social_bp,
         historial_clinico_bp,
+        backup_bp,
     )
 
     app.register_blueprint(auth_bp)
@@ -31,5 +32,6 @@ def create_app():
     app.register_blueprint(actividad_fisica_bp)
     app.register_blueprint(actividad_social_bp)
     app.register_blueprint(historial_clinico_bp)
+    app.register_blueprint(backup_bp)
 
     return app

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Historiales clínicos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <div>
+                    <h3 class="mb-1">
+                        Historiales clínicos de {{ paciente.nombre }}
+                    </h3>
+                    <p class="text-muted mb-0">
+                        Consulta, edita o crea historiales clínicos del paciente.
+                    </p>
+                </div>
+
+                <a href="{{ url_for('pacientes.pacientes_detalle',
+                                    paciente_id=paciente.id) }}"
+                    class="btn btn-secondary btn-sm">
+                    Volver al expediente
+                </a>
+            </div>
+
+            <hr>
+
+            <form method="POST"
+                    action="{{ url_for('historial_clinico.historial_clinico_nuevo',
+                                        paciente_id=paciente.id ) }}"
+                    class="mb-3">
+
+                <button type="submit" class="btn btn-success btn-sm">
+                    Crear nuevo historial clínico
+                </button>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:70px;">N.º</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Creado en</th>
+                            <th style="width:300px;">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for historial in historiales %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+
+                            <td>
+                                {{ historial.fecha or 'Sin fecha' }}
+                            </td>
+
+                            <td>
+                                {% if historial.estado == 'finalizado' %}
+                                    <span class="badge bg-success">
+                                        Finalizado
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">
+                                        En captura
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {{ historial.creado_en.strftime('%d/%m/%Y %H:%M')
+                                    if historial.creado_en else '—' }}
+                            </td>
+
+                            <td class="d-flex gap-1 flex-wrap">
+
+                                <a href="{{ url_for(
+                                    'historial_clinico.historial_clinico_index',
+                                    paciente_id=paciente.id,
+                                    historial_id=historial.id
+                                ) }}"
+                                    class="btn btn-primary btn-sm">
+                                    Editar
+                                </a>
+
+                                <a href="{{ url_for(
+                                    'historial_clinico.historial_clinico_resumen',
+                                    paciente_id=paciente.id,
+                                    historial_id=historial.id
+                                ) }}"
+                                    class="btn btn-info btn-sm">
+                                    Resumen
+                                </a>
+
+                                <a href="{{ url_for(
+                                    'historial_clinico.historial_clinico_pdf',
+                                    paciente_id=paciente.id,
+                                    historial_id=historial.id
+                                ) }}"
+                                    class="btn btn-secondary btn-sm">
+                                    PDF
+                                </a>
+
+                                {% if current_user.rol in ["admin", "superadmin"] %}
+                                    <form method="POST"
+                                        action="{{ url_for(
+                                            'historial_clinico.historial_clinico_eliminar',
+                                            paciente_id=paciente.id,
+                                            historial_id=historial.id
+                                        ) }}"
+                                        class="d-inline">
+
+                                    <button type="submit"
+                                            class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Seguro que deseas eliminar este historial clínico? Esta acción no se puede deshacer.')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        {% endif %}
+
+                            </td>
+                        </tr>
+
+                        {% else %}
+                        <tr>
+                            <td colspan="5"
+                                class="text-center text-muted py-4">
+                                No existen historiales clínicos registrados.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

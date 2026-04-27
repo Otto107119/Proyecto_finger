@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Estudios complementarios{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Estudios complementarios de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                Volver al expediente
+            </a>
+
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Estudios registrados</h5>
+                <a href="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios_agregar', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-success btn-sm">
+                    Agregar estudio
+                </a>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Estudio</th>
+                            <th>Fecha</th>
+                            <th>Resultado</th>
+                            <th>Tratamiento</th>
+                            <th style="width: 160px;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in estudios %}
+                        <tr>
+                            <td>{{ item.estudio or '' }}</td>
+                            <td>{{ item.fecha_estudio or '' }}</td>
+                            <td>{{ item.resultado or '' }}</td>
+                            <td>{{ item.tratamiento or '' }}</td>
+                            <td>
+                                <a href="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios_editar', paciente_id=paciente.id, estudio_id=item.id, historial_id=historial.id) }}"
+                                    class="btn btn-primary btn-sm">
+                                    Editar
+                                </a>
+
+                                <form method="POST"
+                                        action="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios_eliminar', paciente_id=paciente.id, estudio_id=item.id, historial_id=historial.id) }}"
+                                        class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                            onclick="return confirm('¿Eliminar este estudio?')">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No hay estudios registrados.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('historial_clinico.historial_clinico_factores_riesgo', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-secondary btn-sm">
+                    Anterior
+                </a>
+
+                <a href="{{ url_for('historial_clinico.historial_clinico_visitas_especialista', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="btn btn-success btn-sm">
+                    Siguiente
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

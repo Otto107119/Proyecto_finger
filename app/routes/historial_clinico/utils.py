@@ -12,3 +12,13 @@ def obtener_historial(paciente_id):
         db.session.commit()
 
     return paciente, historial
+
+def obtener_historial_por_id(paciente_id, historial_id):
+    paciente = Paciente.query.get_or_404(paciente_id)
+
+    historial = HistorialClinico.query.filter_by(
+        id=historial_id,
+        paciente_id=paciente.id
+    ).first_or_404()
+
+    return paciente, historial

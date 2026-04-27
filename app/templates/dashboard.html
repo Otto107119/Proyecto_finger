@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 
-{% if current_user.rol == "admin" %}
+{% if current_user.rol in ["admin", "superadmin"] %}
     <div class="alert alert-danger mt-3">
         Acceso total al sistema.
     </div>
@@ -20,7 +20,7 @@
         <h4>Bienvenido {{ current_user.nombre }} 👋</h4>
         <p>Rol: <strong>{{ current_user.rol }}</strong></p>
 
-        {% if current_user.rol == "admin" %}
+        {% if current_user.rol in ["admin", "superadmin"] %}
             <div class="alert alert-danger mt-3">
                 Acceso total al sistema.
             </div>

@@ -4,16 +4,18 @@ from flask_login import login_required
 from app import db
 from app.models import ParesCraneales
 from app.forms.historial_clinico import ParesCranealesForm
+
 from . import historial_clinico_bp
-from .utils import obtener_historial
+from .utils import obtener_historial_por_id
 
 
-@historial_clinico_bp.route("/pares-craneales", methods=["GET", "POST"])
+@historial_clinico_bp.route("/<int:historial_id>/pares-craneales", methods=["GET", "POST"])
 @login_required
-def historial_clinico_pares_craneales(paciente_id):
-    paciente, historial = obtener_historial(paciente_id)
+def historial_clinico_pares_craneales(paciente_id, historial_id):
+    paciente, historial = obtener_historial_por_id(paciente_id, historial_id)
 
     registro = ParesCraneales.query.filter_by(historial_clinico_id=historial.id).first()
+
     if not registro:
         registro = ParesCraneales(historial_clinico_id=historial.id)
         db.session.add(registro)
@@ -24,9 +26,14 @@ def historial_clinico_pares_craneales(paciente_id):
     if form.validate_on_submit():
         form.populate_obj(registro)
         db.session.commit()
+
         flash("Pares craneales guardados correctamente.", "success")
         return redirect(
-            url_for("historial_clinico.historial_clinico_pares_craneales", paciente_id=paciente.id)
+            url_for(
+                "historial_clinico.historial_clinico_pares_craneales",
+                paciente_id=paciente.id,
+                historial_id=historial.id
+            )
         )
 
     return render_template(

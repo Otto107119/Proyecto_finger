@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Marcha y equilibrio{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Marcha y equilibrio de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                Volver al expediente
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <hr>
+                <h5 class="mb-3">Alteraciones posturales</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check">
+                            {{ form.cifosis(class="form-check-input") }}
+                            {{ form.cifosis.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check">
+                            {{ form.lordosis(class="form-check-input") }}
+                            {{ form.lordosis.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check">
+                            {{ form.escoliosis(class="form-check-input") }}
+                            {{ form.escoliosis.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mb-3">Síntomas y antecedentes</h5>
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.mareos(class="form-check-input") }}
+                            {{ form.mareos.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.sincope(class="form-check-input") }}
+                            {{ form.sincope.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.caidas(class="form-check-input") }}
+                            {{ form.caidas.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        {{ form.frecuencia_caidas.label(class="form-label") }}
+                        {{ form.frecuencia_caidas(class="form-control") }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="form-check mb-2">
+                            {{ form.fracturas(class="form-check-input") }}
+                            {{ form.fracturas.label(class="form-check-label") }}
+                        </div>
+
+                        {{ form.antiguedad_fracturas.label(class="form-label") }}
+                        {{ form.antiguedad_fracturas(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.consecuencias_secuelas.label(class="form-label") }}
+                        {{ form.consecuencias_secuelas(class="form-control", rows="3") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.ayudas_tecnicas.label(class="form-label") }}
+                        {{ form.ayudas_tecnicas(class="form-control", rows="3") }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('historial_clinico.historial_clinico_pares_craneales', paciente_id=paciente.id, historial_id=historial.id) }}"
+                        class="btn btn-secondary btn-sm">
+                        Anterior
+                    </a>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Guardar
+                        </button>
+                        <a href="{{ url_for('historial_clinico.historial_clinico_aphf', paciente_id=paciente.id, historial_id=historial.id) }}"
+                            class="btn btn-success btn-sm">
+                            Siguiente
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

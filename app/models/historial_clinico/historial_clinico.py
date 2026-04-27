@@ -11,6 +11,8 @@ class HistorialClinico(db.Model):
     paciente = db.relationship("Paciente", backref="historiales_clinicos")
 
     fecha = db.Column(db.Date, nullable=True)
+    estado = db.Column(db.String(20), nullable=False, default="en_captura")
+    fecha_finalizacion = db.Column(db.DateTime, nullable=True)
 
     # Encabezado
     contacto_nombre = db.Column(db.String(150), nullable=True)

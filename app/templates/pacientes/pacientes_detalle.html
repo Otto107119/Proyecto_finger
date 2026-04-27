@@ -48,10 +48,11 @@
           Actividad social
         </a>
 
-        <a class="btn btn-primary"
-          href="{{ url_for('historial_clinico.historial_clinico_datos_generales', paciente_id=paciente.id) }}">
+        <a href="{{ url_for('historial_clinico.historiales_clinicos_lista', paciente_id=paciente.id) }}"
+          class="btn btn-primary">
           Historial clínico
         </a>
+
 
       </div>
 

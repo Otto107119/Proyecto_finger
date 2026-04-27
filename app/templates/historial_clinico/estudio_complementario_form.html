@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Estudio complementario{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">{{ titulo }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('historial_clinico.historial_clinico_estudios_complementarios', paciente_id=paciente.id, historial_id=historial.id) }}">
+                Volver a estudios complementarios
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="row">
+                    <div class="col-md-8 mb-3">
+                        {{ form.estudio.label(class="form-label") }}
+                        {{ form.estudio(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.fecha_estudio.label(class="form-label") }}
+                        {{ form.fecha_estudio(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.resultado.label(class="form-label") }}
+                        {{ form.resultado(class="form-control", rows="4") }}
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        {{ form.tratamiento.label(class="form-label") }}
+                        {{ form.tratamiento(class="form-control", rows="4") }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

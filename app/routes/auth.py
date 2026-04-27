@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
 from app.models import Usuario
@@ -30,8 +29,10 @@ def register():
         nuevo = Usuario(
             nombre=form.nombre.data,
             correo=form.correo.data,
-            password=generate_password_hash(form.password.data),
+            rol="capturista"
         )
+        nuevo.set_password(form.password.data)
+
         db.session.add(nuevo)
         db.session.commit()
 
@@ -48,7 +49,7 @@ def login():
     if form.validate_on_submit():
         usuario = Usuario.query.filter_by(correo=form.correo.data).first()
 
-        if usuario and check_password_hash(usuario.password, form.password.data):
+        if usuario and usuario.check_password(form.password.data):
             login_user(usuario)
             next_page = request.args.get("next")
             return redirect(next_page or url_for("auth.index"))

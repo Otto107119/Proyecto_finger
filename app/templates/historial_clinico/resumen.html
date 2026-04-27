@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+{% block title %}Resumen del historial clínico{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h3 class="mb-2">Resumen del historial clínico</h3>
+                    <p class="mb-1"><strong>Paciente:</strong> {{ paciente.nombre }}</p>
+                    <p class="mb-1"><strong>Fecha:</strong> {{ historial.fecha or 'Sin fecha' }}</p>
+                    <p class="mb-1">
+                        <strong>Estado:</strong>
+                        {% if historial.estado == 'finalizado' %}
+                            <span class="badge bg-success">Finalizado</span>
+                        {% else %}
+                            <span class="badge bg-warning text-dark">En captura</span>
+                        {% endif %}
+                    </p>
+                    {% if historial.fecha_finalizacion %}
+                    <p class="mb-0"><strong>Fecha de finalización:</strong> {{ historial.fecha_finalizacion }}</p>
+                    {% endif %}
+                </div>
+
+                <a class="btn btn-secondary btn-sm"
+                    href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id, historial_id=historial.id) }}">
+                    Volver al expediente
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">Avance de captura</h5>
+
+            <div class="progress mb-3" role="progressbar" aria-valuenow="{{ progreso }}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar" style="width: {{ progreso }}%;">
+                    {{ progreso }}%
+                </div>
+            </div>
+
+            <div class="row">
+                {% for nombre, ok in checklist %}
+                <div class="col-md-4 mb-2">
+                    {% if ok %}
+                        <span class="badge bg-success">Completo</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Pendiente</span>
+                    {% endif %}
+                    <span class="ms-2">{{ nombre }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion" id="accordionResumen">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="h1">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+                    Datos generales y contexto
+                </button>
+            </h2>
+            <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    <p><strong>Escolaridad:</strong> {{ historial.escolaridad or '—' }}</p>
+                    <p><strong>Estado civil:</strong> {{ historial.estado_civil or '—' }}</p>
+                    <p><strong>Ocupación actual:</strong> {{ historial.ocupacion_actual or '—' }}</p>
+                    <p><strong>Motivo de consulta:</strong> {{ historial.motivo_consulta or '—' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="h2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+                    Área física y valoración funcional
+                </button>
+            </h2>
+            <div id="c2" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    <p><strong>Estado general:</strong> {{ historial.estado_general or '—' }}</p>
+                    <p><strong>Biotipo:</strong> {{ historial.biotipo or '—' }}</p>
+                    <p><strong>Talla:</strong> {{ historial.talla or '—' }}</p>
+                    <p><strong>Peso:</strong> {{ historial.peso or '—' }}</p>
+                    <p><strong>Actividad física:</strong> {{ 'Sí' if historial.actividad_fisica else 'No' }}</p>
+
+                    {% if pares_craneales %}
+                    <hr>
+                    <p><strong>Pares craneales evaluados:</strong> {{ 'Sí' if pares_craneales.evaluados else 'No' }}</p>
+                    <p><strong>Alteraciones:</strong> {{ pares_craneales.alteraciones or '—' }}</p>
+                    {% endif %}
+
+                    {% if marcha_equilibrio %}
+                    <hr>
+                    <p><strong>Mareos:</strong> {{ 'Sí' if marcha_equilibrio.mareos else 'No' }}</p>
+                    <p><strong>Caídas:</strong> {{ 'Sí' if marcha_equilibrio.caidas else 'No' }}</p>
+                    <p><strong>Ayudas técnicas:</strong> {{ marcha_equilibrio.ayudas_tecnicas or '—' }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="h3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+                    Antecedentes
+                </button>
+            </h2>
+            <div id="c3" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    {% if aphf %}
+                    <p><strong>A.P.H.F. observaciones:</strong> {{ aphf.observaciones or '—' }}</p>
+                    {% endif %}
+
+                    {% if app_patologias %}
+                    <p><strong>A.P.P. registrados:</strong> {{ app_patologias|length }}</p>
+                    <ul>
+                        {% for item in app_patologias %}
+                        <li>{{ item.patologia or '—' }} — {{ item.farmaco or 'Sin fármaco' }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p><strong>A.P.P. registrados:</strong> 0</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="h4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
+                    Riesgos y seguimiento
+                </button>
+            </h2>
+            <div id="c4" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    {% if factores_riesgo %}
+                    <p><strong>Alcohol:</strong> {{ 'Sí' if factores_riesgo.alcohol else 'No' }}</p>
+                    <p><strong>Tabaco:</strong> {{ 'Sí' if factores_riesgo.tabaco else 'No' }}</p>
+                    <p><strong>Drogas:</strong> {{ 'Sí' if factores_riesgo.drogas else 'No' }}</p>
+                    <p><strong>Vida sexual activa:</strong> {{ 'Sí' if factores_riesgo.vida_sexual_activa else 'No' }}</p>
+                    {% endif %}
+
+                    <hr>
+                    <p><strong>Estudios complementarios:</strong> {{ estudios|length }}</p>
+                    <p><strong>Visitas a especialista:</strong> {{ visitas|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4 mb-5">
+        <a href="{{ url_for('historial_clinico.historial_clinico_visitas_especialista', paciente_id=paciente.id, historial_id=historial.id) }}"
+            class="btn btn-secondary btn-sm">
+            Volver a captura
+        </a>
+
+        <div>
+            <form method="POST"
+                    action="{{ url_for('historial_clinico.historial_clinico_finalizar', paciente_id=paciente.id, historial_id=historial.id) }}"
+                    class="d-inline">
+                <button type="submit" class="btn btn-success btn-sm">
+                    Finalizar captura
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -39,12 +39,12 @@
               <td class="text-end">
                 {% if current_user.rol in ["admin", "capturista"] %}
                   <a class="btn btn-outline-primary btn-sm"
-                     href="{{ url_for('actividad_fisica.actividad_fisica_editar', paciente_id=paciente.id, actividad_id=a.id) }}">
-                    Editar
+                      href="{{ url_for('actividad_fisica.actividad_fisica_editar', paciente_id=paciente.id, actividad_id=a.id) }}">
+                      Editar
                   </a>
                 {% endif %}
 
-                {% if current_user.rol == "admin" %}
+                {% if current_user.rol in ["admin", "superadmin"] %}
                   <form method="POST"
                         action="{{ url_for('actividad_fisica.actividad_fisica_eliminar', paciente_id=paciente.id, actividad_id=a.id) }}"
                         style="display:inline;"
@@ -67,7 +67,7 @@
 </div>
 
 <a class="btn btn-secondary mt-3"
-   href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+    href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
   Volver
 </a>
 {% endblock %}

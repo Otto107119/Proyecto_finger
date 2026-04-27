@@ -4,13 +4,13 @@ from flask_login import login_required
 from app import db
 from app.forms.historial_clinico import DatosGeneralesForm
 from . import historial_clinico_bp
-from .utils import obtener_historial
+from .utils import obtener_historial_por_id
 
 
-@historial_clinico_bp.route("/datos-generales", methods=["GET", "POST"])
+@historial_clinico_bp.route("/<int:historial_id>/datos-generales", methods=["GET", "POST"])
 @login_required
-def historial_clinico_datos_generales(paciente_id):
-    paciente, historial = obtener_historial(paciente_id)
+def historial_clinico_datos_generales(paciente_id, historial_id):
+    paciente, historial = obtener_historial_por_id(paciente_id, historial_id)
     form = DatosGeneralesForm(obj=historial)
 
     if form.validate_on_submit():
@@ -18,7 +18,9 @@ def historial_clinico_datos_generales(paciente_id):
         db.session.commit()
         flash("Datos generales guardados correctamente.", "success")
         return redirect(
-            url_for("historial_clinico.historial_clinico_area_social", paciente_id=paciente.id)
+            url_for("historial_clinico.historial_clinico_area_social", 
+            paciente_id=paciente.id,
+            historial_id=historial.id)
         )
 
     return render_template(

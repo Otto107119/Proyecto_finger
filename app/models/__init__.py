@@ -11,4 +11,14 @@ from .actividad_social import (
     ActividadSocialHermano,
     ActividadSocialHijo,
 )
-from .historial_clinico import HistorialClinico
+from .historial_clinico import (
+    HistorialClinico,
+    ParesCraneales,
+    MarchaEquilibrio,
+    APHF,
+    APPResumen,
+    APPPatologia,
+    FactoresRiesgo,
+    EstudioComplementario,
+    VisitaEspecialista,
+)

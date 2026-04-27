@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% block title %}A.P.H.F.{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">A.P.H.F. de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                Volver al expediente
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <hr>
+                <h5 class="mb-3">Familiares directos</h5>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h6 class="fw-bold">Padre</h6>
+
+                        <div class="form-check mb-2">
+                            {{ form.vive_padre(class="form-check-input") }}
+                            {{ form.vive_padre.label(class="form-check-label") }}
+                        </div>
+
+                        <div class="mb-2">
+                            {{ form.edad_padre.label(class="form-label") }}
+                            {{ form.edad_padre(class="form-control") }}
+                        </div>
+
+                        <div>
+                            {{ form.padecimientos_padre.label(class="form-label") }}
+                            {{ form.padecimientos_padre(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <h6 class="fw-bold">Madre</h6>
+
+                        <div class="form-check mb-2">
+                            {{ form.vive_madre(class="form-check-input") }}
+                            {{ form.vive_madre.label(class="form-check-label") }}
+                        </div>
+
+                        <div class="mb-2">
+                            {{ form.edad_madre.label(class="form-label") }}
+                            {{ form.edad_madre(class="form-control") }}
+                        </div>
+
+                        <div>
+                            {{ form.padecimientos_madre.label(class="form-label") }}
+                            {{ form.padecimientos_madre(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <h6 class="fw-bold">Hermanos</h6>
+
+                        <div class="mb-2">
+                            {{ form.numero_hermanos.label(class="form-label") }}
+                            {{ form.numero_hermanos(class="form-control") }}
+                        </div>
+
+                        <div>
+                            {{ form.padecimientos_hermanos.label(class="form-label") }}
+                            {{ form.padecimientos_hermanos(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                        <h6 class="fw-bold">Hijos</h6>
+
+                        <div class="mb-2">
+                            {{ form.numero_hijos.label(class="form-label") }}
+                            {{ form.numero_hijos(class="form-control") }}
+                        </div>
+
+                        <div>
+                            {{ form.padecimientos_hijos.label(class="form-label") }}
+                            {{ form.padecimientos_hijos(class="form-control", rows="3") }}
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mb-3">Antecedentes familiares frecuentes</h5>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.diabetes(class="form-check-input") }}
+                            {{ form.diabetes.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.hipertension(class="form-check-input") }}
+                            {{ form.hipertension.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.cancer(class="form-check-input") }}
+                            {{ form.cancer.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.cardiopatias(class="form-check-input") }}
+                            {{ form.cardiopatias.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.obesidad(class="form-check-input") }}
+                            {{ form.obesidad.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.demencia(class="form-check-input") }}
+                            {{ form.demencia.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.alzheimer(class="form-check-input") }}
+                            {{ form.alzheimer.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.parkinson(class="form-check-input") }}
+                            {{ form.parkinson.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <div class="form-check">
+                            {{ form.enfermedad_renal(class="form-check-input") }}
+                            {{ form.enfermedad_renal.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-3">
+                        {{ form.otra_enfermedad.label(class="form-label") }}
+                        {{ form.otra_enfermedad(class="form-control") }}
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mb-3">Notas clínicas heredofamiliares</h5>
+
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        {{ form.observaciones.label(class="form-label") }}
+                        {{ form.observaciones(
+                            class="form-control",
+                            rows="8",
+                            style="background-image: linear-gradient(to bottom, transparent 95%, #d0d0d0 95%); background-size: 100% 2.1em; line-height: 2.1em;"
+                        ) }}
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('historial_clinico.historial_clinico_marcha_equilibrio', paciente_id=paciente.id, historial_id=historial.id) }}"
+                        class="btn btn-secondary btn-sm">
+                        Anterior
+                    </a>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            Guardar
+                        </button>
+
+                        <a href="{{ url_for('historial_clinico.historial_clinico_app', paciente_id=paciente.id, historial_id=historial.id) }}"
+                            class="btn btn-success btn-sm">
+                            Siguiente
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

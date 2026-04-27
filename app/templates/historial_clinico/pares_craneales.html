@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Pares craneales{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h3 class="mb-3">Pares craneales de {{ paciente.nombre }}</h3>
+
+            <a class="btn btn-secondary btn-sm mb-3"
+                href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                Volver al expediente
+            </a>
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <hr>
+                <h5 class="mb-3">Valoración neurológica</h5>
+
+                <div class="row align-items-start">
+                    <div class="col-md-4 mb-4 text-center">
+                        <div class="border rounded bg-light p-2">
+                            <img src="{{ url_for('static', filename='img/pares_craneales.png') }}"
+                                alt="Pares craneales"
+                                class="img-fluid rounded"
+                                style="max-height: 320px; object-fit: contain;">
+                        </div>
+                        <small class="text-muted d-block mt-2">
+                            Imagen de referencia anatómica
+                        </small>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    {{ form.evaluados(class="form-check-input") }}
+                                    {{ form.evaluados.label(class="form-check-label") }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    {{ form.sin_alteraciones(class="form-check-input") }}
+                                    {{ form.sin_alteraciones.label(class="form-check-label") }}
+                                </div>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                {{ form.alteraciones.label(class="form-label") }}
+                                {{ form.alteraciones(class="form-control", rows="3") }}
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                {{ form.observaciones_generales.label(class="form-label") }}
+                                {{ form.observaciones_generales(class="form-control", rows="3") }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+                <h5 class="mb-3">Salud oral y alimentación</h5>
+
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.dentadura_postiza(class="form-check-input") }}
+                            {{ form.dentadura_postiza.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.removible(class="form-check-input") }}
+                            {{ form.removible.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.problemas_masticar(class="form-check-input") }}
+                            {{ form.problemas_masticar.label(class="form-check-label") }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                        <div class="form-check">
+                            {{ form.atragantamientos(class="form-check-input") }}
+                            {{ form.atragantamientos.label(class="form-check-label") }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.piezas_perdidas.label(class="form-label") }}
+                        {{ form.piezas_perdidas(class="form-control", rows="2") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.piezas_conservadas.label(class="form-label") }}
+                        {{ form.piezas_conservadas(class="form-control", rows="2") }}
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        {{ form.piezas_fragiles.label(class="form-label") }}
+                        {{ form.piezas_fragiles(class="form-control", rows="2") }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        {{ form.consistencia_alimentos.label(class="form-label") }}
+                        {{ form.consistencia_alimentos(class="form-select") }}
+                    </div>
+                </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                            <a href="{{ url_for('historial_clinico.historial_clinico_area_fisica', paciente_id=paciente.id, historial_id=historial.id) }}"
+                            class="btn btn-secondary btn-sm">
+                        Anterior
+                    </a>
+
+                    <div>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                        Guardar
+                    </button>
+
+                    <a href="{{ url_for('historial_clinico.historial_clinico_marcha_equilibrio', paciente_id=paciente.id, historial_id=historial.id) }}"
+                        class="btn btn-success btn-sm">
+                        Siguiente
+                    </a>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
