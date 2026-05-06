@@ -1,0 +1,478 @@
+{% extends "base.html" %}
+
+{% block title %}Actividad Nutricional{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Actividad Nutricional</h4>
+            <small>Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <ul class="nav nav-tabs mb-4" id="nutricionTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="datos-tab" data-bs-toggle="tab"
+                                data-bs-target="#datos" type="button" role="tab">
+                            Datos generales
+                        </button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="calidad-tab" data-bs-toggle="tab"
+                                data-bs-target="#calidad" type="button" role="tab">
+                            Calidad de dieta
+                        </button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="mna-tab" data-bs-toggle="tab"
+                                data-bs-target="#mna" type="button" role="tab">
+                            MNA-SF
+                        </button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="recordatorio-tab" data-bs-toggle="tab"
+                                data-bs-target="#recordatorio" type="button" role="tab">
+                            Recordatorio 24 h
+                        </button>
+                    </li>
+
+                </ul>
+
+                <div class="tab-content">
+
+                    <!-- DATOS GENERALES -->
+                    <div class="tab-pane fade show active" id="datos" role="tabpanel">
+
+                        <h5 class="mb-3">Datos generales</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                {{ form.peso.label(class="form-label") }}
+                                {{ form.peso(class="form-control") }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form.talla.label(class="form-label") }}
+                                {{ form.talla(class="form-control") }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form.pantorrilla.label(class="form-label") }}
+                                {{ form.pantorrilla(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                {{ form.cintura.label(class="form-label") }}
+                                {{ form.cintura(class="form-control") }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form.cadera.label(class="form-label") }}
+                                {{ form.cadera(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-check mb-2">
+                            {{ form.problemas_masticacion_deglucion(class="form-check-input") }}
+                            {{ form.problemas_masticacion_deglucion.label(class="form-check-label") }}
+                        </div>
+
+                        <div class="form-check mb-2">
+                            {{ form.alergias_alimentos(class="form-check-input") }}
+                            {{ form.alergias_alimentos.label(class="form-check-label") }}
+                        </div>
+
+                        <div class="form-check mb-2">
+                            {{ form.intolerancias_alimentos(class="form-check-input") }}
+                            {{ form.intolerancias_alimentos.label(class="form-check-label") }}
+                        </div>
+
+                    </div>
+
+                    <!-- CALIDAD DE DIETA -->
+                    <div class="tab-pane fade" id="calidad" role="tabpanel">
+
+                        <h5 class="mb-3">Índice de calidad de la dieta</h5>
+
+                        <div class="alert alert-info">
+                            Marca los criterios que cumple el paciente. Cada opción marcada equivale a 1 punto.
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-check mb-2">
+                                    {{ form.frutas_diarias(class="form-check-input") }}
+                                    {{ form.frutas_diarias.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.verduras_diarias(class="form-check-input") }}
+                                    {{ form.verduras_diarias.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.leguminosas(class="form-check-input") }}
+                                    {{ form.leguminosas.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.proteina_adecuada(class="form-check-input") }}
+                                    {{ form.proteina_adecuada.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.cereales_integrales(class="form-check-input") }}
+                                    {{ form.cereales_integrales.label(class="form-check-label") }}
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-check mb-2">
+                                    {{ form.limita_refrescos_jugos(class="form-check-input") }}
+                                    {{ form.limita_refrescos_jugos.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.limita_embutidos_procesados(class="form-check-input") }}
+                                    {{ form.limita_embutidos_procesados.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.agua_suficiente(class="form-check-input") }}
+                                    {{ form.agua_suficiente.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.grasas_saludables(class="form-check-input") }}
+                                    {{ form.grasas_saludables.label(class="form-check-label") }}
+                                </div>
+
+                                <div class="form-check mb-2">
+                                    {{ form.mas_de_tres_comidas(class="form-check-input") }}
+                                    {{ form.mas_de_tres_comidas.label(class="form-check-label") }}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- MNA-SF -->
+                    <div class="tab-pane fade" id="mna" role="tabpanel">
+
+                        <h5 class="mb-3">Mini Nutritional Assessment - Versión corta</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.mna_ingesta.label(class="form-label") }}
+                                {{ form.mna_ingesta(class="form-select") }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form.mna_perdida_peso.label(class="form-label") }}
+                                {{ form.mna_perdida_peso(class="form-select") }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.mna_movilidad.label(class="form-label") }}
+                                {{ form.mna_movilidad(class="form-select") }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form.mna_estres.label(class="form-label") }}
+                                {{ form.mna_estres(class="form-select") }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.mna_neuropsicologicos.label(class="form-label") }}
+                                {{ form.mna_neuropsicologicos(class="form-select") }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form.mna_imc.label(class="form-label") }}
+                                {{ form.mna_imc(class="form-select") }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                        <!-- RECORDATORIO 24H -->
+                        <div class="tab-pane fade" id="recordatorio" role="tabpanel">
+
+                            <h5 class="mb-3">Recordatorio de 24 horas</h5>
+
+                            <div class="row mb-3"> 
+                                <div class="col-md-4">
+                                    {{ form.dia_recordatorio.label(class="form-label") }}
+                                    {{ form.dia_recordatorio(class="form-select") }}
+                                </div>
+                            </div>
+
+                    <!-- 🔥 DESAYUNO -->
+                    <h6 class="mt-3">Desayuno</h6>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.desayuno_frutas.label }}
+                            {{ form.desayuno_frutas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_verduras.label }}
+                            {{ form.desayuno_verduras(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_cereales.label }}
+                            {{ form.desayuno_cereales(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_lacteos.label }}
+                            {{ form.desayuno_lacteos(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            {{ form.desayuno_leguminosas.label }}
+                            {{ form.desayuno_leguminosas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_aoa.label }}
+                            {{ form.desayuno_aoa(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_aceites.label }}
+                            {{ form.desayuno_aceites(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.desayuno_cafe.label }}
+                            {{ form.desayuno_cafe(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            {{ form.desayuno_azucar.label }}
+                            {{ form.desayuno_azucar(class="form-control") }}
+                        </div>
+                    </div>
+
+
+                    <hr class="my-4">
+
+                    <!-- COMIDA -->
+                    <h6 class="mt-3">Comida</h6>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.comida_frutas.label }}
+                            {{ form.comida_frutas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.comida_verduras.label }}
+                            {{ form.comida_verduras(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.comida_cereales.label }}
+                            {{ form.comida_cereales(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.comida_leguminosas.label }}
+                            {{ form.comida_leguminosas(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            {{ form.comida_aoa.label }}
+                            {{ form.comida_aoa(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.comida_aceites.label }}
+                            {{ form.comida_aceites(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- INTERMEDIOS -->
+                    <h6 class="mt-3">Intermedios: matutino y/o vespertino</h6>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.intermedio_frutas.label }}
+                            {{ form.intermedio_frutas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.intermedio_verduras.label }}
+                            {{ form.intermedio_verduras(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.intermedio_cereales.label }}
+                            {{ form.intermedio_cereales(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.intermedio_lacteos.label }}
+                            {{ form.intermedio_lacteos(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            {{ form.intermedio_frutos_secos.label }}
+                            {{ form.intermedio_frutos_secos(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- CENA -->
+                    <h6 class="mt-3">Cena</h6>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form.cena_frutas.label }}
+                            {{ form.cena_frutas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.cena_verduras.label }}
+                            {{ form.cena_verduras(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.cena_cereales.label }}
+                            {{ form.cena_cereales(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.cena_lacteos.label }}
+                            {{ form.cena_lacteos(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-3">
+                            {{ form.cena_leguminosas.label }}
+                            {{ form.cena_leguminosas(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.cena_aoa.label }}
+                            {{ form.cena_aoa(class="form-control") }}
+                        </div>
+
+                        <div class="col-md-3">
+                            {{ form.cena_aceites.label }}
+                            {{ form.cena_aceites(class="form-control") }}
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mt-4 mb-3">Frecuencia de grasas</h5>
+
+                    <table class="table table-bordered text-center align-middle">
+                        <thead class="table-success">
+                            <tr>
+                                <th>Tipo de grasa</th>
+                                <th>No utiliza</th>
+                                <th>1 / día</th>
+                                <th>2-3 / día</th>
+                                <th>1-2 semana</th>
+                                <th>2-4 semana</th>
+                                <th>1 vez / mes</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% set grasas = [
+                                'Aceite de soya',
+                                'Aceite de canola',
+                                'Aceite de maíz',
+                                'Aceite de oliva virgen extra',
+                                'Aguacate',
+                                'Frutos secos',
+                                'Manteca',
+                                'Mantequilla'
+                            ] %}
+
+                            {% set frecuencias = [
+                                'No utiliza',
+                                '1/día',
+                                '2-3/día',
+                                '1-2 semana',
+                                '2-4 semana',
+                                '1 vez/mes'
+                            ] %}
+
+                            {% for grasa in grasas %}
+                                {% set grasa_index = loop.index0 %}
+                                <tr>
+                                    <td class="text-start">
+                                        <strong>{{ grasa }}</strong>
+                                        <input type="hidden" name="tipo_grasa_{{ grasa_index }}" value="{{ grasa }}">
+                                    </td>
+
+                                    {% for frecuencia in frecuencias %}
+                                    <td>
+                                        <input type="radio"
+                                            name="frecuencia_grasa_{{ grasa_index }}"
+                                            value="{{ frecuencia }}"
+                                            {% if frecuencia == 'No utiliza' %}checked{% endif %}>
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('pacientes.pacientes_lista') }}" class="btn btn-secondary">
+                        Cancelar
+                    </a>
+
+                    {{ form.submit(class="btn btn-success") }}
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

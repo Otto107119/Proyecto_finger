@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle Área Médica{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">Detalle Área Médica</h4>
+            <small>Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="card-body">
+
+            <h5>Riesgo cardiovascular</h5>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Sexo</th>
+                    <td>{{ registro.sexo or "-" }}</td>
+                </tr>
+                <tr>
+                    <th>Edad</th>
+                    <td>{{ registro.edad or "-" }}</td>
+                </tr>
+                <tr>
+                    <th>Presión sistólica</th>
+                    <td>{{ registro.presion_sistolica or "-" }} mmHg</td>
+                </tr>
+                <tr>
+                    <th>Tratamiento por hipertensión</th>
+                    <td>{{ "Sí" if registro.tratamiento_hipertension else "No" }}</td>
+                </tr>
+                <tr>
+                    <th>Fumador</th>
+                    <td>{{ "Sí" if registro.fumador else "No" }}</td>
+                </tr>
+                <tr>
+                    <th>Diabético</th>
+                    <td>{{ "Sí" if registro.diabetico else "No" }}</td>
+                </tr>
+                <tr>
+                    <th>HDL</th>
+                    <td>{{ registro.hdl or "-" }}</td>
+                </tr>
+                <tr>
+                    <th>Colesterol</th>
+                    <td>{{ registro.colesterol or "-" }}</td>
+                </tr>
+                <tr>
+                    <th>Edad del corazón</th>
+                    <td>{{ registro.edad_corazon or "-" }}</td>
+                </tr>
+                <tr>
+                    <th>Porcentaje de riesgo</th>
+                    <td>{{ registro.porcentaje_riesgo or "-" }}%</td>
+                </tr>
+                <tr>
+                    <th>Interpretación</th>
+                    <td><strong>{{ registro.interpretacion_riesgo or "-" }}</strong></td>
+                </tr>
+            </table>
+
+            <h5 class="mt-4">Laboratoriales</h5>
+
+            <table class="table table-bordered table-striped">
+                <thead class="table-danger">
+                    <tr>
+                        <th>Parámetro</th>
+                        <th>Valor</th>
+                        <th>Referencia</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>Colesterol total</td>
+                        <td>{{ registro.colesterol_total or "-" }} mg/dL</td>
+                        <td>&lt;200 mg/dL</td>
+                    </tr>
+                    <tr>
+                        <td>Colesterol LDL</td>
+                        <td>{{ registro.colesterol_ldl or "-" }} mg/dL</td>
+                        <td>&lt;100 mg/dL</td>
+                    </tr>
+                    <tr>
+                        <td>Colesterol HDL</td>
+                        <td>{{ registro.colesterol_hdl or "-" }} mg/dL</td>
+                        <td>40 - 60 mg/dL</td>
+                    </tr>
+                    <tr>
+                        <td>Triglicéridos</td>
+                        <td>{{ registro.trigliceridos or "-" }} mg/dL</td>
+                        <td>&lt;150 mg/dL</td>
+                    </tr>
+                    <tr>
+                        <td>Glucosa capilar</td>
+                        <td>{{ registro.glucosa_capilar or "-" }} mg/dL</td>
+                        <td>70 - 110 mg/dL</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between mt-4">
+
+            <a href="{{ url_for('area_medica.index', paciente_id=paciente.id) }}"
+                class="btn btn-secondary">
+                Volver
+            </a>
+
+            <div class="d-flex gap-2">
+
+                {% if puede_editar %}
+                    <a href="{{ url_for('area_medica.editar', registro_id=registro.id) }}"
+                        class="btn btn-warning">
+                        Editar
+                    </a>
+                {% endif %}
+
+                {% if puede_eliminar %}
+                    <form method="POST"
+                        action="{{ url_for('area_medica.eliminar', registro_id=registro.id) }}">
+                        <button type="submit"
+                            class="btn btn-outline-danger"
+                            onclick="return confirm('¿Eliminar este registro médico?')">
+                            Eliminar
+                        </button>
+                    </form>
+                {% endif %}
+
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

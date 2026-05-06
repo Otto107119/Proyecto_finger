@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Actividad Nutricional{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="mb-0">Actividad Nutricional</h4>
+                <small>Paciente: {{ paciente.nombre }}</small>
+            </div>
+
+            <a href="{{ url_for('actividad_nutricional.nueva', paciente_id=paciente.id) }}"
+                class="btn btn-light btn-sm">
+                Nueva actividad
+            </a>
+        </div>
+
+        <div class="card-body">
+
+            {% if actividades %}
+                <table class="table table-bordered table-striped">
+                    <thead class="table-success">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>IMC</th>
+                            <th>Calidad de dieta</th>
+                            <th>MNA-SF</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for actividad in actividades %}
+                        <tr>
+                            <td>{{ actividad.fecha_registro.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td>{{ actividad.imc or "No calculado" }}</td>
+                            <td>
+                                {{ actividad.puntaje_calidad_dieta }}/10<br>
+                                <small>{{ actividad.interpretacion_calidad_dieta }}</small>
+                            </td>
+                            <td>
+                                {{ actividad.puntaje_mna }}/14<br>
+                                <small>{{ actividad.interpretacion_mna }}</small>
+                            </td>
+
+                            <td class="text-center">
+
+                                <a href="{{ url_for('actividad_nutricional.detalle', actividad_id=actividad.id) }}"
+                                class="btn btn-primary btn-sm">
+                                    Ver
+                                </a>
+
+                                {% if puede_editar %}
+                                <a href="{{ url_for('actividad_nutricional.editar', actividad_id=actividad.id) }}" class="btn btn-warning">
+                                    Editar
+                                </a>
+                                {% endif %}
+
+                                {% if puede_pdf %}
+                                <a href="{{ url_for('actividad_nutricional.pdf', actividad_id=actividad.id) }}" class="btn btn-success">
+                                    PDF
+                                </a>
+                                {% endif %}
+
+                                {% if puede_eliminar %}
+                                <form method="POST" action="{{ url_for('actividad_nutricional.eliminar', actividad_id=actividad.id) }}">
+                                    <button class="btn btn-danger" type="submit">
+                                        Eliminar
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-info mb-0">
+                    Este paciente aún no tiene registros de actividad nutricional.
+                </div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{{ url_for('pacientes.pacientes_lista') }}"
+                    class="btn btn-secondary">
+                    Volver al paciente
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

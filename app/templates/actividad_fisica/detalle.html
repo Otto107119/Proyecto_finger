@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle actividad física{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3>Detalle de evaluación física</h3>
+            <p class="text-muted mb-0">
+                Paciente: {{ paciente.nombre }} {{ paciente.apellido_paterno }} {{ paciente.apellido_materno }}
+            </p>
+            <small class="text-muted">
+                Fecha: {{ evaluacion.fecha.strftime('%d/%m/%Y') }}
+            </small>
+        </div>
+
+        <div>
+            <a href="{{ url_for('actividad_fisica.lista', paciente_id=paciente.id) }}" class="btn btn-secondary btn-sm">
+                Volver
+            </a>
+
+            {% if puede_pdf %}
+            <a href="{{ url_for('actividad_fisica.pdf', evaluacion_id=evaluacion.id) }}" class="btn btn-danger btn-sm">
+                Descargar PDF
+            </a>
+            {% endif %}
+
+            {% if puede_editar %}
+            <a href="{{ url_for('actividad_fisica.editar', evaluacion_id=evaluacion.id) }}" class="btn btn-warning btn-sm">
+                Editar
+            </a>
+
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">SPPB Total</h6>
+                    <h2>{{ evaluacion.sppb_total or 0 }}/12</h2>
+                    <span class="badge bg-primary">
+                        {{ evaluacion.interpretacion_sppb or "Sin interpretar" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Riesgo de caída</h6>
+                    <p class="mb-0">{{ evaluacion.riesgo_caida or "-" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Riesgo funcional</h6>
+                    <p class="mb-0">{{ evaluacion.riesgo_funcional or "-" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm text-center">
+                <div class="card-body">
+                    <h6 class="text-muted">Fecha</h6>
+                    <p class="mb-0">{{ evaluacion.fecha.strftime('%d/%m/%Y') }}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white">
+            Evaluaciones físicas generales
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered align-middle">
+                <tbody>
+                    <tr>
+                        <th>Sentarse y levantarse 30 s</th>
+                        <td>{{ evaluacion.sentarse_levantarse_30s or "-" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Dinamómetro</th>
+                        <td>
+                            {% if evaluacion.dinamometro_kg is not none %}
+                                {{ evaluacion.dinamometro_kg }} kg
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>TUG</th>
+                        <td>
+                            {% if evaluacion.tug_segundos is not none %}
+                                {{ evaluacion.tug_segundos }} segundos
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Equilibrio unipodal</th>
+                        <td>
+                            {% if evaluacion.equilibrio_unipodal_segundos is not none %}
+                                {{ evaluacion.equilibrio_unipodal_segundos }} segundos
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Caminata 6 minutos</th>
+                        <td>
+                            {% if evaluacion.caminata_6min_metros is not none %}
+                                {{ evaluacion.caminata_6min_metros }} metros
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Velocidad de marcha</th>
+                        <td>
+                            {% if evaluacion.velocidad_marcha_ms is not none %}
+                                {{ evaluacion.velocidad_marcha_ms }} m/s
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white">
+            Resultado SPPB
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered align-middle">
+                <tbody>
+                    <tr>
+                        <th>Equilibrio</th>
+                        <td>{{ evaluacion.sppb_equilibrio or 0 }}/4</td>
+                    </tr>
+                    <tr>
+                        <th>Velocidad de marcha</th>
+                        <td>{{ evaluacion.sppb_velocidad_marcha or 0 }}/4</td>
+                    </tr>
+                    <tr>
+                        <th>Fuerza de piernas</th>
+                        <td>{{ evaluacion.sppb_fuerza_piernas or 0 }}/4</td>
+                    </tr>
+                    <tr>
+                        <th>Total</th>
+                        <td><strong>{{ evaluacion.sppb_total or 0 }}/12</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Interpretación</th>
+                        <td>{{ evaluacion.interpretacion_sppb or "-" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if evaluacion.notas %}
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-dark text-white">
+            Notas clínicas
+        </div>
+        <div class="card-body">
+            {{ evaluacion.notas }}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if puede_eliminar %}
+    <form action="{{ url_for('actividad_fisica.eliminar', evaluacion_id=evaluacion.id) }}" method="POST" class="text-end mb-4">
+        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Eliminar esta evaluación física?')">
+            Eliminar evaluación
+        </button>
+    </form>
+    {% endif %}
+
+</div>
+{% endblock %}

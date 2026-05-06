@@ -16,8 +16,7 @@
                     </p>
                 </div>
 
-                <a href="{{ url_for('pacientes.pacientes_detalle',
-                                    paciente_id=paciente.id) }}"
+                <a href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}"
                     class="btn btn-secondary btn-sm">
                     Volver al expediente
                 </a>
@@ -25,15 +24,15 @@
 
             <hr>
 
-            <form method="POST"
-                    action="{{ url_for('historial_clinico.historial_clinico_nuevo',
-                                        paciente_id=paciente.id ) }}"
+            {% if puede_crear %}
+                <form method="POST"
+                    action="{{ url_for('historial_clinico.historial_clinico_nuevo', paciente_id=paciente.id) }}"
                     class="mb-3">
-
-                <button type="submit" class="btn btn-success btn-sm">
-                    Crear nuevo historial clínico
-                </button>
-            </form>
+                    <button type="submit" class="btn btn-success btn-sm">
+                        Crear nuevo historial clínico
+                    </button>
+                </form>
+            {% endif %}
 
             <div class="table-responsive">
                 <table class="table table-bordered table-striped align-middle">
@@ -52,19 +51,13 @@
                         <tr>
                             <td>{{ loop.index }}</td>
 
-                            <td>
-                                {{ historial.fecha or 'Sin fecha' }}
-                            </td>
+                            <td>{{ historial.fecha or 'Sin fecha' }}</td>
 
                             <td>
                                 {% if historial.estado == 'finalizado' %}
-                                    <span class="badge bg-success">
-                                        Finalizado
-                                    </span>
+                                    <span class="badge bg-success">Finalizado</span>
                                 {% else %}
-                                    <span class="badge bg-warning text-dark">
-                                        En captura
-                                    </span>
+                                    <span class="badge bg-warning text-dark">En captura</span>
                                 {% endif %}
                             </td>
 
@@ -81,7 +74,11 @@
                                     historial_id=historial.id
                                 ) }}"
                                     class="btn btn-primary btn-sm">
-                                    Editar
+                                    {% if puede_crear %}
+                                        Editar
+                                    {% else %}
+                                        Ver
+                                    {% endif %}
                                 </a>
 
                                 <a href="{{ url_for(
@@ -93,16 +90,18 @@
                                     Resumen
                                 </a>
 
-                                <a href="{{ url_for(
-                                    'historial_clinico.historial_clinico_pdf',
-                                    paciente_id=paciente.id,
-                                    historial_id=historial.id
-                                ) }}"
-                                    class="btn btn-secondary btn-sm">
-                                    PDF
-                                </a>
+                                {% if puede_pdf %}
+                                    <a href="{{ url_for(
+                                        'historial_clinico.historial_clinico_pdf',
+                                        paciente_id=paciente.id,
+                                        historial_id=historial.id
+                                    ) }}"
+                                        class="btn btn-secondary btn-sm">
+                                        PDF
+                                    </a>
+                                {% endif %}
 
-                                {% if current_user.rol in ["admin", "superadmin"] %}
+                                {% if puede_eliminar %}
                                     <form method="POST"
                                         action="{{ url_for(
                                             'historial_clinico.historial_clinico_eliminar',
@@ -111,21 +110,20 @@
                                         ) }}"
                                         class="d-inline">
 
-                                    <button type="submit"
+                                        <button type="submit"
                                             class="btn btn-danger btn-sm"
                                             onclick="return confirm('¿Seguro que deseas eliminar este historial clínico? Esta acción no se puede deshacer.')">
-                                    Eliminar
-                                </button>
-                            </form>
-                        {% endif %}
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                {% endif %}
 
                             </td>
                         </tr>
 
                         {% else %}
                         <tr>
-                            <td colspan="5"
-                                class="text-center text-muted py-4">
+                            <td colspan="5" class="text-center text-muted py-4">
                                 No existen historiales clínicos registrados.
                             </td>
                         </tr>

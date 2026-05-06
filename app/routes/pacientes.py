@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import login_required, current_user
 
 from app import db
@@ -41,3 +41,20 @@ def pacientes_nuevo():
 def pacientes_detalle(paciente_id):
     paciente = Paciente.query.get_or_404(paciente_id)
     return render_template("pacientes/pacientes_detalle.html", paciente=paciente)
+
+
+@pacientes_bp.route("/<int:paciente_id>/eliminar", methods=["POST"])
+@login_required 
+def pacientes_eliminar(paciente_id):
+
+    if current_user.rol != "superadmin":
+        abort(403)
+
+    paciente = Paciente.query.get_or_404(paciente_id)
+
+    db.session.delete(paciente)
+    db.session.commit()
+
+    flash("Paciente eliminado correctamente.", "success")
+
+    return redirect(url_for("pacientes.pacientes_lista"))

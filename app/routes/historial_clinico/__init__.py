@@ -7,6 +7,8 @@ historial_clinico_bp = Blueprint(
     url_prefix="/pacientes/<int:paciente_id>/historial-clinico"
 )
 
+AREA = "historial_clinico"
+
 from . import index
 from . import datos_generales
 from . import area_social

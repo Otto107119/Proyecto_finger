@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Actividad física{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3>Actividad física</h3>
+            <p class="text-muted mb-0">
+                Paciente: {{ paciente.nombre }} {{ paciente.apellido_paterno }} {{ paciente.apellido_materno }}
+            </p>
+        </div>
+
+        <div>
+            <a href="{{ url_for('pacientes.pacientes_lista') }}" class="btn btn-secondary btn-sm">
+                Volver
+            </a>
+
+            {% if puede_editar %}
+            <a href="{{ url_for('actividad_fisica.nuevo', paciente_id=paciente.id) }}" class="btn btn-primary btn-sm">
+                Nueva evaluación
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if evaluaciones %}
+    <div class="card shadow-sm">
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>SPPB total</th>
+                        <th>Interpretación</th>
+                        <th>Riesgo caída</th>
+                        <th>Riesgo funcional</th>
+                        <th class="text-end">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in evaluaciones %}
+                    <tr>
+                        <td>{{ e.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            {% if e.sppb_total is not none %}
+                                <strong>{{ e.sppb_total }}/12</strong>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ e.interpretacion_sppb or "-" }}</td>
+                        <td>{{ e.riesgo_caida or "-" }}</td>
+                        <td>{{ e.riesgo_funcional or "-" }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('actividad_fisica.detalle', evaluacion_id=e.id) }}" class="btn btn-info btn-sm">
+                                Ver
+                            </a>
+
+                            {% if puede_pdf %}
+                            <a href="{{ url_for('actividad_fisica.pdf', evaluacion_id=e.id) }}" class="btn btn-danger btn-sm">
+                                PDF
+                            </a>
+                            {% endif %}
+
+                            {% if puede_editar %}
+                            <a href="{{ url_for('actividad_fisica.editar', evaluacion_id=e.id) }}" class="btn btn-warning btn-sm">
+                                Editar
+                            </a>
+                            {% endif %}
+
+                            {% if puede_eliminar %}
+                            <form action="{{ url_for('actividad_fisica.eliminar', evaluacion_id=e.id) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta evaluación física?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="alert alert-info">
+        Este paciente aún no tiene evaluaciones físicas registradas.
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

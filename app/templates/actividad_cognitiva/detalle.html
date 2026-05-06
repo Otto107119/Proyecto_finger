@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}
+Actividad Cognitiva
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-0">Actividad Cognitiva</h3>
+            <small class="text-muted">Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('actividad_cognitiva.detalle', paciente_id=paciente.id) }}"
+                class="btn btn-outline-secondary">
+                Volver a consultas
+            </a>
+
+            {% if not registro %}
+                <a href="{{ url_for('actividad_cognitiva.crear', paciente_id=paciente.id) }}"
+                    class="btn btn-primary">
+                    Crear actividad cognitiva
+                </a>
+            {% else %}
+                {% if puede_editar %}
+                    <a href="{{ url_for('actividad_cognitiva.editar', registro_id=registro.id) }}"
+                        class="btn btn-warning">
+                        Editar
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not registro %}
+        <div class="alert alert-info">
+            Este paciente todavía no tiene registrada el área de actividad cognitiva.
+        </div>
+    {% else %}
+
+        {% if registro.finalizado %}
+            <div class="alert alert-success">
+                Este apartado ya fue finalizado.
+            </div>
+        {% else %}
+            <div class="alert alert-warning">
+                Este apartado todavía está en edición.
+            </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Estimación general
+            </div>
+            <div class="card-body">
+                <h5>{{ registro.estimacion_global or "Sin estimación" }}</h5>
+                <p class="mb-0">
+                    {{ registro.resumen_automatico or "Todavía no hay resumen automático disponible." }}
+                </p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Datos generales
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4"><strong>Fecha:</strong> {{ registro.fecha_evaluacion or "-" }}</div>
+                    <div class="col-md-4"><strong>Examinador:</strong> {{ registro.examinador or "-" }}</div>
+                    <div class="col-md-4"><strong>Edad:</strong> {{ registro.edad or "-" }}</div>
+                    <div class="col-md-4"><strong>Escolaridad:</strong> {{ registro.escolaridad_anios or "-" }}</div>
+                    <div class="col-md-4"><strong>Ocupación:</strong> {{ registro.ocupacion or "-" }}</div>
+                    <div class="col-md-4"><strong>Preferencia manual:</strong> {{ registro.preferencia_manual or "-" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Resultados por prueba
+            </div>
+
+                    <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    Detalle clínico
+                </div>
+                <div class="card-body row">
+
+                    <div class="col-md-6">
+                        <strong>Benson inmediata:</strong> {{ registro.benson_inmediata or "-" }} <br>
+                        <strong>Benson diferida:</strong> {{ registro.benson_diferida or "-" }}
+                    </div>
+
+                    <div class="col-md-6">
+                        <strong>Craft RI:</strong> {{ registro.craft_ri_44 or "-" }} <br>
+                        <strong>Craft RD:</strong> {{ registro.craft_rd_44 or "-" }}
+                    </div>
+
+                    <div class="col-md-6 mt-2">
+                        <strong>Trail A errores:</strong> {{ registro.trail_a_errores or "-" }} <br>
+                        <strong>Trail B errores:</strong> {{ registro.trail_b_errores or "-" }}
+                    </div>
+
+                    <div class="col-md-6 mt-2">
+                        <strong>Trail A líneas:</strong> {{ registro.trail_a_lineas_correctas or "-" }} <br>
+                        <strong>Trail B líneas:</strong> {{ registro.trail_b_lineas_correctas or "-" }}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Proceso</th>
+                            <th>Prueba</th>
+                            <th>Puntuación</th>
+                            <th>Estimación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Screening</td>
+                            <td>MOCA</td>
+                            <td>{{ registro.moca_total if registro.moca_total is not none else "-" }} /30</td>
+                            <td>{{ registro.moca_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Atención</td>
+                            <td>Dígitos directos</td>
+                            <td>{{ registro.digitos_directos_total if registro.digitos_directos_total is not none else "-" }} /14</td>
+                            <td>-</td>
+                        </tr>
+
+                        <tr>
+                            <td>Atención</td>
+                            <td>Dígitos inversos</td>
+                            <td>{{ registro.digitos_inversos_total if registro.digitos_inversos_total is not none else "-" }} /8</td>
+                            <td>-</td>
+                        </tr>
+
+                        <tr>
+                            <td>Atención sostenida</td>
+                            <td>Trail Making Test A</td>
+                            <td>{{ registro.trail_a_tiempo if registro.trail_a_tiempo is not none else "-" }} seg.</td>
+                            <td>{{ registro.trail_a_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Función ejecutiva</td>
+                            <td>Trail Making Test B</td>
+                            <td>{{ registro.trail_b_tiempo if registro.trail_b_tiempo is not none else "-" }} seg.</td>
+                            <td>{{ registro.trail_b_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Búsqueda léxica</td>
+                            <td>MINT-32</td>
+                            <td>{{ registro.mint_32_total if registro.mint_32_total is not none else "-" }} /32</td>
+                            <td>{{ registro.mint_32_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fluencia fonológica</td>
+                            <td>Letras P y M</td>
+                            <td>{{ registro.fluencia_pm_promedio if registro.fluencia_pm_promedio is not none else "-" }}</td>
+                            <td>{{ registro.fluencia_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fluidez semántica</td>
+                            <td>Animales / Vegetales</td>
+                            <td>
+                                {{ registro.animales_total if registro.animales_total is not none else "-" }}
+                                /
+                                {{ registro.vegetales_total if registro.vegetales_total is not none else "-" }}
+                            </td>
+                            <td>{{ registro.fluidez_semantica_estimacion or "-" }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria visual</td>
+                            <td>Benson % retenido</td>
+                            <td>{{ registro.benson_porcentaje_retenido if registro.benson_porcentaje_retenido is not none else "-" }}%</td>
+                            <td>-</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria verbal</td>
+                            <td>Craft Story % retenido</td>
+                            <td>{{ registro.craft_porcentaje_retenido if registro.craft_porcentaje_retenido is not none else "-" }}%</td>
+                            <td>-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Índices derivados
+            </div>
+            <div class="card-body row">
+                <div class="col-md-4">
+                    <strong>Trail diferencial:</strong>
+                    {{ registro.trail_puntuacion_diferencial if registro.trail_puntuacion_diferencial is not none else "-" }}
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Trail ratio:</strong>
+                    {{ registro.trail_puntuacion_ratio if registro.trail_puntuacion_ratio is not none else "-" }}
+                </div>
+
+                <div class="col-md-4">
+                    <strong>Diferencia verbal/visual:</strong>
+                    {{ registro.diferencia_retencion_verbal_visual if registro.diferencia_retencion_verbal_visual is not none else "-" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+
+            {% if not registro.finalizado %}
+                <form method="POST"
+                        action="{{ url_for('actividad_cognitiva.finalizar', registro_id=registro.id) }}">
+                    <button type="submit" class="btn btn-success"
+                            onclick="return confirm('¿Deseas finalizar este apartado? Después quedará bloqueado para capturistas.')">
+                        Finalizar captura
+                    </button>
+                </form>
+            {% endif %}
+
+            {% if puede_desbloquear %}
+                <form method="POST"
+                        action="{{ url_for('actividad_cognitiva.desbloquear', registro_id=registro.id) }}">
+                    <button type="submit" class="btn btn-outline-warning">
+                        Desbloquear edición
+                    </button>
+                </form>
+            {% endif %}
+
+            {% if puede_eliminar %}
+                <form method="POST"
+                        action="{{ url_for('actividad_cognitiva.eliminar', registro_id=registro.id) }}">
+                    <button type="submit" class="btn btn-outline-danger"
+                            onclick="return confirm('¿Seguro que deseas eliminar este registro?')">
+                        Eliminar
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

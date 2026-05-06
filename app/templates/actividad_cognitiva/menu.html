@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}
+Actividad Cognitiva
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-0">Actividad Cognitiva</h3>
+            <small class="text-muted">Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('pacientes.pacientes_lista') }}"
+               class="btn btn-outline-secondary">
+                Volver a pacientes
+            </a>
+
+            {% if puede_editar %}
+                <a href="{{ url_for('actividad_cognitiva.crear', paciente_id=paciente.id) }}"
+                   class="btn btn-primary">
+                    Nueva consulta cognitiva
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if not registros %}
+        <div class="alert alert-info">
+            Este paciente todavía no tiene consultas registradas en actividad cognitiva.
+        </div>
+    {% else %}
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                Consultas cognitivas registradas
+            </div>
+
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Examinador</th>
+                            <th>MOCA</th>
+                            <th>Estimación global</th>
+                            <th>Estado</th>
+                            <th style="width: 280px;">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for registro in registros %}
+                            <tr>
+                                <td>{{ registro.fecha_evaluacion or "-" }}</td>
+                                <td>{{ registro.examinador or "-" }}</td>
+
+                                <td>
+                                    {% if registro.moca_total is not none %}
+                                        {{ registro.moca_total }}/30
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+
+                                <td>{{ registro.estimacion_global or "Sin estimación" }}</td>
+
+                                <td>
+                                    {% if registro.finalizado %}
+                                        <span class="badge bg-success">Finalizado</span>
+                                    {% else %}
+                                        <span class="badge bg-warning text-dark">En edición</span>
+                                    {% endif %}
+                                </td>
+
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <a href="{{ url_for('actividad_cognitiva.ver_consulta', registro_id=registro.id) }}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Ver
+                                        </a>
+
+                                        {% if puede_editar %}
+                                            <a href="{{ url_for('actividad_cognitiva.editar', registro_id=registro.id) }}"
+                                               class="btn btn-sm btn-outline-warning">
+                                                Editar
+                                            </a>
+                                        {% endif %}
+
+                                        {% if puede_pdf %}
+                                            <a href="{{ url_for('actividad_cognitiva.pdf', consulta_id=registro.id) }}"
+                                               class="btn btn-sm btn-outline-danger">
+                                                PDF
+                                            </a>
+                                        {% endif %}
+
+                                        {% if puede_eliminar %}
+                                            <form method="POST"
+                                                  action="{{ url_for('actividad_cognitiva.eliminar', registro_id=registro.id) }}"
+                                                  class="d-inline">
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('¿Seguro que deseas eliminar esta consulta cognitiva?')">
+                                                    Eliminar
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

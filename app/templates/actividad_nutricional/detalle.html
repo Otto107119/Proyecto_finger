@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Detalle Actividad Nutricional{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h4 class="mb-0">Detalle de Actividad Nutricional</h4>
+            <small>Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="card-body">
+
+            <h5>Datos generales</h5>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Peso</th>
+                    <td>{{ actividad.peso or "No registrado" }} kg</td>
+                </tr>
+                <tr>
+                    <th>Talla</th>
+                    <td>{{ actividad.talla or "No registrado" }} cm</td>
+                </tr>
+                <tr>
+                    <th>IMC</th>
+                    <td>{{ actividad.imc or "No calculado" }}</td>
+                </tr>
+                <tr>
+                    <th>Cintura</th>
+                    <td>{{ actividad.cintura or "No registrado" }} cm</td>
+                </tr>
+                <tr>
+                    <th>Cadera</th>
+                    <td>{{ actividad.cadera or "No registrado" }} cm</td>
+                </tr>
+                <tr>
+                    <th>Pantorrilla</th>
+                    <td>{{ actividad.pantorrilla or "No registrado" }} cm</td>
+                </tr>
+            </table>
+
+            <h5 class="mt-4">Índice de calidad de dieta</h5>
+
+            <div class="alert alert-info">
+                <strong>Puntaje:</strong> {{ actividad.puntaje_calidad_dieta }} / 10 <br>
+                <strong>Interpretación:</strong> {{ actividad.interpretacion_calidad_dieta }}
+            </div>
+
+            <h5 class="mt-4">MNA-SF</h5>
+
+            <div class="alert alert-warning">
+                <strong>Puntaje:</strong> {{ actividad.puntaje_mna }} / 14 <br>
+                <strong>Interpretación:</strong> {{ actividad.interpretacion_mna }}
+            </div>
+
+            <h5 class="mt-4">Recordatorio 24 horas</h5>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>Día reportado</th>
+                    <td>{{ actividad.dia_recordatorio or "No registrado" }}</td>
+                </tr>
+                <tr>
+                    <th>Observaciones</th>
+                    <td>{{ actividad.observaciones or "Sin observaciones" }}</td>
+                </tr>
+            </table>
+
+            <h5 class="mt-4">Frecuencia de grasas</h5>
+
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead class="table-success">
+                    <tr>
+                        <th>Tipo de grasa</th>
+                        <th>Utiliza</th>
+                        <th>Frecuencia</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for grasa in actividad.frecuencia_grasas %}
+                    <tr>
+                        <td class="text-start">{{ grasa.tipo_grasa }}</td>
+                        <td>{{ "Sí" if grasa.utiliza else "No" }}</td>
+                        <td>{{ grasa.frecuencia }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="mt-4">
+                <a href="{{ url_for('pacientes.pacientes_lista') }}" class="btn btn-secondary">
+                    Volver
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

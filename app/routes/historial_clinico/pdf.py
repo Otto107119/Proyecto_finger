@@ -1,7 +1,9 @@
 from io import BytesIO
-from flask import send_file
-from flask_login import login_required
+from flask import send_file, abort
+from flask_login import login_required, current_user
 
+from app.utils.permisos import puede_descargar_pdf_area
+from . import AREA
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -417,6 +419,9 @@ def generar_pdf_historial_bytes(paciente, historial):
 @historial_clinico_bp.route("/<int:historial_id>/pdf")
 @login_required
 def historial_clinico_pdf(paciente_id, historial_id):
+    if not puede_descargar_pdf_area(current_user, AREA):
+        abort(403)
+
     paciente, historial = obtener_historial_por_id(paciente_id, historial_id)
 
     pdf_bytes = generar_pdf_historial_bytes(paciente, historial)

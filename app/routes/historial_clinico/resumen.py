@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from flask import render_template, redirect, url_for, flash
-from flask_login import login_required
+from flask import render_template, redirect, url_for, flash, abort
+from flask_login import login_required, current_user
 
 from app import db
 from app.models import (
@@ -14,9 +14,12 @@ from app.models import (
     EstudioComplementario,
     VisitaEspecialista,
 )
-from app.utils.decorators import roles_requeridos
+from app.utils.permisos import (
+    puede_ver_area,
+    puede_editar_area
+)
 
-from . import historial_clinico_bp
+from . import historial_clinico_bp, AREA
 from .utils import obtener_historial_por_id
 
 
@@ -148,10 +151,11 @@ def seccion_visitas_especialista_completa(visitas):
 
 @historial_clinico_bp.route("/<int:historial_id>/resumen")
 @login_required
-@roles_requeridos("admin", "superadmin", "gerontologia", "capturista")
 def historial_clinico_resumen(paciente_id, historial_id):
+    if not puede_ver_area(current_user, AREA):
+        abort(403)
+        
     paciente, historial = obtener_historial_por_id(paciente_id, historial_id)
-
     pares_craneales = ParesCraneales.query.filter_by(historial_clinico_id=historial.id).first()
     marcha_equilibrio = MarchaEquilibrio.query.filter_by(historial_clinico_id=historial.id).first()
     aphf = APHF.query.filter_by(historial_clinico_id=historial.id).first()
@@ -194,13 +198,15 @@ def historial_clinico_resumen(paciente_id, historial_id):
         factores_riesgo=factores_riesgo,
         estudios=estudios,
         visitas=visitas,
+        puede_editar=puede_editar_area(current_user, AREA),
     )
 
 
 @historial_clinico_bp.route("/<int:historial_id>/finalizar", methods=["POST"])
 @login_required
-@roles_requeridos("admin", "superadmin", "gerontologia", "capturista")
 def historial_clinico_finalizar(paciente_id, historial_id):
+    if not puede_editar_area(current_user, AREA):
+        abort(403)
     paciente, historial = obtener_historial_por_id(paciente_id, historial_id)
 
     historial.estado = "finalizado"

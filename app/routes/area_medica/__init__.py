@@ -1,0 +1,1 @@
+from .routes import area_medica_bp

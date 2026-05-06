@@ -3,6 +3,7 @@
 
 {% block content %}
 <div class="container mt-4">
+
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-start">
@@ -18,13 +19,10 @@
                             <span class="badge bg-warning text-dark">En captura</span>
                         {% endif %}
                     </p>
-                    {% if historial.fecha_finalizacion %}
-                    <p class="mb-0"><strong>Fecha de finalización:</strong> {{ historial.fecha_finalizacion }}</p>
-                    {% endif %}
                 </div>
 
                 <a class="btn btn-secondary btn-sm"
-                    href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id, historial_id=historial.id) }}">
+                    href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
                     Volver al expediente
                 </a>
             </div>
@@ -35,7 +33,7 @@
         <div class="card-body">
             <h5 class="mb-3">Avance de captura</h5>
 
-            <div class="progress mb-3" role="progressbar" aria-valuenow="{{ progreso }}" aria-valuemin="0" aria-valuemax="100">
+            <div class="progress mb-3">
                 <div class="progress-bar" style="width: {{ progreso }}%;">
                     {{ progreso }}%
                 </div>
@@ -57,15 +55,19 @@
     </div>
 
     <div class="accordion" id="accordionResumen">
+
+        <!-- DATOS GENERALES -->
         <div class="accordion-item">
-            <h2 class="accordion-header" id="h1">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#c1">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#datosGenerales">
                     Datos generales y contexto
                 </button>
             </h2>
-            <div id="c1" class="accordion-collapse collapse show" data-bs-parent="#accordionResumen">
+            <div id="datosGenerales" class="accordion-collapse collapse show" data-bs-parent="#accordionResumen">
                 <div class="accordion-body">
                     <p><strong>Escolaridad:</strong> {{ historial.escolaridad or '—' }}</p>
+                    <p><strong>Sabe leer:</strong> {{ 'Sí' if historial.sabe_leer else 'No' }}</p>
+                    <p><strong>Sabe escribir:</strong> {{ 'Sí' if historial.sabe_escribir else 'No' }}</p>
                     <p><strong>Estado civil:</strong> {{ historial.estado_civil or '—' }}</p>
                     <p><strong>Ocupación actual:</strong> {{ historial.ocupacion_actual or '—' }}</p>
                     <p><strong>Motivo de consulta:</strong> {{ historial.motivo_consulta or '—' }}</p>
@@ -73,100 +75,234 @@
             </div>
         </div>
 
+        <!-- ÁREA SOCIAL -->
         <div class="accordion-item">
-            <h2 class="accordion-header" id="h2">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#areaSocial">
+                    Área social
+                </button>
+            </h2>
+            <div id="areaSocial" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    <p><strong>Tiene hijos:</strong> {{ 'Sí' if historial.tiene_hijos else 'No' }}</p>
+                    <p><strong>Vive con:</strong> {{ historial.vive_con or '—' }}</p>
+                    <p><strong>Pensión:</strong> {{ 'Sí' if historial.pension else 'No' }}</p>
+                    <p><strong>Ingreso familiar mensual:</strong> {{ historial.ingreso_familiar_mensual or '—' }}</p>
+                    <p><strong>Pasa el día con:</strong> {{ historial.pasa_dia_con or '—' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA ESPIRITUAL -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#areaEspiritual">
+                    Área espiritual
+                </button>
+            </h2>
+            <div id="areaEspiritual" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    <p><strong>Sentido de vida:</strong> {{ historial.sentido_vida or '—' }}</p>
+                    <p><strong>Misión de vida:</strong> {{ historial.mision_vida or '—' }}</p>
+                    <p><strong>Miedo a morir:</strong> {{ 'Sí' if historial.miedo_morir else 'No' }}</p>
+                    <p><strong>Metas de vida:</strong> {{ historial.metas_vida or '—' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA PSICOLÓGICA -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#areaPsicologica">
+                    Área psicológica
+                </button>
+            </h2>
+            <div id="areaPsicologica" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    <p><strong>Episodios positivos:</strong> {{ historial.episodios_positivos or '—' }}</p>
+                    <p><strong>Estado de ánimo:</strong> {{ historial.estado_animo or '—' }}</p>
+                    <p><strong>Pérdidas:</strong> {{ 'Sí' if historial.perdidas else 'No' }}</p>
+                    <p><strong>Duelo:</strong> {{ 'Sí' if historial.duelo else 'No' }}</p>
+                    <p><strong>Estrés:</strong> {{ 'Sí' if historial.estres else 'No' }}</p>
+                    <p><strong>Comunicación verbal:</strong> {{ historial.comunicacion_verbal or '—' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA FÍSICA -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#areaFisica">
                     Área física y valoración funcional
                 </button>
             </h2>
-            <div id="c2" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+            <div id="areaFisica" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
                 <div class="accordion-body">
+                    <p><strong>Incontinencia:</strong> {{ 'Sí' if historial.incontinencia else 'No' }}</p>
                     <p><strong>Estado general:</strong> {{ historial.estado_general or '—' }}</p>
                     <p><strong>Biotipo:</strong> {{ historial.biotipo or '—' }}</p>
                     <p><strong>Talla:</strong> {{ historial.talla or '—' }}</p>
                     <p><strong>Peso:</strong> {{ historial.peso or '—' }}</p>
                     <p><strong>Actividad física:</strong> {{ 'Sí' if historial.actividad_fisica else 'No' }}</p>
+                </div>
+            </div>
+        </div>
 
+        <!-- PARES CRANEALES -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paresCraneales">
+                    Pares craneales
+                </button>
+            </h2>
+            <div id="paresCraneales" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
                     {% if pares_craneales %}
-                    <hr>
-                    <p><strong>Pares craneales evaluados:</strong> {{ 'Sí' if pares_craneales.evaluados else 'No' }}</p>
-                    <p><strong>Alteraciones:</strong> {{ pares_craneales.alteraciones or '—' }}</p>
-                    {% endif %}
-
-                    {% if marcha_equilibrio %}
-                    <hr>
-                    <p><strong>Mareos:</strong> {{ 'Sí' if marcha_equilibrio.mareos else 'No' }}</p>
-                    <p><strong>Caídas:</strong> {{ 'Sí' if marcha_equilibrio.caidas else 'No' }}</p>
-                    <p><strong>Ayudas técnicas:</strong> {{ marcha_equilibrio.ayudas_tecnicas or '—' }}</p>
+                        <p><strong>Evaluados:</strong> {{ 'Sí' if pares_craneales.evaluados else 'No' }}</p>
+                        <p><strong>Sin alteraciones:</strong> {{ 'Sí' if pares_craneales.sin_alteraciones else 'No' }}</p>
+                        <p><strong>Alteraciones:</strong> {{ pares_craneales.alteraciones or '—' }}</p>
+                        <p><strong>Dentadura postiza:</strong> {{ 'Sí' if pares_craneales.dentadura_postiza else 'No' }}</p>
+                        <p><strong>Piezas perdidas:</strong> {{ pares_craneales.piezas_perdidas or '—' }}</p>
+                        <p><strong>Observaciones:</strong> {{ pares_craneales.observaciones_generales or '—' }}</p>
+                    {% else %}
+                        <p class="text-muted">Sin registro.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
 
+        <!-- MARCHA Y EQUILIBRIO -->
         <div class="accordion-item">
-            <h2 class="accordion-header" id="h3">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#marchaEquilibrio">
+                    Marcha y equilibrio
+                </button>
+            </h2>
+            <div id="marchaEquilibrio" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    {% if marcha_equilibrio %}
+                        <p><strong>Cifosis:</strong> {{ 'Sí' if marcha_equilibrio.cifosis else 'No' }}</p>
+                        <p><strong>Lordosis:</strong> {{ 'Sí' if marcha_equilibrio.lordosis else 'No' }}</p>
+                        <p><strong>Escoliosis:</strong> {{ 'Sí' if marcha_equilibrio.escoliosis else 'No' }}</p>
+                        <p><strong>Mareos:</strong> {{ 'Sí' if marcha_equilibrio.mareos else 'No' }}</p>
+                        <p><strong>Síncope:</strong> {{ 'Sí' if marcha_equilibrio.sincope else 'No' }}</p>
+                        <p><strong>Caídas:</strong> {{ 'Sí' if marcha_equilibrio.caidas else 'No' }}</p>
+                        <p><strong>Fracturas:</strong> {{ 'Sí' if marcha_equilibrio.fracturas else 'No' }}</p>
+                        <p><strong>Ayudas técnicas:</strong> {{ marcha_equilibrio.ayudas_tecnicas or '—' }}</p>
+                    {% else %}
+                        <p class="text-muted">Sin registro.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTECEDENTES -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#antecedentes">
                     Antecedentes
                 </button>
             </h2>
-            <div id="c3" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+            <div id="antecedentes" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
                 <div class="accordion-body">
+                    <h6>A.P.H.F.</h6>
                     {% if aphf %}
-                    <p><strong>A.P.H.F. observaciones:</strong> {{ aphf.observaciones or '—' }}</p>
-                    {% endif %}
-
-                    {% if app_patologias %}
-                    <p><strong>A.P.P. registrados:</strong> {{ app_patologias|length }}</p>
-                    <ul>
-                        {% for item in app_patologias %}
-                        <li>{{ item.patologia or '—' }} — {{ item.farmaco or 'Sin fármaco' }}</li>
-                        {% endfor %}
-                    </ul>
+                        <p><strong>Vive padre:</strong> {{ 'Sí' if aphf.vive_padre else 'No' }}</p>
+                        <p><strong>Vive madre:</strong> {{ 'Sí' if aphf.vive_madre else 'No' }}</p>
+                        <p><strong>Padecimientos padre:</strong> {{ aphf.padecimientos_padre or '—' }}</p>
+                        <p><strong>Padecimientos madre:</strong> {{ aphf.padecimientos_madre or '—' }}</p>
+                        <p><strong>Diabetes:</strong> {{ 'Sí' if aphf.diabetes else 'No' }}</p>
+                        <p><strong>Hipertensión:</strong> {{ 'Sí' if aphf.hipertension else 'No' }}</p>
+                        <p><strong>Observaciones:</strong> {{ aphf.observaciones or '—' }}</p>
                     {% else %}
-                    <p><strong>A.P.P. registrados:</strong> 0</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="h4">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4">
-                    Riesgos y seguimiento
-                </button>
-            </h2>
-            <div id="c4" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
-                <div class="accordion-body">
-                    {% if factores_riesgo %}
-                    <p><strong>Alcohol:</strong> {{ 'Sí' if factores_riesgo.alcohol else 'No' }}</p>
-                    <p><strong>Tabaco:</strong> {{ 'Sí' if factores_riesgo.tabaco else 'No' }}</p>
-                    <p><strong>Drogas:</strong> {{ 'Sí' if factores_riesgo.drogas else 'No' }}</p>
-                    <p><strong>Vida sexual activa:</strong> {{ 'Sí' if factores_riesgo.vida_sexual_activa else 'No' }}</p>
+                        <p class="text-muted">Sin A.P.H.F.</p>
                     {% endif %}
 
                     <hr>
-                    <p><strong>Estudios complementarios:</strong> {{ estudios|length }}</p>
-                    <p><strong>Visitas a especialista:</strong> {{ visitas|length }}</p>
+
+                    <h6>A.P.P.</h6>
+                    {% if app_resumen %}
+                        <p><strong>Número de embarazos:</strong> {{ app_resumen.numero_embarazos or '—' }}</p>
+                        <p><strong>Fármacos no especificados:</strong> {{ app_resumen.farmacos_no_especificados or '—' }}</p>
+                        <p><strong>Medicina alterna:</strong> {{ app_resumen.medicina_alterna or '—' }}</p>
+                    {% endif %}
+
+                    {% if app_patologias %}
+                        <ul>
+                            {% for item in app_patologias %}
+                                <li>
+                                    <strong>{{ item.patologia or 'Patología no especificada' }}</strong>
+                                    — {{ item.farmaco or 'Sin fármaco' }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted">Sin patologías registradas.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
+
+        <!-- RIESGOS Y SEGUIMIENTO -->
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#riesgos">
+                    Riesgos y seguimiento
+                </button>
+            </h2>
+            <div id="riesgos" class="accordion-collapse collapse" data-bs-parent="#accordionResumen">
+                <div class="accordion-body">
+                    {% if factores_riesgo %}
+                        <p><strong>Alcohol:</strong> {{ 'Sí' if factores_riesgo.alcohol else 'No' }}</p>
+                        <p><strong>Tabaco:</strong> {{ 'Sí' if factores_riesgo.tabaco else 'No' }}</p>
+                        <p><strong>Drogas:</strong> {{ 'Sí' if factores_riesgo.drogas else 'No' }}</p>
+                        <p><strong>Vida sexual activa:</strong> {{ 'Sí' if factores_riesgo.vida_sexual_activa else 'No' }}</p>
+                        <p><strong>Observaciones:</strong> {{ factores_riesgo.observaciones or '—' }}</p>
+                    {% else %}
+                        <p class="text-muted">Sin factores de riesgo registrados.</p>
+                    {% endif %}
+
+                    <hr>
+
+                    <p><strong>Estudios complementarios:</strong> {{ estudios|length }}</p>
+                    {% if estudios %}
+                        <ul>
+                            {% for estudio in estudios %}
+                                <li>{{ estudio.tipo_estudio or 'Estudio' }} — {{ estudio.resultado or 'Sin resultado' }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+
+                    <p><strong>Visitas a especialista:</strong> {{ visitas|length }}</p>
+                    {% if visitas %}
+                        <ul>
+                            {% for visita in visitas %}
+                                <li>{{ visita.especialidad or 'Especialidad' }} — {{ visita.motivo or 'Sin motivo' }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="d-flex justify-content-between mt-4 mb-5">
-        <a href="{{ url_for('historial_clinico.historial_clinico_visitas_especialista', paciente_id=paciente.id, historial_id=historial.id) }}"
+        <a href="{{ url_for('historial_clinico.historial_clinico_index', paciente_id=paciente.id, historial_id=historial.id) }}"
             class="btn btn-secondary btn-sm">
             Volver a captura
         </a>
 
-        <div>
+        {% if puede_editar %}
             <form method="POST"
-                    action="{{ url_for('historial_clinico.historial_clinico_finalizar', paciente_id=paciente.id, historial_id=historial.id) }}"
-                    class="d-inline">
+                action="{{ url_for('historial_clinico.historial_clinico_finalizar', paciente_id=paciente.id, historial_id=historial.id) }}"
+                class="d-inline">
                 <button type="submit" class="btn btn-success btn-sm">
                     Finalizar captura
                 </button>
             </form>
-        </div>
+        {% endif %}
     </div>
+
 </div>
 {% endblock %}

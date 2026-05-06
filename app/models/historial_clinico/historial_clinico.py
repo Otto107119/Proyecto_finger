@@ -8,7 +8,7 @@ class HistorialClinico(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
     paciente_id = db.Column(db.Integer, db.ForeignKey("paciente.id"), nullable=False)
-    paciente = db.relationship("Paciente", backref="historiales_clinicos")
+    paciente = db.relationship("Paciente",back_populates="historiales_clinicos")
 
     fecha = db.Column(db.Date, nullable=True)
     estado = db.Column(db.String(20), nullable=False, default="en_captura")

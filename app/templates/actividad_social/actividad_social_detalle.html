@@ -9,7 +9,7 @@
 
             <div class="mb-3 d-flex justify-content-between align-items-center">
                 <a class="btn btn-secondary"
-                   href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
+                    href="{{ url_for('pacientes.pacientes_detalle', paciente_id=paciente.id) }}">
                     Volver al expediente
                 </a>
 
@@ -61,7 +61,7 @@
 
                                 <div class="d-flex justify-content-between mt-3">
                                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
-                                       class="btn btn-outline-secondary">
+                                        class="btn btn-outline-secondary">
                                         Anterior
                                     </a>
 
@@ -71,7 +71,7 @@
                                         </button>
 
                                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
-                                           class="btn btn-success">
+                                            class="btn btn-success">
                                             Siguiente
                                         </a>
                                     </div>
@@ -86,12 +86,12 @@
 
                     <div class="d-flex justify-content-between mt-3 mb-4">
                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
-                           class="btn btn-outline-secondary">
+                            class="btn btn-outline-secondary">
                             Anterior
                         </a>
 
                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
-                           class="btn btn-success">
+                            class="btn btn-success">
                             Siguiente
                         </a>
                     </div>
@@ -125,8 +125,8 @@
                                         {% if editable_social %}
                                             <td>
                                                 <form method="POST"
-                                                      action="{{ url_for('actividad_social.actividad_social_hermano_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hermano_id=hermano.id) }}"
-                                                      onsubmit="return confirm('¿Eliminar este hermano?');">
+                                                        action="{{ url_for('actividad_social.actividad_social_hermano_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hermano_id=hermano.id) }}"
+                                                        onsubmit="return confirm('¿Eliminar este hermano?');">
                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                         Eliminar
                                                     </button>
@@ -193,7 +193,7 @@
 
                                 <div class="d-flex justify-content-between mt-3">
                                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
-                                       class="btn btn-outline-secondary">
+                                        class="btn btn-outline-secondary">
                                         Anterior
                                     </a>
 
@@ -203,7 +203,7 @@
                                         </button>
 
                                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
-                                           class="btn btn-success">
+                                            class="btn btn-success">
                                             Siguiente
                                         </a>
                                     </div>
@@ -218,12 +218,12 @@
 
                     <div class="d-flex justify-content-between mt-3 mb-4">
                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
-                           class="btn btn-outline-secondary">
+                            class="btn btn-outline-secondary">
                             Anterior
                         </a>
 
                         <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
-                           class="btn btn-success">
+                            class="btn btn-success">
                             Siguiente
                         </a>
                     </div>
@@ -261,8 +261,8 @@
                                         {% if editable_social %}
                                             <td>
                                                 <form method="POST"
-                                                      action="{{ url_for('actividad_social.actividad_social_hijo_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hijo_id=hijo.id) }}"
-                                                      onsubmit="return confirm('¿Eliminar este hijo?');">
+                                                        action="{{ url_for('actividad_social.actividad_social_hijo_eliminar', paciente_id=paciente.id, actividad_id=actividad.id, hijo_id=hijo.id) }}"
+                                                        onsubmit="return confirm('¿Eliminar este hijo?');">
                                                     <button type="submit" class="btn btn-sm btn-danger">
                                                         Eliminar
                                                     </button>
@@ -408,34 +408,32 @@
 
                 <div class="d-flex justify-content-between mt-4">
                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
-                       class="btn btn-outline-secondary">
+                        class="btn btn-outline-secondary">
                         Anterior
                     </a>
 
-                    <div class="d-flex gap-2">
-                        {% if editable_social %}
-                            {% if actividad and not actividad.finalizado %}
-                                <form method="POST"
-                                      action="{{ url_for('actividad_social.actividad_social_finalizar', paciente_id=paciente.id, actividad_id=actividad.id) }}">
-                                    <button type="submit"
-                                            class="btn btn-success"
-                                            onclick="return confirm('¿Finalizar captura de Actividad Social?')">
-                                        Finalizar captura
-                                    </button>
-                                </form>
-                            {% elif actividad and actividad.finalizado %}
-                                <span class="badge bg-success fs-6">
-                                    Captura finalizada ✔
-                                </span>
-                            {% endif %}
-                        {% else %}
-                            {% if actividad and actividad.finalizado %}
-                                <span class="badge bg-success fs-6">
-                                    Captura finalizada ✔
-                                </span>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                <div class="d-flex justify-content-between mt-4">
+
+                    <a href="{{ url_for('actividad_social.actividad_social_lista', paciente_id=paciente.id) }}"
+                    class="btn btn-secondary">
+                        Volver al menú
+                    </a>
+
+                    {% if actividad and not actividad.finalizado and editable_social %}
+                        <form method="POST"
+                            action="{{ url_for('actividad_social.actividad_social_finalizar', paciente_id=paciente.id, actividad_id=actividad.id) }}">
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    onclick="return confirm('¿Finalizar captura de Actividad Social?')">
+                                Finalizar captura
+                            </button>
+                        </form>
+                    {% elif actividad and actividad.finalizado %}
+                        <button class="btn btn-success" disabled>
+                            Captura finalizada ✔
+                        </button>
+                    {% endif %}
+
                 </div>
 
             {% else %}
@@ -578,12 +576,12 @@
                         <div>
                             {% if seccion == "economia" %}
                                 <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='datos_generales') }}"
-                                   class="btn btn-outline-secondary">
+                                    class="btn btn-outline-secondary">
                                     Anterior
                                 </a>
                             {% elif seccion == "padres" %}
                                 <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='economia') }}"
-                                   class="btn btn-outline-secondary">
+                                    class="btn btn-outline-secondary">
                                     Anterior
                                 </a>
                             {% endif %}
@@ -611,17 +609,17 @@
                             {% else %}
                                 {% if seccion == "datos_generales" %}
                                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='economia') }}"
-                                       class="btn btn-success">
+                                        class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% elif seccion == "economia" %}
                                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='padres') }}"
-                                       class="btn btn-success">
+                                        class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% elif seccion == "padres" %}
                                     <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hermanos') }}"
-                                       class="btn btn-success">
+                                        class="btn btn-success">
                                         Siguiente
                                     </a>
                                 {% endif %}

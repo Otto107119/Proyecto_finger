@@ -1,8 +1,16 @@
 from datetime import datetime
 from flask import render_template, url_for, redirect, flash, abort
 from flask_login import login_required, current_user
-from app.utils.decorators import roles_requeridos
 
+from app.utils.permisos import (
+    puede_ver_area,
+    puede_crear_area,
+    puede_editar_area,
+    puede_eliminar_area,
+    puede_descargar_pdf_area
+)
+
+from . import historial_clinico_bp, AREA
 from app import db
 from app.models import (
     Paciente,
@@ -16,8 +24,6 @@ from app.models import (
     EstudioComplementario,
     VisitaEspecialista,
 )
-
-from . import historial_clinico_bp
 
 
 def texto_lleno(valor):
@@ -76,8 +82,10 @@ def tiene_area_fisica(historial):
 
 @historial_clinico_bp.route("/")
 @login_required
-@roles_requeridos("admin", "superadmin", "gerontologia", "capturista")
 def historiales_clinicos_lista(paciente_id):
+    if not puede_ver_area(current_user, AREA):
+        abort(403)
+    
     paciente = Paciente.query.get_or_404(paciente_id)
 
     historiales = HistorialClinico.query.filter_by(
@@ -87,7 +95,10 @@ def historiales_clinicos_lista(paciente_id):
     return render_template(
         "historial_clinico/lista.html",
         paciente=paciente,
-        historiales=historiales
+        historiales=historiales,
+        puede_crear=puede_crear_area(current_user, AREA),
+        puede_eliminar=puede_eliminar_area(current_user, AREA),
+        puede_pdf=puede_descargar_pdf_area(current_user, AREA),
     )
 
 
@@ -95,7 +106,9 @@ def historiales_clinicos_lista(paciente_id):
 @login_required
 def historial_clinico_nuevo(paciente_id):
     paciente = Paciente.query.get_or_404(paciente_id)
-
+    if not puede_crear_area(current_user, AREA):
+        abort(403)
+    
     nuevo = HistorialClinico(
         paciente_id=paciente.id,
         fecha=datetime.utcnow().date(),
@@ -120,7 +133,9 @@ def historial_clinico_nuevo(paciente_id):
 @login_required
 def historial_clinico_index(paciente_id, historial_id):
     paciente = Paciente.query.get_or_404(paciente_id)
-
+    if not puede_ver_area(current_user, AREA):
+        abort(403)
+        
     historial = HistorialClinico.query.filter_by(
         id=historial_id,
         paciente_id=paciente.id
@@ -250,14 +265,17 @@ def historial_clinico_index(paciente_id, historial_id):
         "historial_clinico/index.html",
         paciente=paciente,
         historial=historial,
-        modulos=modulos
+        modulos=modulos,
+        puede_editar=puede_editar_area(current_user, AREA),
+        puede_eliminar=puede_eliminar_area(current_user, AREA),
+        puede_pdf=puede_descargar_pdf_area(current_user, AREA),
     )
 
 
 @historial_clinico_bp.route("/<int:historial_id>/eliminar", methods=["POST"])
 @login_required
 def historial_clinico_eliminar(paciente_id, historial_id):
-    if current_user.rol not in ["admin", "superadmin"]:
+    if not puede_eliminar_area(current_user, AREA):
         abort(403)
 
     paciente = Paciente.query.get_or_404(paciente_id)

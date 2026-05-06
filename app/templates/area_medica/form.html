@@ -1,0 +1,178 @@
+from datetime import date
+
+{% extends "base.html" %}
+
+{% block title %}Área Médica{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4 mb-5">
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">
+                {% if modo == "editar" %}
+                    Editar Área Médica
+                {% else %}
+                    Nueva Área Médica
+                {% endif %}
+            </h4>
+            <small>Paciente: {{ paciente.nombre }}</small>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <ul class="nav nav-tabs mb-4" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab"
+                                data-bs-target="#riesgo" type="button">
+                            Riesgo cardiovascular
+                        </button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab"
+                                data-bs-target="#laboratorio" type="button">
+                            Laboratoriales
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+
+                    <!-- RIESGO CARDIOVASCULAR -->
+                    <div class="tab-pane fade show active" id="riesgo">
+
+                        <h5 class="mb-3">Riesgo cardiovascular - colesterol</h5>
+
+                            <div class="alert alert-light border">
+                                <strong>Sexo:</strong> {{ paciente.genero or "-" }} <br>
+                                <strong>Edad:</strong> {{ edad_paciente if edad_paciente is not none else "-" }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form.presion_sistolica.label(class="form-label") }}
+                                {{ form.presion_sistolica(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-check mt-4">
+                                    {{ form.tratamiento_hipertension(class="form-check-input") }}
+                                    {{ form.tratamiento_hipertension.label(class="form-check-label") }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check mt-4">
+                                    {{ form.fumador(class="form-check-input") }}
+                                    {{ form.fumador.label(class="form-check-label") }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check mt-4">
+                                    {{ form.diabetico(class="form-check-input") }}
+                                    {{ form.diabetico.label(class="form-check-label") }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                {{ form.hdl.label(class="form-label") }}
+                                {{ form.hdl(class="form-control") }}
+                            </div>
+
+                            <div class="col-md-4">
+                                {{ form.colesterol.label(class="form-label") }}
+                                {{ form.colesterol(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h5 class="mb-3">Resultados de riesgo</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.edad_corazon.label(class="form-label") }}
+                                {{ form.edad_corazon(class="form-control") }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form.porcentaje_riesgo.label(class="form-label") }}
+                                {{ form.porcentaje_riesgo(class="form-control") }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- LABORATORIALES -->
+                    <div class="tab-pane fade" id="laboratorio">
+
+                        <h5 class="mb-3">Perfil lipídico</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                {{ form.colesterol_total.label(class="form-label") }}
+                                {{ form.colesterol_total(class="form-control") }}
+                                <small class="text-muted">Referencia: &lt;200 mg/dL</small>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.colesterol_ldl.label(class="form-label") }}
+                                {{ form.colesterol_ldl(class="form-control") }}
+                                <small class="text-muted">Referencia: &lt;100 mg/dL</small>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.colesterol_hdl.label(class="form-label") }}
+                                {{ form.colesterol_hdl(class="form-control") }}
+                                <small class="text-muted">Referencia: 40 - 60 mg/dL</small>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.trigliceridos.label(class="form-label") }}
+                                {{ form.trigliceridos(class="form-control") }}
+                                <small class="text-muted">Referencia: &lt;150 mg/dL</small>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h5 class="mb-3">Glucosa en ayuno</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                {{ form.glucosa_capilar.label(class="form-label") }}
+                                {{ form.glucosa_capilar(class="form-control") }}
+                                <small class="text-muted">Referencia: 70 - 110 mg/dL</small>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ url_for('area_medica.index', paciente_id=paciente.id) }}"
+                        class="btn btn-secondary">
+                        Cancelar
+                    </a>
+
+                    {{ form.submit(class="btn btn-danger") }}
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

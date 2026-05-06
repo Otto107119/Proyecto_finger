@@ -3,7 +3,10 @@ from .paciente import Paciente
 from .actividad_fisica import ActividadFisica
 from .actividad_cognitiva import ActividadCognitiva
 from .actividad_nutricional import ActividadNutricional
-from .actividad_medica import ActividadMedica
+from .area_medica import AreaMedica
+from app.models.actividad_cognitiva import ActividadCognitiva
+from app.models.actividad_fisica import ActividadFisica
+
 from .actividad_social import (
     ActividadSocial,
     ActividadSocialEconomia,

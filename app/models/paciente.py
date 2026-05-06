@@ -14,12 +14,25 @@ class Paciente(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey("usuario.id"), nullable=False)
     usuario = db.relationship("Usuario", backref="pacientes")
 
+    historiales_clinicos = db.relationship(
+        "HistorialClinico",
+        back_populates="paciente",
+        cascade="all, delete-orphan"
+    )
+    
     actividades_sociales = db.relationship(
-    "ActividadSocial",
-    back_populates="paciente",
-    cascade="all, delete-orphan",
-    order_by="desc(ActividadSocial.created_at)"
-)
+        "ActividadSocial",
+        back_populates="paciente",
+        cascade="all, delete-orphan",
+        order_by="desc(ActividadSocial.created_at)"
+    )
+    
+    actividades_fisicas = db.relationship(
+        "ActividadFisica",
+        backref="paciente",
+        cascade="all, delete-orphan"
+    )
+
 
     @property
     def edad(self):
@@ -30,3 +43,4 @@ class Paciente(db.Model):
         if (hoy.month, hoy.day) < (self.fecha_nacimiento.month, self.fecha_nacimiento.day):
             edad -= 1
         return edad
+

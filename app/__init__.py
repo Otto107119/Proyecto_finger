@@ -4,6 +4,7 @@ from flask_login import LoginManager
 from config import Config
 from flask_migrate import Migrate
 
+
 db = SQLAlchemy()
 migrate = Migrate()
 login_manager = LoginManager()
@@ -21,7 +22,10 @@ def create_app():
     from app.routes import (
         auth_bp,
         pacientes_bp,
+        actividad_cognitiva_bp,
         actividad_fisica_bp,
+        actividad_nutricional_bp,
+        area_medica_bp,
         actividad_social_bp,
         historial_clinico_bp,
         backup_bp,
@@ -29,7 +33,10 @@ def create_app():
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(pacientes_bp)
+    app.register_blueprint(actividad_cognitiva_bp)
     app.register_blueprint(actividad_fisica_bp)
+    app.register_blueprint(actividad_nutricional_bp)
+    app.register_blueprint(area_medica_bp)
     app.register_blueprint(actividad_social_bp)
     app.register_blueprint(historial_clinico_bp)
     app.register_blueprint(backup_bp)

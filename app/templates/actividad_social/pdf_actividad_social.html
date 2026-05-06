@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actividad Social</title>
+
+    <style>
+        @page {
+            size: letter;
+            margin: 1.5cm;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 10.5px;
+            color: #222;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            margin: 3px 0 0 0;
+            font-size: 11px;
+        }
+
+        .estado {
+            text-align: right;
+            margin-bottom: 10px;
+            font-size: 10px;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .finalizada {
+            background-color: #198754;
+        }
+
+        .captura {
+            background-color: #ffc107;
+            color: #222;
+        }
+
+        .section {
+            margin-bottom: 14px;
+            page-break-inside: avoid;
+        }
+
+        .section-title {
+            background-color: #e9ecef;
+            border-left: 5px solid #333;
+            padding: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .no-border td {
+            border: none;
+            padding: 3px 5px;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 28%;
+        }
+
+        .money {
+            text-align: right;
+        }
+
+        .text-muted {
+            color: #777;
+            font-style: italic;
+        }
+
+        .footer {
+            margin-top: 25px;
+            border-top: 1px solid #999;
+            padding-top: 8px;
+            font-size: 9px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Actividad Social</h1>
+    <p>Expediente social del paciente</p>
+</div>
+
+<div class="estado">
+    {% if actividad.finalizado %}
+        <span class="badge finalizada">Captura finalizada</span>
+    {% else %}
+        <span class="badge captura">En captura</span>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-title">Datos del paciente</div>
+    <table class="no-border">
+        <tr>
+            <td class="label">Nombre:</td>
+            <td>{{ paciente.nombre or "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">ID del paciente:</td>
+            <td>{{ paciente.id }}</td>
+        </tr>
+        <tr>
+            <td class="label">Fecha de captura:</td>
+            <td>{{ actividad.created_at.strftime("%Y-%m-%d %H:%M") if actividad.created_at else "Sin fecha" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Fecha de finalización:</td>
+            <td>{{ actividad.fecha_finalizado.strftime("%Y-%m-%d %H:%M") if actividad.fecha_finalizado else "No finalizada" }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-title">Datos generales</div>
+    <table>
+        <tr>
+            <td class="label">Seguridad social</td>
+            <td>{{ actividad.seguridad_social or "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Tiempo de residencia en Ameca</td>
+            <td>{{ actividad.tiempo_residencia_ameca or "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Tipo de vivienda</td>
+            <td>{{ actividad.tipo_vivienda or "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Migración</td>
+            <td>{{ "Sí" if actividad.migracion else "No" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Observaciones</td>
+            <td>{{ actividad.observaciones or "Sin capturar" }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-title">Economía</div>
+
+    {% if actividad.economia %}
+        <table>
+            <tr>
+                <th>Ingresos</th>
+                <th class="money">Monto</th>
+            </tr>
+            <tr>
+                <td>Ingreso entrevistado</td>
+                <td class="money">${{ actividad.economia.ingreso_entrevistado or 0 }}</td>
+            </tr>
+            <tr>
+                <td>Otros ingresos</td>
+                <td class="money">${{ actividad.economia.otros_ingresos or 0 }}</td>
+            </tr>
+            <tr>
+                <th>Total ingreso mensual</th>
+                <th class="money">${{ actividad.economia.total_ingreso_mensual or 0 }}</th>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Concepto</th>
+                <th class="money">Monto</th>
+                <th>Concepto</th>
+                <th class="money">Monto</th>
+            </tr>
+
+            <tr><td>Renta</td><td class="money">${{ actividad.economia.renta or 0 }}</td><td>Colegiaturas</td><td class="money">${{ actividad.economia.colegiaturas or 0 }}</td></tr>
+            <tr><td>Alimentación</td><td class="money">${{ actividad.economia.alimentacion or 0 }}</td><td>Gastos médicos</td><td class="money">${{ actividad.economia.gastos_medicos or 0 }}</td></tr>
+            <tr><td>Transporte</td><td class="money">${{ actividad.economia.transporte or 0 }}</td><td>Diversión</td><td class="money">${{ actividad.economia.diversion or 0 }}</td></tr>
+            <tr><td>Gasolina</td><td class="money">${{ actividad.economia.gasolina or 0 }}</td><td>Pagos tarjetas</td><td class="money">${{ actividad.economia.pagos_tarjetas or 0 }}</td></tr>
+            <tr><td>Luz</td><td class="money">${{ actividad.economia.luz or 0 }}</td><td>Ahorro</td><td class="money">${{ actividad.economia.ahorro or 0 }}</td></tr>
+            <tr><td>Agua</td><td class="money">${{ actividad.economia.agua or 0 }}</td><td>Deudas</td><td class="money">${{ actividad.economia.deudas or 0 }}</td></tr>
+            <tr><td>Gas</td><td class="money">${{ actividad.economia.gas or 0 }}</td><td>Ropa</td><td class="money">${{ actividad.economia.ropa or 0 }}</td></tr>
+            <tr><td>Teléfono</td><td class="money">${{ actividad.economia.telefono or 0 }}</td><td>Calzado</td><td class="money">${{ actividad.economia.calzado or 0 }}</td></tr>
+            <tr><td>Teléfono celular</td><td class="money">${{ actividad.economia.telefono_celular or 0 }}</td><td>Alcohol / cigarros</td><td class="money">${{ actividad.economia.alcohol_cigarros or 0 }}</td></tr>
+            <tr><td>Cable</td><td class="money">${{ actividad.economia.cable or 0 }}</td><td>Internet</td><td class="money">${{ actividad.economia.internet or 0 }}</td></tr>
+            <tr><td>Otros gastos</td><td class="money">${{ actividad.economia.otros_gastos or 0 }}</td><td>Empleados domésticos</td><td class="money">${{ actividad.economia.empleados_domesticos or 0 }}</td></tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Total egresos</th>
+                <th class="money">${{ actividad.economia.total_egresos or 0 }}</th>
+            </tr>
+            <tr>
+                <th>Balance mensual</th>
+                <th class="money">${{ actividad.economia.balance_mensual or 0 }}</th>
+            </tr>
+        </table>
+    {% else %}
+        <p class="text-muted">No hay información económica capturada.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-title">Padres</div>
+
+    {% set padre = actividad.padres | selectattr("tipo", "equalto", "padre") | first %}
+    {% set madre = actividad.padres | selectattr("tipo", "equalto", "madre") | first %}
+
+    <table>
+        <tr>
+            <th>Dato</th>
+            <th>Padre</th>
+            <th>Madre</th>
+        </tr>
+        <tr>
+            <td class="label">Nombre</td>
+            <td>{{ padre.nombre if padre else "Sin capturar" }}</td>
+            <td>{{ madre.nombre if madre else "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Edad o tiempo de vida</td>
+            <td>{{ padre.edad_o_tiempo_vida if padre else "Sin capturar" }}</td>
+            <td>{{ madre.edad_o_tiempo_vida if madre else "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Vive</td>
+            <td>{{ "Sí" if padre and padre.vive else "No" }}</td>
+            <td>{{ "Sí" if madre and madre.vive else "No" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Causa de muerte</td>
+            <td>{{ padre.causa_muerte if padre and padre.causa_muerte else "Sin capturar" }}</td>
+            <td>{{ madre.causa_muerte if madre and madre.causa_muerte else "Sin capturar" }}</td>
+        </tr>
+        <tr>
+            <td class="label">Enfermedad</td>
+            <td>{{ padre.enfermedad if padre and padre.enfermedad else "Sin capturar" }}</td>
+            <td>{{ madre.enfermedad if madre and madre.enfermedad else "Sin capturar" }}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="section">
+    <div class="section-title">Hermanos</div>
+
+    {% if actividad.hermanos %}
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Relación</th>
+                <th>Dónde vive</th>
+                <th>Enfermedad</th>
+            </tr>
+            {% for hermano in actividad.hermanos %}
+                <tr>
+                    <td>{{ hermano.nombre or "" }}</td>
+                    <td>{{ hermano.edad or "" }}</td>
+                    <td>{{ hermano.relacion or "" }}</td>
+                    <td>{{ hermano.donde_vive or "" }}</td>
+                    <td>{{ hermano.enfermedad or "" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="text-muted">No hay hermanos registrados.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-title">Hijos</div>
+
+    {% if actividad.hijos %}
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Edad</th>
+                <th>Estado civil</th>
+                <th>Relación</th>
+                <th>Dónde vive</th>
+                <th>Enfermedad</th>
+                <th>Núm. hijos</th>
+            </tr>
+            {% for hijo in actividad.hijos %}
+                <tr>
+                    <td>{{ hijo.nombre or "" }}</td>
+                    <td>{{ hijo.edad or "" }}</td>
+                    <td>{{ hijo.estado_civil or "" }}</td>
+                    <td>{{ hijo.relacion or "" }}</td>
+                    <td>{{ hijo.donde_vive or "" }}</td>
+                    <td>{{ hijo.enfermedad or "" }}</td>
+                    <td>{{ hijo.numero_hijos or "" }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="text-muted">No hay hijos registrados.</p>
+    {% endif %}
+</div>
+
+<div class="footer">
+    Documento generado automáticamente desde el sistema de expediente clínico.
+</div>
+
+</body>
+</html>

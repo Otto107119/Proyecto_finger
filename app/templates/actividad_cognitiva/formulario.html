@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}
+Actividad Cognitiva
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="mb-0">
+                {% if modo == "crear" %}
+                    Nueva Actividad Cognitiva
+                {% else %}
+                    Editar Actividad Cognitiva
+                {% endif %}
+            </h3>
+            <small class="text-muted">
+                Paciente: {{ paciente.nombre }}
+            </small>
+        </div>
+
+        <a href="{{ url_for('actividad_cognitiva.detalle', paciente_id=paciente.id) }}"
+            class="btn btn-outline-secondary">
+            Volver
+        </a>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Datos generales
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    {{ form.fecha_evaluacion.label(class="form-label") }}
+                    {{ form.fecha_evaluacion(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.examinador.label(class="form-label") }}
+                    {{ form.examinador(class="form-control") }}
+                </div>
+
+                <div class="alert alert-light border">
+                    <strong>Sexo:</strong> {{ paciente.genero or "-" }} <br>
+                    <strong>Edad:</strong> {{ edad_paciente if edad_paciente is not none else "-" }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.escolaridad_anios.label(class="form-label") }}
+                    {{ form.escolaridad_anios(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.ocupacion.label(class="form-label") }}
+                    {{ form.ocupacion(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.preferencia_manual.label(class="form-label") }}
+                    {{ form.preferencia_manual(class="form-select") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Screening
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    {{ form.moca_total.label(class="form-label") }}
+                    {{ form.moca_total(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Atención
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-3">
+                    {{ form.digitos_directos_total.label(class="form-label") }}
+                    {{ form.digitos_directos_total(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.digitos_directos_longitud.label(class="form-label") }}
+                    {{ form.digitos_directos_longitud(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.digitos_inversos_total.label(class="form-label") }}
+                    {{ form.digitos_inversos_total(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.digitos_inversos_longitud.label(class="form-label") }}
+                    {{ form.digitos_inversos_longitud(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Trail Making Test
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    {{ form.trail_a_tiempo.label(class="form-label") }}
+                    {{ form.trail_a_tiempo(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.trail_a_errores.label(class="form-label") }}
+                    {{ form.trail_a_errores(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.trail_a_lineas_correctas.label(class="form-label") }}
+                    {{ form.trail_a_lineas_correctas(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.trail_b_tiempo.label(class="form-label") }}
+                    {{ form.trail_b_tiempo(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.trail_b_errores.label(class="form-label") }}
+                    {{ form.trail_b_errores(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.trail_b_lineas_correctas.label(class="form-label") }}
+                    {{ form.trail_b_lineas_correctas(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Lenguaje y fluidez verbal
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-4">
+                    {{ form.mint_32_total.label(class="form-label") }}
+                    {{ form.mint_32_total(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.fluencia_p.label(class="form-label") }}
+                    {{ form.fluencia_p(class="form-control") }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.fluencia_m.label(class="form-label") }}
+                    {{ form.fluencia_m(class="form-control") }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form.animales_total.label(class="form-label") }}
+                    {{ form.animales_total(class="form-control") }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form.vegetales_total.label(class="form-label") }}
+                    {{ form.vegetales_total(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Memoria visual - Benson
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-6">
+                    {{ form.benson_inmediata.label(class="form-label") }}
+                    {{ form.benson_inmediata(class="form-control") }}
+                </div>
+
+                <div class="col-md-6">
+                    {{ form.benson_diferida.label(class="form-label") }}
+                    {{ form.benson_diferida(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white">
+                Memoria verbal - Craft Story 21
+            </div>
+            <div class="card-body row g-3">
+                <div class="col-md-3">
+                    {{ form.craft_ri_44.label(class="form-label") }}
+                    {{ form.craft_ri_44(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.craft_ri_parafraseo_25.label(class="form-label") }}
+                    {{ form.craft_ri_parafraseo_25(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.craft_rd_44.label(class="form-label") }}
+                    {{ form.craft_rd_44(class="form-control") }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.craft_rd_parafraseo_25.label(class="form-label") }}
+                    {{ form.craft_rd_parafraseo_25(class="form-control") }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('actividad_cognitiva.detalle', paciente_id=paciente.id) }}"
+                class="btn btn-outline-secondary">
+                Cancelar
+            </a>
+
+            {{ form.submit(class="btn btn-success") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

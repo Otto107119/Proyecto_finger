@@ -27,21 +27,24 @@
         </a>
 
         <a class="btn btn-primary"
-          href="{{ url_for('actividad_fisica.actividad_fisica_lista', paciente_id=paciente.id) }}">
+          href="{{ url_for('actividad_fisica.lista', paciente_id=paciente.id) }}">
           Actividad física
         </a>
 
-        <button class="btn btn-outline-primary" disabled>
-          Actividad cognitiva
-        </button>
+        <a class="btn btn-primary"
+          href="{{ url_for('actividad_cognitiva.detalle', paciente_id=paciente.id) }}">
+          Actividad Cognitiva
+        </a>
 
-        <button class="btn btn-outline-primary" disabled>
-          Actividad nutricional
-        </button>
+        <a class="btn btn-primary" 
+          href="{{ url_for('actividad_nutricional.index', paciente_id=paciente.id) }}">
+          Actividad Nutricional
+        </a>
 
-        <button class="btn btn-outline-primary" disabled>
-            Actividad médica
-        </button>
+        <a class="btn btn-primary" 
+          href="{{ url_for('area_medica.index', paciente_id=paciente.id) }}">
+          Actividad Medica
+        </a>
 
         <a class="btn btn-primary"
           href="{{ url_for('actividad_social.actividad_social_lista', paciente_id=paciente.id) }}">
@@ -53,6 +56,17 @@
           Historial clínico
         </a>
 
+        {% if current_user.rol == "superadmin" %}
+        <form method="POST"
+              action="{{ url_for('pacientes.pacientes_eliminar', paciente_id=paciente.id) }}"
+              class="d-inline"
+              onsubmit="return confirm('¿ELIMINAR COMPLETAMENTE ESTE PACIENTE Y TODO SU EXPEDIENTE? Esta acción no se puede deshacer.');">
+
+            <button type="submit" class="btn btn-danger">
+                Eliminar paciente
+            </button>
+        </form>
+        {% endif %}
 
       </div>
 

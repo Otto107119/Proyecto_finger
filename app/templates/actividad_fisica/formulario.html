@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3>{{ titulo }}</h3>
+            <p class="text-muted mb-0">
+                Paciente: {{ paciente.nombre }} {{ paciente.apellido_paterno }} {{ paciente.apellido_materno }}
+            </p>
+        </div>
+
+        <a href="{{ url_for('actividad_fisica.lista', paciente_id=paciente.id) }}" class="btn btn-secondary btn-sm">
+            Volver
+        </a>
+    </div>
+
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                Evaluaciones físicas generales
+            </div>
+
+            <div class="card-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        {{ form.sentarse_levantarse_30s.label(class="form-label") }}
+                        {{ form.sentarse_levantarse_30s(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.dinamometro_kg.label(class="form-label") }}
+                        {{ form.dinamometro_kg(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.tug_segundos.label(class="form-label") }}
+                        {{ form.tug_segundos(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.equilibrio_unipodal_segundos.label(class="form-label") }}
+                        {{ form.equilibrio_unipodal_segundos(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.caminata_6min_metros.label(class="form-label") }}
+                        {{ form.caminata_6min_metros(class="form-control") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.velocidad_marcha_ms.label(class="form-label") }}
+                        {{ form.velocidad_marcha_ms(class="form-control") }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">
+                SPPB - Short Physical Performance Battery
+            </div>
+
+            <div class="card-body">
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        {{ form.sppb_equilibrio.label(class="form-label") }}
+                        {{ form.sppb_equilibrio(class="form-control", min="0", max="4") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.sppb_velocidad_marcha.label(class="form-label") }}
+                        {{ form.sppb_velocidad_marcha(class="form-control", min="0", max="4") }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form.sppb_fuerza_piernas.label(class="form-label") }}
+                        {{ form.sppb_fuerza_piernas(class="form-control", min="0", max="4") }}
+                    </div>
+
+                </div>
+
+                <div class="alert alert-light border mt-3 mb-0">
+                    <strong>Interpretación automática:</strong><br>
+                    0–3 Muy bajo · 4–6 Bajo · 7–9 Moderado · 10–12 Buen rendimiento
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-dark text-white">
+                Notas clínicas
+            </div>
+
+            <div class="card-body">
+                {{ form.notas.label(class="form-label") }}
+                {{ form.notas(class="form-control", rows="4") }}
+            </div>
+        </div>
+
+        <div class="text-end mb-4">
+            <button type="submit" class="btn btn-primary">
+                {{ accion }}
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

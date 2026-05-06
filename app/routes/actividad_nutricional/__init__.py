@@ -1,0 +1,1 @@
+from .routes import actividad_nutricional_bp
