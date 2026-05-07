@@ -338,6 +338,92 @@
     {% endif %}
 </div>
 
+<div class="section">
+    <div class="section-title">Salud mental y funcionalidad</div>
+
+    {% if actividad.salud_mental %}
+        <table>
+            <tr>
+                <th colspan="2">Escala GDS 15</th>
+            </tr>
+            <tr>
+                <td class="label">Puntaje total</td>
+                <td>{{ actividad.salud_mental.gds_total if actividad.salud_mental.gds_total is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Interpretación</td>
+                <td>{{ actividad.salud_mental.gds_interpretacion or "Sin calcular" }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="4">Lawton y Brody</th>
+            </tr>
+            <tr>
+                <td class="label">Teléfono</td>
+                <td>{{ actividad.salud_mental.lawton_telefono or "Sin capturar" }}</td>
+                <td class="label">Transporte</td>
+                <td>{{ actividad.salud_mental.lawton_transporte or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Compras</td>
+                <td>{{ actividad.salud_mental.lawton_compras or "Sin capturar" }}</td>
+                <td class="label">Preparación de alimentos</td>
+                <td>{{ actividad.salud_mental.lawton_alimentos or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Quehaceres del hogar</td>
+                <td>{{ actividad.salud_mental.lawton_hogar or "Sin capturar" }}</td>
+                <td class="label">Medicación</td>
+                <td>{{ actividad.salud_mental.lawton_medicacion or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Manejo del dinero</td>
+                <td>{{ actividad.salud_mental.lawton_dinero or "Sin capturar" }}</td>
+                <td class="label">Clave</td>
+                <td>I = Independiente, A = Asistencia, D = Dependiente</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="4">Índice de Katz</th>
+            </tr>
+            <tr>
+                <td class="label">Baño</td>
+                <td>{{ actividad.salud_mental.katz_banio or "Sin capturar" }}</td>
+                <td class="label">Vestido</td>
+                <td>{{ actividad.salud_mental.katz_vestido or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Uso de sanitario</td>
+                <td>{{ actividad.salud_mental.katz_sanitario or "Sin capturar" }}</td>
+                <td class="label">Transferencia</td>
+                <td>{{ actividad.salud_mental.katz_transferencia or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Continencia</td>
+                <td>{{ actividad.salud_mental.katz_continencia or "Sin capturar" }}</td>
+                <td class="label">Alimentación</td>
+                <td>{{ actividad.salud_mental.katz_alimentacion or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Total Katz</td>
+                <td>{{ actividad.salud_mental.katz_total if actividad.salud_mental.katz_total is not none else "Sin calcular" }}</td>
+                <td class="label">Clasificación alfabética</td>
+                <td>{{ actividad.salud_mental.katz_letra or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Interpretación Katz</td>
+                <td colspan="3">{{ actividad.salud_mental.katz_interpretacion or "Sin calcular" }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p class="text-muted">No hay información de salud mental capturada.</p>
+    {% endif %}
+</div>
+
 <div class="footer">
     Documento generado automáticamente desde el sistema de expediente clínico.
 </div>

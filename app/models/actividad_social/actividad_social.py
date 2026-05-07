@@ -18,7 +18,7 @@ class ActividadSocial(db.Model):
     tipo_vivienda = db.Column(db.String(20), nullable=True)
     migracion = db.Column(db.Boolean, default=False, nullable=False)
     observaciones = db.Column(db.Text, nullable=True)
-
+    
     finalizado = db.Column(db.Boolean, default=False, nullable=False)
     fecha_finalizado = db.Column(db.DateTime)
 
@@ -34,6 +34,13 @@ class ActividadSocial(db.Model):
 
     economia = db.relationship(
         "ActividadSocialEconomia",
+        back_populates="actividad_social",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+    salud_mental = db.relationship(
+        "ActividadSocialSaludMental",
         back_populates="actividad_social",
         uselist=False,
         cascade="all, delete-orphan"
@@ -56,6 +63,7 @@ class ActividadSocial(db.Model):
         back_populates="actividad_social",
         cascade="all, delete-orphan"
     )
+    
 
     def __repr__(self):
         return f"<ActividadSocial paciente_id={self.paciente_id}>"

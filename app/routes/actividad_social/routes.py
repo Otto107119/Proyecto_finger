@@ -1,18 +1,31 @@
 from datetime import datetime
-
+from app import db
 from flask import render_template, redirect, url_for, flash, request, abort
 from flask_login import login_required, current_user
 
-from app import db
 from app.models import (
     Paciente,
     ActividadSocial,
     ActividadSocialEconomia,
     ActividadSocialPadreMadre,
     ActividadSocialHermano,
-    ActividadSocialHijo
+    ActividadSocialHijo,
+    ActividadSocialSaludMental
 )
-from app.forms.actividad_social import ActividadSocialForm, HermanoForm, HijoForm
+
+from app.forms.actividad_social import (
+    ActividadSocialForm,
+    HermanoForm,
+    HijoForm,
+    ActividadSocialSaludMentalForm
+)
+
+from app.routes.actividad_social.salud_mental_utils import (
+    interpretar_gds,
+    calcular_katz_total,
+    interpretar_katz
+)
+
 from app.utils.permisos import (
     puede_ver_area,
     puede_crear_area,
@@ -108,6 +121,7 @@ def actividad_social_detalle(paciente_id, actividad_id):
     form = ActividadSocialForm()
     hermano_form = HermanoForm()
     hijo_form = HijoForm()
+    salud_mental_form = ActividadSocialSaludMentalForm()
 
     # Bloqueo real de edición por backend
     if request.method == "POST" and not editable_social:
@@ -166,6 +180,25 @@ def actividad_social_detalle(paciente_id, actividad_id):
             form.madre_vive.data = madre.vive
             form.madre_causa_muerte.data = madre.causa_muerte
             form.madre_enfermedad.data = madre.enfermedad
+            
+        if actividad.salud_mental:
+            salud_mental_form.gds_total.data = actividad.salud_mental.gds_total
+
+            salud_mental_form.lawton_telefono.data = actividad.salud_mental.lawton_telefono
+            salud_mental_form.lawton_transporte.data = actividad.salud_mental.lawton_transporte
+            salud_mental_form.lawton_compras.data = actividad.salud_mental.lawton_compras
+            salud_mental_form.lawton_alimentos.data = actividad.salud_mental.lawton_alimentos
+            salud_mental_form.lawton_hogar.data = actividad.salud_mental.lawton_hogar
+            salud_mental_form.lawton_medicacion.data = actividad.salud_mental.lawton_medicacion
+            salud_mental_form.lawton_dinero.data = actividad.salud_mental.lawton_dinero
+
+            salud_mental_form.katz_banio.data = actividad.salud_mental.katz_banio
+            salud_mental_form.katz_vestido.data = actividad.salud_mental.katz_vestido
+            salud_mental_form.katz_sanitario.data = actividad.salud_mental.katz_sanitario
+            salud_mental_form.katz_transferencia.data = actividad.salud_mental.katz_transferencia
+            salud_mental_form.katz_continencia.data = actividad.salud_mental.katz_continencia
+            salud_mental_form.katz_alimentacion.data = actividad.salud_mental.katz_alimentacion
+            salud_mental_form.katz_letra.data = actividad.salud_mental.katz_letra
 
     # Guardar hermanos
     if editable_social and seccion == "hermanos" and hermano_form.validate_on_submit():
@@ -316,6 +349,71 @@ def actividad_social_detalle(paciente_id, actividad_id):
             actividad_id=actividad.id,
             seccion=seccion
         ))
+        
+        
+    # =========================
+    # SALUD MENTAL
+    # =========================
+    if editable_social and seccion == "salud_mental" and salud_mental_form.validate_on_submit():
+        if not actividad.salud_mental:
+            actividad.salud_mental = ActividadSocialSaludMental(
+                actividad_social_id=actividad.id
+            )
+            db.session.add(actividad.salud_mental)
+
+        actividad.salud_mental.gds_total = salud_mental_form.gds_total.data
+        actividad.salud_mental.gds_interpretacion = interpretar_gds(
+            salud_mental_form.gds_total.data
+        )
+
+        actividad.salud_mental.lawton_telefono = salud_mental_form.lawton_telefono.data
+        actividad.salud_mental.lawton_transporte = salud_mental_form.lawton_transporte.data
+        actividad.salud_mental.lawton_compras = salud_mental_form.lawton_compras.data
+        actividad.salud_mental.lawton_alimentos = salud_mental_form.lawton_alimentos.data
+        actividad.salud_mental.lawton_hogar = salud_mental_form.lawton_hogar.data
+        actividad.salud_mental.lawton_medicacion = salud_mental_form.lawton_medicacion.data
+        actividad.salud_mental.lawton_dinero = salud_mental_form.lawton_dinero.data
+
+        actividad.salud_mental.katz_banio = salud_mental_form.katz_banio.data
+        actividad.salud_mental.katz_vestido = salud_mental_form.katz_vestido.data
+        actividad.salud_mental.katz_sanitario = salud_mental_form.katz_sanitario.data
+        actividad.salud_mental.katz_transferencia = salud_mental_form.katz_transferencia.data
+        actividad.salud_mental.katz_continencia = salud_mental_form.katz_continencia.data
+        actividad.salud_mental.katz_alimentacion = salud_mental_form.katz_alimentacion.data
+        actividad.salud_mental.katz_letra = salud_mental_form.katz_letra.data
+
+        actividad.salud_mental.katz_total = calcular_katz_total(
+            salud_mental_form.katz_banio.data,
+            salud_mental_form.katz_vestido.data,
+            salud_mental_form.katz_sanitario.data,
+            salud_mental_form.katz_transferencia.data,
+            salud_mental_form.katz_continencia.data,
+            salud_mental_form.katz_alimentacion.data,
+        )
+
+        actividad.salud_mental.katz_interpretacion = interpretar_katz(
+            actividad.salud_mental.katz_total
+        )
+
+        db.session.commit()
+
+        flash("Salud mental guardada correctamente.", "success")
+
+        accion = request.form.get("accion")
+        if accion == "siguiente":
+            return redirect(url_for(
+                "actividad_social.actividad_social_detalle",
+                paciente_id=paciente.id,
+                actividad_id=actividad.id,
+                seccion="resumen"
+            ))
+
+        return redirect(url_for(
+            "actividad_social.actividad_social_detalle",
+            paciente_id=paciente.id,
+            actividad_id=actividad.id,
+            seccion="salud_mental"
+        ))
 
     return render_template(
         "actividad_social/actividad_social_detalle.html",
@@ -333,6 +431,7 @@ def actividad_social_detalle(paciente_id, actividad_id):
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
+        salud_mental_form=salud_mental_form,
     )
 
 

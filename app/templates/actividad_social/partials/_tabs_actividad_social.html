@@ -24,6 +24,14 @@
         Hijos
     </a>
 
+    <a class="btn btn-outline-primary btn-sm {% if seccion == 'salud_mental' %}active{% endif %}"
+        href="{{ url_for('actividad_social.actividad_social_detalle',
+        paciente_id=paciente.id,
+        actividad_id=actividad.id,
+        seccion='salud_mental') }}">
+        Salud mental
+    </a>
+
     <a class="btn {% if seccion == 'resumen' %}btn-primary{% else %}btn-outline-primary{% endif %}"
         href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}">
         Resumen

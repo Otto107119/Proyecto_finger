@@ -202,7 +202,7 @@
                                             Agregar hijo
                                         </button>
 
-                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
+                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
                                             class="btn btn-success">
                                             Siguiente
                                         </a>
@@ -222,7 +222,7 @@
                             Anterior
                         </a>
 
-                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
                             class="btn btn-success">
                             Siguiente
                         </a>
@@ -277,6 +277,126 @@
                 {% else %}
                     <p class="text-muted">No hay hijos registrados.</p>
                 {% endif %}
+
+                            {% elif seccion == "salud_mental" %}
+                <hr>
+                <h5>Salud mental y funcionalidad</h5>
+
+                <form method="POST">
+                    {{ salud_mental_form.hidden_tag() }}
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6>Escala GDS 15</h6>
+
+                            <div class="mb-3">
+                                {{ salud_mental_form.gds_total.label(class="form-label") }}
+                                {{ salud_mental_form.gds_total(class="form-control", readonly=not editable_social) }}
+                                <small class="text-muted">Puntaje de 0 a 15.</small>
+                            </div>
+
+                            {% if actividad.salud_mental and actividad.salud_mental.gds_interpretacion %}
+                                <p>
+                                    <strong>Interpretación:</strong>
+                                    {{ actividad.salud_mental.gds_interpretacion }}
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6>Lawton y Brody</h6>
+                            <p class="text-muted">I = Independiente, A = Con asistencia, D = Dependiente</p>
+
+                            <div class="row">
+                                {% for campo in [
+                                    salud_mental_form.lawton_telefono,
+                                    salud_mental_form.lawton_transporte,
+                                    salud_mental_form.lawton_compras,
+                                    salud_mental_form.lawton_alimentos,
+                                    salud_mental_form.lawton_hogar,
+                                    salud_mental_form.lawton_medicacion,
+                                    salud_mental_form.lawton_dinero
+                                ] %}
+                                    <div class="col-md-4 mb-3">
+                                        {{ campo.label(class="form-label") }}
+                                        {% if editable_social %}
+                                            {{ campo(class="form-select") }}
+                                        {% else %}
+                                            {{ campo(class="form-select", disabled=true) }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6>Índice de Katz</h6>
+                            <p class="text-muted">I = Independiente, A = Con asistencia, D = Dependiente</p>
+
+                            <div class="row">
+                                {% for campo in [
+                                    salud_mental_form.katz_banio,
+                                    salud_mental_form.katz_vestido,
+                                    salud_mental_form.katz_sanitario,
+                                    salud_mental_form.katz_transferencia,
+                                    salud_mental_form.katz_continencia,
+                                    salud_mental_form.katz_alimentacion
+                                ] %}
+                                    <div class="col-md-4 mb-3">
+                                        {{ campo.label(class="form-label") }}
+                                        {% if editable_social %}
+                                            {{ campo(class="form-select") }}
+                                        {% else %}
+                                            {{ campo(class="form-select", disabled=true) }}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+
+                                <div class="col-md-4 mb-3">
+                                    {{ salud_mental_form.katz_letra.label(class="form-label") }}
+                                    {% if editable_social %}
+                                        {{ salud_mental_form.katz_letra(class="form-select") }}
+                                    {% else %}
+                                        {{ salud_mental_form.katz_letra(class="form-select", disabled=true) }}
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if actividad.salud_mental %}
+                                <p><strong>Total Katz:</strong> {{ actividad.salud_mental.katz_total if actividad.salud_mental.katz_total is not none else "Sin calcular" }}</p>
+                                <p><strong>Interpretación:</strong> {{ actividad.salud_mental.katz_interpretacion or "Sin calcular" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                            class="btn btn-outline-secondary">
+                            Anterior
+                        </a>
+
+                        <div class="d-flex gap-2">
+                            {% if editable_social %}
+                                <button type="submit" name="accion" value="guardar" class="btn btn-primary">
+                                    Guardar
+                                </button>
+
+                                <button type="submit" name="accion" value="siguiente" class="btn btn-success">
+                                    Guardar y siguiente
+                                </button>
+                            {% else %}
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='resumen') }}"
+                                    class="btn btn-success">
+                                    Siguiente
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
 
             {% elif seccion == "resumen" %}
                 <hr>
@@ -406,8 +526,45 @@
                     </div>
                 </div>
 
+                                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="mb-3">Salud mental y funcionalidad</h6>
+
+                        {% if actividad.salud_mental %}
+                            <p><strong>GDS total:</strong> {{ actividad.salud_mental.gds_total if actividad.salud_mental.gds_total is not none else "Sin capturar" }}</p>
+                            <p><strong>Interpretación GDS:</strong> {{ actividad.salud_mental.gds_interpretacion or "Sin calcular" }}</p>
+
+                            <hr>
+
+                            <h6>Lawton y Brody</h6>
+                            <p><strong>Teléfono:</strong> {{ actividad.salud_mental.lawton_telefono or "Sin capturar" }}</p>
+                            <p><strong>Transporte:</strong> {{ actividad.salud_mental.lawton_transporte or "Sin capturar" }}</p>
+                            <p><strong>Compras:</strong> {{ actividad.salud_mental.lawton_compras or "Sin capturar" }}</p>
+                            <p><strong>Preparación de alimentos:</strong> {{ actividad.salud_mental.lawton_alimentos or "Sin capturar" }}</p>
+                            <p><strong>Quehaceres del hogar:</strong> {{ actividad.salud_mental.lawton_hogar or "Sin capturar" }}</p>
+                            <p><strong>Medicación:</strong> {{ actividad.salud_mental.lawton_medicacion or "Sin capturar" }}</p>
+                            <p><strong>Manejo del dinero:</strong> {{ actividad.salud_mental.lawton_dinero or "Sin capturar" }}</p>
+
+                            <hr>
+
+                            <h6>Índice de Katz</h6>
+                            <p><strong>Baño:</strong> {{ actividad.salud_mental.katz_banio or "Sin capturar" }}</p>
+                            <p><strong>Vestido:</strong> {{ actividad.salud_mental.katz_vestido or "Sin capturar" }}</p>
+                            <p><strong>Uso de sanitario:</strong> {{ actividad.salud_mental.katz_sanitario or "Sin capturar" }}</p>
+                            <p><strong>Transferencia:</strong> {{ actividad.salud_mental.katz_transferencia or "Sin capturar" }}</p>
+                            <p><strong>Continencia:</strong> {{ actividad.salud_mental.katz_continencia or "Sin capturar" }}</p>
+                            <p><strong>Alimentación:</strong> {{ actividad.salud_mental.katz_alimentacion or "Sin capturar" }}</p>
+                            <p><strong>Total Katz:</strong> {{ actividad.salud_mental.katz_total if actividad.salud_mental.katz_total is not none else "Sin calcular" }}</p>
+                            <p><strong>Clasificación alfabética:</strong> {{ actividad.salud_mental.katz_letra or "Sin capturar" }}</p>
+                            <p><strong>Interpretación Katz:</strong> {{ actividad.salud_mental.katz_interpretacion or "Sin calcular" }}</p>
+                        {% else %}
+                            <p class="text-muted">No se ha capturado información de salud mental.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
                         class="btn btn-outline-secondary">
                         Anterior
                     </a>

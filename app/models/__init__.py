@@ -13,6 +13,7 @@ from .actividad_social import (
     ActividadSocialPadreMadre,
     ActividadSocialHermano,
     ActividadSocialHijo,
+    ActividadSocialSaludMental,
 )
 from .historial_clinico import (
     HistorialClinico,
