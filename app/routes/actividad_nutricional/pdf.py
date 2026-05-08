@@ -110,7 +110,7 @@ def generar_pdf_actividad_nutricional_bytes(actividad):
         story.append(tabla)
         story.append(Spacer(1, 8))
 
-    story.append(Paragraph("LATAM-FINGERS", titulo_style))
+    story.append(Paragraph("CAVIC Cognición del Adulto Mayor - Vigilancia CUValles", titulo_style))
     story.append(Paragraph("Reporte de Actividad Nutricional", subtitulo_style))
 
     fecha = actividad.fecha_registro.strftime("%d/%m/%Y %H:%M") if actividad.fecha_registro else "-"

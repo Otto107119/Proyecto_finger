@@ -16,7 +16,9 @@ from app.models import (
 )
 from app.utils.permisos import (
     puede_ver_area,
-    puede_editar_area
+    puede_editar_area,
+    puede_eliminar_area,
+    puede_descargar_pdf_area,
 )
 
 from . import historial_clinico_bp, AREA
@@ -199,6 +201,8 @@ def historial_clinico_resumen(paciente_id, historial_id):
         estudios=estudios,
         visitas=visitas,
         puede_editar=puede_editar_area(current_user, AREA),
+        puede_eliminar=puede_eliminar_area(current_user, AREA),
+        puede_pdf=puede_descargar_pdf_area(current_user, AREA),
     )
 
 

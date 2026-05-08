@@ -15,13 +15,13 @@ Actividad Cognitiva
 
         <div class="d-flex gap-2">
             <a href="{{ url_for('pacientes.pacientes_lista') }}"
-               class="btn btn-outline-secondary">
+                class="btn btn-outline-secondary">
                 Volver a pacientes
             </a>
 
             {% if puede_editar %}
                 <a href="{{ url_for('actividad_cognitiva.crear', paciente_id=paciente.id) }}"
-                   class="btn btn-primary">
+                    class="btn btn-primary">
                     Nueva consulta cognitiva
                 </a>
             {% endif %}
@@ -78,28 +78,28 @@ Actividad Cognitiva
                                 <td>
                                     <div class="d-flex flex-wrap gap-1">
                                         <a href="{{ url_for('actividad_cognitiva.ver_consulta', registro_id=registro.id) }}"
-                                           class="btn btn-sm btn-outline-primary">
+                                            class="btn btn-sm btn-outline-primary">
                                             Ver
                                         </a>
 
                                         {% if puede_editar %}
                                             <a href="{{ url_for('actividad_cognitiva.editar', registro_id=registro.id) }}"
-                                               class="btn btn-sm btn-outline-warning">
+                                                class="btn btn-sm btn-outline-warning">
                                                 Editar
                                             </a>
                                         {% endif %}
 
                                         {% if puede_pdf %}
                                             <a href="{{ url_for('actividad_cognitiva.pdf', consulta_id=registro.id) }}"
-                                               class="btn btn-sm btn-outline-danger">
+                                                class="btn btn-sm btn-outline-danger">
                                                 PDF
                                             </a>
                                         {% endif %}
 
                                         {% if puede_eliminar %}
                                             <form method="POST"
-                                                  action="{{ url_for('actividad_cognitiva.eliminar', registro_id=registro.id) }}"
-                                                  class="d-inline">
+                                                    action="{{ url_for('actividad_cognitiva.eliminar', registro_id=registro.id) }}"
+                                                    class="d-inline">
                                                 <button type="submit"
                                                         class="btn btn-sm btn-outline-danger"
                                                         onclick="return confirm('¿Seguro que deseas eliminar esta consulta cognitiva?')">

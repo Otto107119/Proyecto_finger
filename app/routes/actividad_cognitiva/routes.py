@@ -53,7 +53,7 @@ def obtener_edad_paciente(paciente):
 def detalle(paciente_id):
     if not puede_ver_area(current_user, AREA):
         abort(403)
-        
+
     paciente = Paciente.query.get_or_404(paciente_id)
 
     registros = ActividadCognitiva.query.filter_by(
@@ -64,6 +64,7 @@ def detalle(paciente_id):
         "actividad_cognitiva/menu.html",
         paciente=paciente,
         registros=registros,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
@@ -83,10 +84,11 @@ def ver_consulta(registro_id):
         "actividad_cognitiva/detalle.html",
         paciente=paciente,
         registro=registro,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
-        )
+    )
 
 
 @actividad_cognitiva_bp.route("/paciente/<int:paciente_id>/crear", methods=["GET", "POST"])

@@ -35,6 +35,7 @@ def lista(paciente_id):
         "actividad_fisica/lista.html",
         paciente=paciente,
         evaluaciones=evaluaciones,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA)
@@ -97,6 +98,7 @@ def detalle(evaluacion_id):
         "actividad_fisica/detalle.html",
         evaluacion=evaluacion,
         paciente=paciente,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA)

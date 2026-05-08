@@ -65,7 +65,7 @@ def generar_pdf_actividad_cognitiva_bytes(consulta):
     fecha = consulta.fecha_evaluacion or consulta.creado_en
     estado = "Finalizado" if consulta.finalizado else "En proceso"
 
-    story.append(Paragraph("LATAM-FINGERS", titulo_style))
+    story.append(Paragraph("CAVIC Cognición del Adulto Mayor - Vigilancia CUValles", titulo_style))
     story.append(Paragraph("Reporte de Actividad Cognitiva", subtitulo_style))
 
     datos_generales = [

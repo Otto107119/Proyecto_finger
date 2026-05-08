@@ -235,10 +235,12 @@ def detalle(actividad_id):
     actividad = ActividadNutricional.query.get_or_404(actividad_id)
     if not puede_ver_area(current_user, AREA):
         abort(403)
+        
     return render_template(
         "actividad_nutricional/detalle.html",
         actividad=actividad,
         paciente=actividad.paciente,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
@@ -261,6 +263,7 @@ def index(paciente_id):
         "actividad_nutricional/index.html",
         paciente=paciente,
         actividades=actividades,
+        puede_crear=puede_crear_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
         puede_editar=puede_editar_area(current_user, AREA),
@@ -269,7 +272,7 @@ def index(paciente_id):
 @actividad_nutricional_bp.route("/<int:actividad_id>/eliminar", methods=["POST"])
 @login_required
 def eliminar(actividad_id):
-    if not puede_editar_area(current_user, AREA):
+    if not puede_eliminar_area(current_user, AREA):
         abort(403)
     actividad = ActividadNutricional.query.get_or_404(actividad_id)
     paciente_id = actividad.paciente_id

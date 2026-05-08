@@ -64,12 +64,14 @@
                                     <td>
                                         <div class="d-flex gap-2 flex-wrap">
 
+                                            {% if puede_editar %}
                                             <a class="btn btn-primary btn-sm"
                                                 href="{{ url_for('actividad_social.actividad_social_detalle',
                                                     paciente_id=paciente.id,
                                                     actividad_id=actividad.id) }}">
                                                 Editar
                                             </a>
+                                            {% endif %}
 
                                             <a class="btn btn-info btn-sm text-white"
                                                 href="{{ url_for('actividad_social.actividad_social_detalle',

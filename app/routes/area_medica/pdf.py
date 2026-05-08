@@ -97,7 +97,7 @@ def generar_pdf_area_medica_bytes(paciente, registro):
         story.append(tabla)
         story.append(Spacer(1, 8))
 
-    story.append(Paragraph("LATAM-FINGERS", titulo_style))
+    story.append(Paragraph("CAVIC Cognición del Adulto Mayor - Vigilancia CUValles", titulo_style))
     story.append(Paragraph("Reporte de Área Médica", subtitulo_style))
 
     fecha = (
