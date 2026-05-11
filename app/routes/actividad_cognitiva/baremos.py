@@ -9,7 +9,7 @@ def z_a_percentil(z_score):
     """
     Convierte z-score a percentil.
     """
-    return float(round(norm.cdf(z) * 100, 2))
+    return float(round(norm.cdf(z_score) * 100, 2))
 
 
 # =====================================================
