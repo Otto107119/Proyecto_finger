@@ -9,7 +9,7 @@ def z_a_percentil(z_score):
     """
     Convierte z-score a percentil.
     """
-    return round(norm.cdf(z_score) * 100, 2)
+    return float(round(norm.cdf(z) * 100, 2))
 
 
 # =====================================================
@@ -80,11 +80,12 @@ def calcular_z_score(
 
     z = (raw_score - esperado) / rmse
 
-    # Trail A/B
     if score_invertido:
         z *= -1
 
-    percentil = z_a_percentil(z)
+    percentil = float(z_a_percentil(z))
+    z = float(z)
+    esperado = float(esperado)
 
     clasificacion = clasificar_percentil(percentil)
 
