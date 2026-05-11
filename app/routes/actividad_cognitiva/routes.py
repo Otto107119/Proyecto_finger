@@ -18,6 +18,7 @@ from app.forms.actividad_cognitiva import ActividadCognitivaForm
 from app.routes.actividad_cognitiva.calculos import calcular_estimaciones
 from app.routes.actividad_cognitiva.utils import obtener_punto_corte, generar_resumen_clinico
 from app.routes.actividad_cognitiva.pdf import generar_pdf_actividad_cognitiva_bytes
+from app.routes.actividad_cognitiva.pdf import estimacion_por_percentil
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -88,6 +89,7 @@ def ver_consulta(registro_id):
         puede_editar=puede_editar_area(current_user, AREA),
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
+        estimacion_por_percentil=estimacion_por_percentil,
     )
 
 
@@ -96,51 +98,18 @@ def ver_consulta(registro_id):
 def crear(paciente_id):
     if not puede_crear_area(current_user, AREA):
         abort(403)
-        
+
     paciente = Paciente.query.get_or_404(paciente_id)
     form = ActividadCognitivaForm()
 
     if form.validate_on_submit():
         registro = ActividadCognitiva(
-            paciente_id=paciente.id,
-            fecha_evaluacion=form.fecha_evaluacion.data,
-            examinador=form.examinador.data,
-            edad=obtener_edad_paciente(paciente),
-            escolaridad_anios=form.escolaridad_anios.data,
-            ocupacion=form.ocupacion.data,
-            preferencia_manual=form.preferencia_manual.data,
-
-            moca_total=form.moca_total.data,
-
-            digitos_directos_total=form.digitos_directos_total.data,
-            digitos_directos_longitud=form.digitos_directos_longitud.data,
-            digitos_inversos_total=form.digitos_inversos_total.data,
-            digitos_inversos_longitud=form.digitos_inversos_longitud.data,
-
-            trail_a_tiempo=form.trail_a_tiempo.data,
-            trail_a_errores=form.trail_a_errores.data,
-            trail_a_lineas_correctas=form.trail_a_lineas_correctas.data,
-
-            trail_b_tiempo=form.trail_b_tiempo.data,
-            trail_b_errores=form.trail_b_errores.data,
-            trail_b_lineas_correctas=form.trail_b_lineas_correctas.data,
-
-            mint_32_total=form.mint_32_total.data,
-
-            fluencia_p=form.fluencia_p.data,
-            fluencia_m=form.fluencia_m.data,
-
-            animales_total=form.animales_total.data,
-            vegetales_total=form.vegetales_total.data,
-
-            benson_inmediata=form.benson_inmediata.data,
-            benson_diferida=form.benson_diferida.data,
-
-            craft_ri_44=form.craft_ri_44.data,
-            craft_ri_parafraseo_25=form.craft_ri_parafraseo_25.data,
-            craft_rd_44=form.craft_rd_44.data,
-            craft_rd_parafraseo_25=form.craft_rd_parafraseo_25.data,
+            paciente_id=paciente.id
         )
+
+        form.populate_obj(registro)
+
+        registro.edad = obtener_edad_paciente(paciente)
 
         calcular_estimaciones(registro)
 
@@ -182,6 +151,12 @@ def editar(registro_id):
 
     if form.validate_on_submit():
         form.populate_obj(registro)
+
+        # asegurar que estos campos sí se actualicen
+        registro.sexo = form.sexo.data
+        registro.idioma = form.idioma.data
+        registro.escolaridad_anios = form.escolaridad_anios.data
+
         calcular_estimaciones(registro)
         db.session.commit()
 
@@ -190,6 +165,7 @@ def editar(registro_id):
             "actividad_cognitiva.detalle",
             paciente_id=paciente.id
         ))
+
 
     return render_template(
         "actividad_cognitiva/formulario.html",

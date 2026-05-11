@@ -1,23 +1,42 @@
 from io import BytesIO
 
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 
-from app.routes.actividad_cognitiva.utils import obtener_punto_corte, generar_resumen_clinico
+def estimacion_por_percentil(percentil):
+    if percentil is None:
+        return "-"
+
+    if percentil < 1:
+        return "Severamente deteriorado"
+    elif percentil < 2:
+        return "Moderadamente deteriorado"
+    elif percentil < 9:
+        return "Levemente deteriorado"
+    elif percentil < 25:
+        return "Promedio bajo"
+    elif percentil < 75:
+        return "Promedio"
+    elif percentil < 91:
+        return "Promedio alto"
+    elif percentil < 98:
+        return "Superior"
+
+    return "Muy superior"
 
 def generar_pdf_actividad_cognitiva_bytes(consulta):
     buffer = BytesIO()
 
     doc = SimpleDocTemplate(
         buffer,
-        pagesize=letter,
-        rightMargin=40,
-        leftMargin=40,
-        topMargin=40,
-        bottomMargin=40
+        pagesize=landscape(letter),
+        rightMargin=30,
+        leftMargin=30,
+        topMargin=30,
+        bottomMargin=30
     )
 
     styles = getSampleStyleSheet()
@@ -25,172 +44,203 @@ def generar_pdf_actividad_cognitiva_bytes(consulta):
     titulo_style = ParagraphStyle(
         "TituloReporte",
         parent=styles["Title"],
-        fontSize=18,
-        leading=22,
+        fontSize=16,
+        leading=20,
         alignment=1,
-        textColor=colors.HexColor("#1F4E3D"),
-        spaceAfter=12
+        textColor=colors.HexColor("#0D6EFD"),
+        spaceAfter=8
     )
 
     subtitulo_style = ParagraphStyle(
         "Subtitulo",
         parent=styles["Normal"],
-        fontSize=10,
+        fontSize=9,
         alignment=1,
         textColor=colors.gray,
-        spaceAfter=18
+        spaceAfter=12
     )
 
     seccion_style = ParagraphStyle(
         "Seccion",
         parent=styles["Heading2"],
-        fontSize=12,
-        leading=14,
+        fontSize=10,
+        leading=12,
         textColor=colors.white,
-        backColor=colors.HexColor("#198754"),
-        spaceBefore=12,
-        spaceAfter=8,
+        backColor=colors.HexColor("#212529"),
+        spaceBefore=10,
+        spaceAfter=6,
         leftIndent=4
     )
 
     texto_style = ParagraphStyle(
         "Texto",
         parent=styles["Normal"],
-        fontSize=9,
-        leading=12
+        fontSize=8,
+        leading=10
     )
 
     story = []
 
-    fecha = consulta.fecha_evaluacion or consulta.creado_en
-    estado = "Finalizado" if consulta.finalizado else "En proceso"
-
-    story.append(Paragraph("CAVIC Cognición del Adulto Mayor - Vigilancia CUValles", titulo_style))
-    story.append(Paragraph("Reporte de Actividad Cognitiva", subtitulo_style))
-
-    datos_generales = [
-        ["Paciente", consulta.paciente.nombre or "-"],
-        ["Fecha", fecha.strftime("%d/%m/%Y %H:%M") if fecha else "-"],
-        ["Examinador", consulta.examinador or "-"],
-        ["Edad", consulta.edad if consulta.edad is not None else "-"],
-        ["Escolaridad", consulta.escolaridad_anios if consulta.escolaridad_anios is not None else "-"],
-        ["Ocupación", consulta.ocupacion or "-"],
-        ["Preferencia manual", consulta.preferencia_manual or "-"],
-        ["Estado", estado],
-    ]
-
-    tabla_datos = Table(datos_generales, colWidths=[5 * cm, 10 * cm])
-    tabla_datos.setStyle(TableStyle([
-        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#E9F5EF")),
-        ("TEXTCOLOR", (0, 0), (0, -1), colors.HexColor("#1F4E3D")),
-        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
-        ("FONTNAME", (1, 0), (1, -1), "Helvetica"),
-        ("FONTSIZE", (0, 0), (-1, -1), 9),
-        ("GRID", (0, 0), (-1, -1), 0.4, colors.lightgrey),
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 5),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 5),
-    ]))
-
-    story.append(Paragraph("Datos generales", seccion_style))
-    story.append(tabla_datos)
-    story.append(Spacer(1, 10))
-
     def valor(v):
         return v if v not in [None, ""] else "-"
 
-    def agregar_tabla(titulo, filas):
-        story.append(Paragraph(titulo, seccion_style))
+    def fmt(v):
+        if v in [None, ""]:
+            return "-"
+        if isinstance(v, float):
+            return round(v, 3)
+        return v
 
-        data = [["Campo", "Resultado", "Punto de corte"]]
+    fecha = consulta.fecha_evaluacion
+    estado = "Finalizado" if consulta.finalizado else "En proceso"
 
-        for fila in filas:
-            if len(fila) == 2:
-                data.append([fila[0], valor(fila[1]), "-"])
-            else:
-                data.append([fila[0], valor(fila[1]), fila[2]])
+    story.append(Paragraph("CAVIC CUValles", titulo_style))
+    story.append(Paragraph("Reporte de Actividad Cognitiva - UDS-3", subtitulo_style))
 
-        tabla = Table(data, colWidths=[6.5 * cm, 4.5 * cm, 6 * cm])
-        tabla.setStyle(TableStyle([
-            ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#D1E7DD")),
-            ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#0F5132")),
-            ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-            ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-            ("FONTSIZE", (0, 0), (-1, -1), 8),
-            ("GRID", (0, 0), (-1, -1), 0.4, colors.lightgrey),
-            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ("LEFTPADDING", (0, 0), (-1, -1), 5),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-            ("TOPPADDING", (0, 0), (-1, -1), 4),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 4),
-            ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F8F9FA")]),
-        ]))
+    # =========================
+    # DATOS GENERALES
+    # =========================
+    datos_generales = [
+        ["Paciente", valor(consulta.paciente.nombre)],
+        ["Fecha", fecha.strftime("%d/%m/%Y") if fecha else "-"],
+        ["Examinador", valor(consulta.examinador)],
+        ["Edad", valor(consulta.edad)],
+        ["Sexo", valor(consulta.sexo)],
+        ["Escolaridad", valor(consulta.escolaridad_anios)],
+        ["Idioma", valor(consulta.idioma)],
+        ["Ocupación", valor(consulta.ocupacion)],
+        ["Preferencia manual", valor(consulta.preferencia_manual)],
+        ["Estado", estado],
+    ]
 
-        story.append(tabla)
-        story.append(Spacer(1, 8))
+    story.append(Paragraph("Datos generales", seccion_style))
 
-    agregar_tabla("MOCA", [
-        ["MOCA total", consulta.moca_total, obtener_punto_corte("moca")],
-        ["Estimación MOCA", consulta.moca_estimacion],
-    ])
+    tabla_datos = Table(datos_generales, colWidths=[4 * cm, 9 * cm])
+    tabla_datos.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#E9F2FF")),
+        ("TEXTCOLOR", (0, 0), (0, -1), colors.HexColor("#0D6EFD")),
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("GRID", (0, 0), (-1, -1), 0.3, colors.lightgrey),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+    ]))
 
-    agregar_tabla("Dígitos", [
-        ["Dígitos directos total", consulta.digitos_directos_total],
-        ["Dígitos directos longitud", consulta.digitos_directos_longitud],
-        ["Dígitos inversos total", consulta.digitos_inversos_total],
-        ["Dígitos inversos longitud", consulta.digitos_inversos_longitud],
-    ])
+    story.append(tabla_datos)
+    story.append(Spacer(1, 8))
 
-    agregar_tabla("Trail Making Test", [
-        ["Trail A tiempo", f"{valor(consulta.trail_a_tiempo)} seg", obtener_punto_corte("trail_a")],
-        ["Trail A errores", consulta.trail_a_errores],
-        ["Trail A líneas correctas", consulta.trail_a_lineas_correctas],
-        ["Trail A estimación", consulta.trail_a_estimacion],
-        ["Trail B tiempo", f"{valor(consulta.trail_b_tiempo)} seg", obtener_punto_corte("trail_b")],
-        ["Trail B errores", consulta.trail_b_errores],
-        ["Trail B líneas correctas", consulta.trail_b_lineas_correctas],
-        ["Trail B estimación", consulta.trail_b_estimacion],
-        ["Puntuación diferencial", consulta.trail_puntuacion_diferencial],
-        ["Puntuación ratio", consulta.trail_puntuacion_ratio],
-    ])
+    # =========================
+    # ESTIMACIÓN GENERAL
+    # =========================
+    story.append(Paragraph("Estimación general", seccion_style))
+    story.append(Paragraph(f"<b>{valor(consulta.estimacion_global)}</b>", texto_style))
+    story.append(Paragraph(valor(consulta.perfil_cognitivo), texto_style))
+    story.append(Spacer(1, 8))
 
-    agregar_tabla("Lenguaje y fluidez", [
-        ["MINT 32 total", consulta.mint_32_total, obtener_punto_corte("mint")],
-        ["MINT 32 estimación", consulta.mint_32_estimacion],
-        ["Fluencia P", consulta.fluencia_p],
-        ["Fluencia M", consulta.fluencia_m],
-        ["Promedio P/M", consulta.fluencia_pm_promedio, obtener_punto_corte("fluencia_pm")],
-        ["Fluencia estimación", consulta.fluencia_estimacion],
-        ["Animales total", consulta.animales_total, obtener_punto_corte("animales")],
-        ["Vegetales total", consulta.vegetales_total, obtener_punto_corte("vegetales")],
-        ["Fluidez semántica estimación", consulta.fluidez_semantica_estimacion],
-    ])
+    # =========================
+    # RESULTADOS NORMATIVOS
+    # =========================
+    story.append(Paragraph("Resultados normativos UDS-3", seccion_style))
 
-    agregar_tabla("Memoria visual - Benson", [
-        ["Benson inmediata", consulta.benson_inmediata],
-        ["Benson diferida", consulta.benson_diferida],
-        ["Porcentaje retenido", consulta.benson_porcentaje_retenido],
-    ])
+    resultados = [
+        ["Proceso", "Prueba", "Puntaje bruto", "Z-score", "Percentil", "Estimación"],
 
-    agregar_tabla("Memoria verbal - Craft", [
-        ["Craft RI 44", consulta.craft_ri_44],
-        ["Craft RI paráfrase 25", consulta.craft_ri_parafraseo_25],
-        ["Craft RD 44", consulta.craft_rd_44],
-        ["Craft RD paráfrase 25", consulta.craft_rd_parafraseo_25],
-        ["Porcentaje retenido Craft", consulta.craft_porcentaje_retenido],
-        ["Diferencia retención verbal/visual", consulta.diferencia_retencion_verbal_visual],
-    ])
+        ["Screening", "MOCA", f"{valor(consulta.moca_total)}/30", fmt(consulta.moca_z), fmt(consulta.moca_percentil), valor(consulta.moca_estimacion)],
 
-    agregar_tabla("Resultado global", [
-        ["Estimación global", consulta.estimacion_global],
-    ])
+        ["Atención", "Dígitos directos total", f"{valor(consulta.digitos_directos_total)}/14", fmt(consulta.digitos_directos_total_z), fmt(consulta.digitos_directos_total_percentil), estimacion_por_percentil(consulta.digitos_directos_total_percentil)],
+        ["Atención", "Dígitos directos longitud", f"{valor(consulta.digitos_directos_longitud)}/9", fmt(consulta.digitos_directos_longitud_z), fmt(consulta.digitos_directos_longitud_percentil), estimacion_por_percentil(consulta.digitos_directos_longitud_percentil)],
+        ["Atención", "Dígitos inversos total", f"{valor(consulta.digitos_inversos_total)}/8", fmt(consulta.digitos_inversos_total_z), fmt(consulta.digitos_inversos_total_percentil), estimacion_por_percentil(consulta.digitos_inversos_total_percentil)],
+        ["Atención", "Dígitos inversos longitud", f"{valor(consulta.digitos_inversos_longitud)}/8", fmt(consulta.digitos_inversos_longitud_z), fmt(consulta.digitos_inversos_longitud_percentil), estimacion_por_percentil(consulta.digitos_inversos_longitud_percentil)],
 
-    resumen_clinico = generar_resumen_clinico(consulta)
+        ["Atención sostenida", "Trail Making Test A", f"{valor(consulta.trail_a_tiempo)} seg.", fmt(consulta.trail_a_z), fmt(consulta.trail_a_percentil), estimacion_por_percentil(consulta.trail_a_percentil)],
+        ["Función ejecutiva", "Trail Making Test B", f"{valor(consulta.trail_b_tiempo)} seg.", fmt(consulta.trail_b_z), fmt(consulta.trail_b_percentil), estimacion_por_percentil(consulta.trail_b_percentil)],
 
-    story.append(Paragraph("Resumen clínico automático", seccion_style))
-    story.append(Paragraph(resumen_clinico, texto_style))
+        ["Búsqueda léxica", "MINT-32", f"{valor(consulta.mint_32_total)}/32", fmt(consulta.mint_32_z), fmt(consulta.mint_32_percentil), valor(consulta.mint_32_estimacion)],
+
+        ["Fluencia fonológica", "Letra P", valor(consulta.fluencia_p), fmt(consulta.fluencia_p_z), fmt(consulta.fluencia_p_percentil), estimacion_por_percentil(consulta.fluencia_p_percentil)],
+        ["Fluencia fonológica", "Letra M", valor(consulta.fluencia_m), fmt(consulta.fluencia_m_z), fmt(consulta.fluencia_m_percentil), estimacion_por_percentil(consulta.fluencia_m_percentil)],
+        ["Fluencia fonológica", "Total P + M", valor(consulta.fluencia_pm_total), fmt(consulta.fluencia_pm_z), fmt(consulta.fluencia_pm_percentil), estimacion_por_percentil(consulta.fluencia_pm_percentil)],
+
+        ["Fluidez semántica", "Animales", valor(consulta.fluidez_animales), fmt(consulta.fluidez_animales_z), fmt(consulta.fluidez_animales_percentil), estimacion_por_percentil(consulta.fluidez_animales_percentil)],
+        ["Fluidez semántica", "Vegetales", valor(consulta.fluidez_vegetales), fmt(consulta.fluidez_vegetales_z), fmt(consulta.fluidez_vegetales_percentil), estimacion_por_percentil(consulta.fluidez_vegetales_percentil)],
+
+        ["Memoria visual", "Benson copia", f"{valor(consulta.benson_copia_total)}/10", fmt(consulta.benson_copia_z), fmt(consulta.benson_copia_percentil), estimacion_por_percentil(consulta.benson_copia_percentil)],
+        ["Memoria visual", "Benson recuerdo", f"{valor(consulta.benson_recuerdo_total)}/10", fmt(consulta.benson_recuerdo_z), fmt(consulta.benson_recuerdo_percentil), estimacion_por_percentil(consulta.benson_recuerdo_percentil)],
+        ["Memoria visual", "Benson % retenido", f"{valor(consulta.benson_porcentaje_retenido)}%", fmt(consulta.benson_retencion_z), fmt(consulta.benson_retencion_percentil), estimacion_por_percentil(consulta.benson_retencion_percentil)],
+
+        ["Memoria verbal", "Craft inmediato textual", f"{valor(consulta.craft_inmediato_textual)}/44", fmt(consulta.craft_inmediato_textual_z), fmt(consulta.craft_inmediato_textual_percentil), estimacion_por_percentil(consulta.craft_inmediato_textual_percentil)],
+        ["Memoria verbal", "Craft inmediato parafraseo", f"{valor(consulta.craft_inmediato_parafraseo)}/25", fmt(consulta.craft_inmediato_parafraseo_z), fmt(consulta.craft_inmediato_parafraseo_percentil), estimacion_por_percentil(consulta.craft_inmediato_parafraseo_percentil)],
+        ["Memoria verbal", "Craft diferido textual", f"{valor(consulta.craft_diferido_textual)}/44", fmt(consulta.craft_diferido_textual_z), fmt(consulta.craft_diferido_textual_percentil), estimacion_por_percentil(consulta.craft_diferido_textual_percentil)],
+        ["Memoria verbal", "Craft diferido parafraseo", f"{valor(consulta.craft_diferido_parafraseo)}/25", fmt(consulta.craft_diferido_parafraseo_z), fmt(consulta.craft_diferido_parafraseo_percentil), estimacion_por_percentil(consulta.craft_diferido_parafraseo_percentil)],
+        ["Memoria verbal", "Craft % retenido", f"{valor(consulta.craft_porcentaje_retenido)}%", fmt(consulta.craft_retencion_z), fmt(consulta.craft_retencion_percentil), estimacion_por_percentil(consulta.craft_retencion_percentil)],
+    ]
+
+    tabla_resultados = Table(
+        resultados,
+        colWidths=[3.3 * cm, 5.2 * cm, 3 * cm, 2.3 * cm, 2.4 * cm, 3.4 * cm],
+        repeatRows=1
+    )
+
+    tabla_resultados.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#212529")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 7),
+        ("GRID", (0, 0), (-1, -1), 0.25, colors.lightgrey),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F8F9FA")]),
+    ]))
+
+    story.append(tabla_resultados)
+    story.append(Spacer(1, 8))
+
+    # =========================
+    # ÍNDICES DERIVADOS
+    # =========================
+    story.append(Paragraph("Índices derivados", seccion_style))
+
+    indices = [
+        ["Índice", "Valor", "Z-score", "Percentil"],
+        ["Trail diferencial B-A", valor(consulta.trail_diferencial), fmt(consulta.trail_diferencial_z), fmt(consulta.trail_diferencial_percentil)],
+        ["Trail ratio B/A", valor(consulta.trail_ratio), fmt(consulta.trail_ratio_z), fmt(consulta.trail_ratio_percentil)],
+        ["Diferencial semántico/fonológico", valor(consulta.fluencia_semantica_fonologica_diferencial), fmt(consulta.fluencia_semantica_fonologica_z), fmt(consulta.fluencia_semantica_fonologica_percentil)],
+        ["Índice de errores", valor(consulta.indice_errores), fmt(consulta.indice_errores_z), fmt(consulta.indice_errores_percentil)],
+        ["Diferencia verbal/visual", valor(consulta.diferencia_retencion_verbal_visual), fmt(consulta.diferencia_retencion_verbal_visual_z), fmt(consulta.diferencia_retencion_verbal_visual_percentil)],
+    ]
+
+    tabla_indices = Table(indices, colWidths=[7 * cm, 4 * cm, 4 * cm, 4 * cm])
+    tabla_indices.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#212529")),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
+        ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("GRID", (0, 0), (-1, -1), 0.3, colors.lightgrey),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F8F9FA")]),
+    ]))
+
+    story.append(tabla_indices)
+    story.append(Spacer(1, 8))
+
+    # =========================
+    # SUEÑO
+    # =========================
+    story.append(Paragraph("Calidad del sueño", seccion_style))
+
+    sueno = [
+        ["Índice de calidad de sueño", valor(consulta.sueno_indice_calidad)],
+        ["Estimación", valor(consulta.sueno_estimacion)],
+        ["Observaciones", valor(consulta.sueno_observaciones)],
+    ]
+
+    tabla_sueno = Table(sueno, colWidths=[5 * cm, 14 * cm])
+    tabla_sueno.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#E9F2FF")),
+        ("TEXTCOLOR", (0, 0), (0, -1), colors.HexColor("#0D6EFD")),
+        ("FONTNAME", (0, 0), (0, -1), "Helvetica-Bold"),
+        ("FONTSIZE", (0, 0), (-1, -1), 8),
+        ("GRID", (0, 0), (-1, -1), 0.3, colors.lightgrey),
+    ]))
+
+    story.append(tabla_sueno)
 
     doc.build(story)
 

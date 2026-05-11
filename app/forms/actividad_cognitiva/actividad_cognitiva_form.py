@@ -1,71 +1,235 @@
 from flask_wtf import FlaskForm
+
 from wtforms import (
     StringField,
     IntegerField,
     FloatField,
-    DateField,
+    TextAreaField,
+    SubmitField,
     SelectField,
-    SubmitField
+    DateField
 )
-from wtforms.validators import Optional, NumberRange
+
+from wtforms.validators import Optional
 
 
 class ActividadCognitivaForm(FlaskForm):
-    fecha_evaluacion = DateField("Fecha de evaluación", validators=[Optional()])
-    examinador = StringField("Examinador", validators=[Optional()])
 
-    escolaridad_anios = IntegerField("Años de escolaridad", validators=[Optional(), NumberRange(min=0, max=40)])
-    ocupacion = StringField("Ocupación", validators=[Optional()])
+    # ==========================================
+    # DATOS GENERALES
+    # ==========================================
 
-    preferencia_manual = SelectField(
-        "Preferencia manual",
+    fecha_evaluacion = DateField(
+        "Fecha de evaluación",
+        validators=[Optional()]
+    )
+
+    examinador = StringField(
+        "Examinador",
+        validators=[Optional()]
+    )
+
+    edad = IntegerField(
+        "Edad",
+        validators=[Optional()]
+    )
+
+    sexo = SelectField(
+        "Sexo",
         choices=[
-            ("", "Seleccione"),
-            ("Derecha", "Derecha"),
-            ("Izquierda", "Izquierda"),
-            ("Ambidiestro", "Ambidiestro")
+            (" masculino", "Masculino"),
+            (" femenino", "Femenino")
         ],
         validators=[Optional()]
     )
 
-    # Screening
-    moca_total = IntegerField("MOCA total /30", validators=[Optional(), NumberRange(min=0, max=30)])
+    escolaridad_anios = IntegerField(
+        "Años de escolaridad",
+        validators=[Optional()]
+    )
 
-    # Atención
-    digitos_directos_total = IntegerField("Dígitos orden directos /14", validators=[Optional(), NumberRange(min=0, max=14)])
-    digitos_directos_longitud = IntegerField("Dígitos directos longitud /9", validators=[Optional(), NumberRange(min=0, max=9)])
-    digitos_inversos_total = IntegerField("Dígitos orden inversos /8", validators=[Optional(), NumberRange(min=0, max=8)])
-    digitos_inversos_longitud = IntegerField("Dígitos inversos longitud /8", validators=[Optional(), NumberRange(min=0, max=8)])
+    idioma = SelectField(
+        "Idioma",
+        choices=[
+            (" spanish", "Español"),
+            (" english", "Inglés")
+        ],
+        validators=[Optional()]
+    )
 
-    # Trail A
-    trail_a_tiempo = FloatField("Trail Making Test A - tiempo /150 seg", validators=[Optional(), NumberRange(min=0, max=150)])
-    trail_a_errores = IntegerField("Trail Making Test A - errores", validators=[Optional(), NumberRange(min=0)])
-    trail_a_lineas_correctas = IntegerField("Trail Making Test A - líneas correctas", validators=[Optional(), NumberRange(min=0)])
+    ocupacion = StringField(
+        "Ocupación",
+        validators=[Optional()]
+    )
 
-    # Trail B
-    trail_b_tiempo = FloatField("Trail Making Test B - tiempo /300 seg", validators=[Optional(), NumberRange(min=0, max=300)])
-    trail_b_errores = IntegerField("Trail Making Test B - errores", validators=[Optional(), NumberRange(min=0)])
-    trail_b_lineas_correctas = IntegerField("Trail Making Test B - líneas correctas", validators=[Optional(), NumberRange(min=0)])
+    preferencia_manual = SelectField(
+        "Preferencia manual",
+        choices=[
+            ("diestra", "Diestra"),
+            ("zurda", "Zurda"),
+            ("ambidiestro", "Ambidiestro")
+        ],
+        validators=[Optional()]
+    )
 
-    # Lenguaje
-    mint_32_total = IntegerField("MINT-32 /32", validators=[Optional(), NumberRange(min=0, max=32)])
+    # ==========================================
+    # MOCA
+    # ==========================================
 
-    # Fluencia fonológica
-    fluencia_p = IntegerField("Fluencia fonológica letra P /50", validators=[Optional(), NumberRange(min=0, max=50)])
-    fluencia_m = IntegerField("Fluencia fonológica letra M /50", validators=[Optional(), NumberRange(min=0, max=50)])
+    moca_total = FloatField(
+        "MOCA total",
+        validators=[Optional()]
+    )
 
-    # Fluidez semántica
-    animales_total = IntegerField("Fluidez semántica animales", validators=[Optional(), NumberRange(min=0)])
-    vegetales_total = IntegerField("Fluidez semántica vegetales", validators=[Optional(), NumberRange(min=0)])
+    # ==========================================
+    # DÍGITOS
+    # ==========================================
 
-    # Benson
-    benson_inmediata = FloatField("Benson inmediata /10", validators=[Optional(), NumberRange(min=0, max=10)])
-    benson_diferida = FloatField("Benson diferida /10", validators=[Optional(), NumberRange(min=0, max=10)])
+    digitos_directos_total = FloatField(
+        "Dígitos directos total",
+        validators=[Optional()]
+    )
 
-    # Craft Story
-    craft_ri_44 = IntegerField("Craft Story R.I. /44", validators=[Optional(), NumberRange(min=0, max=44)])
-    craft_ri_parafraseo_25 = IntegerField("Craft Story R.I. parafraseo /25", validators=[Optional(), NumberRange(min=0, max=25)])
-    craft_rd_44 = IntegerField("Craft Story R.D. /44", validators=[Optional(), NumberRange(min=0, max=44)])
-    craft_rd_parafraseo_25 = IntegerField("Craft Story R.D. parafraseo /25", validators=[Optional(), NumberRange(min=0, max=25)])
+    digitos_directos_longitud = FloatField(
+        "Dígitos directos longitud",
+        validators=[Optional()]
+    )
 
-    submit = SubmitField("Guardar actividad cognitiva")
+    digitos_inversos_total = FloatField(
+        "Dígitos inversos total",
+        validators=[Optional()]
+    )
+
+    digitos_inversos_longitud = FloatField(
+        "Dígitos inversos longitud",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # TRAIL MAKING TEST
+    # ==========================================
+
+    trail_a_tiempo = FloatField(
+        "Trail A tiempo",
+        validators=[Optional()]
+    )
+
+    trail_a_lineas_tiempo = FloatField(
+        "Trail A líneas/tiempo",
+        validators=[Optional()]
+    )
+
+    trail_a_errores = IntegerField(
+        "Trail A errores",
+        validators=[Optional()]
+    )
+
+    trail_b_tiempo = FloatField(
+        "Trail B tiempo",
+        validators=[Optional()]
+    )
+
+    trail_b_lineas_tiempo = FloatField(
+        "Trail B líneas/tiempo",
+        validators=[Optional()]
+    )
+
+    trail_b_errores = IntegerField(
+        "Trail B errores",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # MINT-32
+    # ==========================================
+
+    mint_32_total = FloatField(
+        "MINT-32",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # FLUENCIA FONOLÓGICA
+    # ==========================================
+
+    fluencia_p = FloatField(
+        "Fluencia letra P",
+        validators=[Optional()]
+    )
+
+    fluencia_m = FloatField(
+        "Fluencia letra M",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # FLUIDEZ SEMÁNTICA
+    # ==========================================
+
+    fluidez_animales = FloatField(
+        "Fluidez animales",
+        validators=[Optional()]
+    )
+
+    fluidez_vegetales = FloatField(
+        "Fluidez vegetales",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # BENSON
+    # ==========================================
+
+    benson_copia_total = FloatField(
+        "Benson copia",
+        validators=[Optional()]
+    )
+
+    benson_recuerdo_total = FloatField(
+        "Benson recuerdo",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # CRAFT STORY
+    # ==========================================
+
+    craft_inmediato_textual = FloatField(
+        "Craft inmediato textual",
+        validators=[Optional()]
+    )
+
+    craft_inmediato_parafraseo = FloatField(
+        "Craft inmediato parafraseo",
+        validators=[Optional()]
+    )
+
+    craft_diferido_textual = FloatField(
+        "Craft diferido textual",
+        validators=[Optional()]
+    )
+
+    craft_diferido_parafraseo = FloatField(
+        "Craft diferido parafraseo",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # SUEÑO
+    # ==========================================
+
+    sueno_indice_calidad = FloatField(
+        "Índice calidad de sueño",
+        validators=[Optional()]
+    )
+
+    sueno_observaciones = TextAreaField(
+        "Observaciones sueño",
+        validators=[Optional()]
+    )
+
+    # ==========================================
+    # BOTÓN
+    # ==========================================
+
+    submit = SubmitField("Guardar evaluación")

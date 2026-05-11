@@ -1,5 +1,23 @@
 {% extends "base.html" %}
 
+{% macro badge_estimacion(texto) %}
+    {% if texto in ["Muy superior", "Superior"] %}
+        <span class="badge bg-success">{{ texto }}</span>
+    {% elif texto in ["Promedio alto", "Promedio"] %}
+        <span class="badge bg-primary">{{ texto }}</span>
+    {% elif texto == "Promedio bajo" %}
+        <span class="badge bg-warning text-dark">{{ texto }}</span>
+    {% elif texto == "Levemente deteriorado" %}
+        <span class="badge" style="background-color:#fd7e14; color:white;">
+        {{ texto }}
+        </span>
+    {% elif texto in ["Moderadamente deteriorado", "Severamente deteriorado"] %}
+        <span class="badge bg-danger">{{ texto }}</span>
+    {% else %}
+        <span class="badge bg-secondary">-</span>
+    {% endif %}
+{% endmacro %}
+
 {% block title %}
 Actividad Cognitiva
 {% endblock %}
@@ -52,13 +70,17 @@ Actividad Cognitiva
         {% endif %}
 
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                Estimación general
-            </div>
+    <div class="card-header bg-primary text-white">
+        Estimación general
+    </div>
+
             <div class="card-body">
-                <h5>{{ registro.estimacion_global or "Sin estimación" }}</h5>
+                <h5 class="fw-bold">
+                    {{ registro.estimacion_global or "Sin estimación" }}
+                </h5>
+
                 <p class="mb-0">
-                    {{ registro.resumen_automatico or "Todavía no hay resumen automático disponible." }}
+                    {{ registro.perfil_cognitivo or "No hay resumen clínico disponible." }}
                 </p>
             </div>
         </div>
@@ -72,6 +94,8 @@ Actividad Cognitiva
                     <div class="col-md-4"><strong>Fecha:</strong> {{ registro.fecha_evaluacion or "-" }}</div>
                     <div class="col-md-4"><strong>Examinador:</strong> {{ registro.examinador or "-" }}</div>
                     <div class="col-md-4"><strong>Edad:</strong> {{ registro.edad or "-" }}</div>
+                    <div class="col-md-4"><strong>Sexo:</strong>{{ registro.sexo or "-" }}</div>
+                    <div class="col-md-4"><strong>Idioma:</strong>{{ registro.idioma or "-" }}</div>
                     <div class="col-md-4"><strong>Escolaridad:</strong> {{ registro.escolaridad_anios or "-" }}</div>
                     <div class="col-md-4"><strong>Ocupación:</strong> {{ registro.ocupacion or "-" }}</div>
                     <div class="col-md-4"><strong>Preferencia manual:</strong> {{ registro.preferencia_manual or "-" }}</div>
@@ -81,121 +105,213 @@ Actividad Cognitiva
 
         <div class="card mb-4">
             <div class="card-header bg-dark text-white">
-                Resultados por prueba
-            </div>
-
-                    <div class="card mb-4">
-                <div class="card-header bg-secondary text-white">
-                    Detalle clínico
-                </div>
-                <div class="card-body row">
-
-                    <div class="col-md-6">
-                        <strong>Benson inmediata:</strong> {{ registro.benson_inmediata or "-" }} <br>
-                        <strong>Benson diferida:</strong> {{ registro.benson_diferida or "-" }}
-                    </div>
-
-                    <div class="col-md-6">
-                        <strong>Craft RI:</strong> {{ registro.craft_ri_44 or "-" }} <br>
-                        <strong>Craft RD:</strong> {{ registro.craft_rd_44 or "-" }}
-                    </div>
-
-                    <div class="col-md-6 mt-2">
-                        <strong>Trail A errores:</strong> {{ registro.trail_a_errores or "-" }} <br>
-                        <strong>Trail B errores:</strong> {{ registro.trail_b_errores or "-" }}
-                    </div>
-
-                    <div class="col-md-6 mt-2">
-                        <strong>Trail A líneas:</strong> {{ registro.trail_a_lineas_correctas or "-" }} <br>
-                        <strong>Trail B líneas:</strong> {{ registro.trail_b_lineas_correctas or "-" }}
-                    </div>
-
-                </div>
+                Resultados normativos UDS-3
             </div>
 
             <div class="card-body table-responsive">
-                <table class="table table-bordered table-striped align-middle">
-                    <thead>
+                <table class="table table-bordered table-sm align-middle">
+                    <thead class="table-light">
                         <tr>
                             <th>Proceso</th>
                             <th>Prueba</th>
-                            <th>Puntuación</th>
+                            <th>Puntaje bruto</th>
+                            <th>Z-score</th>
+                            <th>Percentil</th>
                             <th>Estimación</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         <tr>
                             <td>Screening</td>
                             <td>MOCA</td>
-                            <td>{{ registro.moca_total if registro.moca_total is not none else "-" }} /30</td>
-                            <td>{{ registro.moca_estimacion or "-" }}</td>
+                            <td>{{ registro.moca_total or '-' }}/30</td>
+                            <td>{{ registro.moca_z or '-' }}</td>
+                            <td>{{ registro.moca_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.moca_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Atención</td>
-                            <td>Dígitos directos</td>
-                            <td>{{ registro.digitos_directos_total if registro.digitos_directos_total is not none else "-" }} /14</td>
-                            <td>-</td>
+                            <td>Dígitos directos total</td>
+                            <td>{{ registro.digitos_directos_total or '-' }}/14</td>
+                            <td>{{ registro.digitos_directos_total_z or '-' }}</td>
+                            <td>{{ registro.digitos_directos_total_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.digitos_directos_total_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Atención</td>
-                            <td>Dígitos inversos</td>
-                            <td>{{ registro.digitos_inversos_total if registro.digitos_inversos_total is not none else "-" }} /8</td>
-                            <td>-</td>
+                            <td>Dígitos directos longitud</td>
+                            <td>{{ registro.digitos_directos_longitud or '-' }}/9</td>
+                            <td>{{ registro.digitos_directos_longitud_z or '-' }}</td>
+                            <td>{{ registro.digitos_directos_longitud_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.digitos_directos_longitud_percentil)) }}</td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Atención</td>
+                            <td>Dígitos inversos total</td>
+                            <td>{{ registro.digitos_inversos_total or '-' }}/8</td>
+                            <td>{{ registro.digitos_inversos_total_z or '-' }}</td>
+                            <td>{{ registro.digitos_inversos_total_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.digitos_inversos_total_percentil)) }}</td>
+
+                        </tr>
+
+                        <tr>
+                            <td>Atención</td>
+                            <td>Dígitos inversos longitud</td>
+                            <td>{{ registro.digitos_inversos_longitud or '-' }}/8</td>
+                            <td>{{ registro.digitos_inversos_longitud_z or '-' }}</td>
+                            <td>{{ registro.digitos_inversos_longitud_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.digitos_inversos_longitud_percentil)) }}</td>
+
                         </tr>
 
                         <tr>
                             <td>Atención sostenida</td>
                             <td>Trail Making Test A</td>
-                            <td>{{ registro.trail_a_tiempo if registro.trail_a_tiempo is not none else "-" }} seg.</td>
-                            <td>{{ registro.trail_a_estimacion or "-" }}</td>
+                            <td>{{ registro.trail_a_tiempo or '-' }} seg.</td>
+                            <td>{{ registro.trail_a_z or '-' }}</td>
+                            <td>{{ registro.trail_a_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.trail_a_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Función ejecutiva</td>
                             <td>Trail Making Test B</td>
-                            <td>{{ registro.trail_b_tiempo if registro.trail_b_tiempo is not none else "-" }} seg.</td>
-                            <td>{{ registro.trail_b_estimacion or "-" }}</td>
+                            <td>{{ registro.trail_b_tiempo or '-' }} seg.</td>
+                            <td>{{ registro.trail_b_z or '-' }}</td>
+                            <td>{{ registro.trail_b_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.trail_b_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Búsqueda léxica</td>
                             <td>MINT-32</td>
-                            <td>{{ registro.mint_32_total if registro.mint_32_total is not none else "-" }} /32</td>
-                            <td>{{ registro.mint_32_estimacion or "-" }}</td>
+                            <td>{{ registro.mint_32_total or '-' }}/32</td>
+                            <td>{{ registro.mint_32_z or '-' }}</td>
+                            <td>{{ registro.mint_32_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.mint_32_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Fluencia fonológica</td>
-                            <td>Letras P y M</td>
-                            <td>{{ registro.fluencia_pm_promedio if registro.fluencia_pm_promedio is not none else "-" }}</td>
-                            <td>{{ registro.fluencia_estimacion or "-" }}</td>
+                            <td>Letra P</td>
+                            <td>{{ registro.fluencia_p or '-' }}</td>
+                            <td>{{ registro.fluencia_p_z or '-' }}</td>
+                            <td>{{ registro.fluencia_p_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluencia_p_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fluencia fonológica</td>
+                            <td>Letra M</td>
+                            <td>{{ registro.fluencia_m or '-' }}</td>
+                            <td>{{ registro.fluencia_m_z or '-' }}</td>
+                            <td>{{ registro.fluencia_m_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluencia_m_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fluencia fonológica</td>
+                            <td>Total P + M</td>
+                            <td>{{ registro.fluencia_pm_total or '-' }}</td>
+                            <td>{{ registro.fluencia_pm_z or '-' }}</td>
+                            <td>{{ registro.fluencia_pm_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluencia_pm_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Fluidez semántica</td>
-                            <td>Animales / Vegetales</td>
-                            <td>
-                                {{ registro.animales_total if registro.animales_total is not none else "-" }}
-                                /
-                                {{ registro.vegetales_total if registro.vegetales_total is not none else "-" }}
-                            </td>
-                            <td>{{ registro.fluidez_semantica_estimacion or "-" }}</td>
+                            <td>Animales</td>
+                            <td>{{ registro.fluidez_animales or '-' }}</td>
+                            <td>{{ registro.fluidez_animales_z or '-' }}</td>
+                            <td>{{ registro.fluidez_animales_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluidez_animales_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fluidez semántica</td>
+                            <td>Vegetales</td>
+                            <td>{{ registro.fluidez_vegetales or '-' }}</td>
+                            <td>{{ registro.fluidez_vegetales_z or '-' }}</td>
+                            <td>{{ registro.fluidez_vegetales_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluidez_vegetales_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria visual</td>
+                            <td>Benson copia</td>
+                            <td>{{ registro.benson_copia_total or '-' }}/10</td>
+                            <td>{{ registro.benson_copia_z or '-' }}</td>
+                            <td>{{ registro.benson_copia_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.benson_copia_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria visual</td>
+                            <td>Benson recuerdo</td>
+                            <td>{{ registro.benson_recuerdo_total or '-' }}/10</td>
+                            <td>{{ registro.benson_recuerdo_z or '-' }}</td>
+                            <td>{{ registro.benson_recuerdo_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.benson_recuerdo_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Memoria visual</td>
                             <td>Benson % retenido</td>
-                            <td>{{ registro.benson_porcentaje_retenido if registro.benson_porcentaje_retenido is not none else "-" }}%</td>
-                            <td>-</td>
+                            <td>{{ registro.benson_porcentaje_retenido or '-' }}%</td>
+                            <td>{{ registro.benson_retencion_z or '-' }}</td>
+                            <td>{{ registro.benson_retencion_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.benson_retencion_percentil)) }}</td>
                         </tr>
 
                         <tr>
                             <td>Memoria verbal</td>
-                            <td>Craft Story % retenido</td>
-                            <td>{{ registro.craft_porcentaje_retenido if registro.craft_porcentaje_retenido is not none else "-" }}%</td>
-                            <td>-</td>
+                            <td>Craft inmediato textual</td>
+                            <td>{{ registro.craft_inmediato_textual or '-' }}/44</td>
+                            <td>{{ registro.craft_inmediato_textual_z or '-' }}</td>
+                            <td>{{ registro.craft_inmediato_textual_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.craft_inmediato_textual_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria verbal</td>
+                            <td>Craft inmediato parafraseo</td>
+                            <td>{{ registro.craft_inmediato_parafraseo or '-' }}/25</td>
+                            <td>{{ registro.craft_inmediato_parafraseo_z or '-' }}</td>
+                            <td>{{ registro.craft_inmediato_parafraseo_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.craft_inmediato_parafraseo_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria verbal</td>
+                            <td>Craft diferido textual</td>
+                            <td>{{ registro.craft_diferido_textual or '-' }}/44</td>
+                            <td>{{ registro.craft_diferido_textual_z or '-' }}</td>
+                            <td>{{ registro.craft_diferido_textual_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.craft_diferido_textual_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria verbal</td>
+                            <td>Craft diferido parafraseo</td>
+                            <td>{{ registro.craft_diferido_parafraseo or '-' }}/25</td>
+                            <td>{{ registro.craft_diferido_parafraseo_z or '-' }}</td>
+                            <td>{{ registro.craft_diferido_parafraseo_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.craft_diferido_parafraseo_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Memoria verbal</td>
+                            <td>Craft % retenido</td>
+                            <td>{{ registro.craft_porcentaje_retenido or '-' }}%</td>
+                            <td>{{ registro.craft_retencion_z or '-' }}</td>
+                            <td>{{ registro.craft_retencion_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.craft_retencion_percentil)) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -203,24 +319,89 @@ Actividad Cognitiva
         </div>
 
         <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    Calidad del sueño
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <strong>Índice de calidad:</strong>
+                            {{ registro.sueno_indice_calidad if registro.sueno_indice_calidad is not none else "-" }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Estimación:</strong>
+                            {{ registro.sueno_estimacion or "-" }}
+                        </div>
+
+                        <div class="col-md-4">
+                            <strong>Observaciones:</strong>
+                            {{ registro.sueno_observaciones or "-" }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        <div class="card mb-4">
             <div class="card-header bg-dark text-white">
                 Índices derivados
             </div>
-            <div class="card-body row">
-                <div class="col-md-4">
-                    <strong>Trail diferencial:</strong>
-                    {{ registro.trail_puntuacion_diferencial if registro.trail_puntuacion_diferencial is not none else "-" }}
-                </div>
 
-                <div class="col-md-4">
-                    <strong>Trail ratio:</strong>
-                    {{ registro.trail_puntuacion_ratio if registro.trail_puntuacion_ratio is not none else "-" }}
-                </div>
+            <div class="card-body table-responsive">
+                <table class="table table-bordered table-sm align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Índice</th>
+                            <th>Valor</th>
+                            <th>Z-score</th>
+                            <th>Percentil</th>
+                            <th>Estimación</th>
+                        </tr>
+                    </thead>
 
-                <div class="col-md-4">
-                    <strong>Diferencia verbal/visual:</strong>
-                    {{ registro.diferencia_retencion_verbal_visual if registro.diferencia_retencion_verbal_visual is not none else "-" }}
-                </div>
+                    <tbody>
+                        <tr>
+                            <td>Trail diferencial (B - A)</td>
+                            <td>{{ registro.trail_diferencial or '-' }}</td>
+                            <td>{{ registro.trail_diferencial_z or '-' }}</td>
+                            <td>{{ registro.trail_diferencial_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.trail_diferencial_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Trail ratio (B / A)</td>
+                            <td>{{ registro.trail_ratio or '-' }}</td>
+                            <td>{{ registro.trail_ratio_z or '-' }}</td>
+                            <td>{{ registro.trail_ratio_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.trail_ratio_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Diferencial semántico / fonológico</td>
+                            <td>{{ registro.fluencia_semantica_fonologica_diferencial or '-' }}</td>
+                            <td>{{ registro.fluencia_semantica_fonologica_z or '-' }}</td>
+                            <td>{{ registro.fluencia_semantica_fonologica_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.fluencia_semantica_fonologica_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Índice de errores</td>
+                            <td>{{ registro.indice_errores or '-' }}</td>
+                            <td>{{ registro.indice_errores_z or '-' }}</td>
+                            <td>{{ registro.indice_errores_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.indice_errores_percentil)) }}</td>
+                        </tr>
+
+                        <tr>
+                            <td>Diferencia verbal / visual</td>
+                            <td>{{ registro.diferencia_retencion_verbal_visual if registro.diferencia_retencion_verbal_visual is not none else '-' }}</td>
+                            <td>{{ registro.diferencia_retencion_verbal_visual_z or '-' }}</td>
+                            <td>{{ registro.diferencia_retencion_verbal_visual_percentil or '-' }}</td>
+                            <td>{{ badge_estimacion(estimacion_por_percentil(registro.diferencia_retencion_verbal_visual_percentil)) }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
