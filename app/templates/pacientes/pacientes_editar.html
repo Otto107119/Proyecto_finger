@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Editar paciente{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+    <div class="card shadow-lg">
+        <div class="card-body">
+        <h3 class="text-center mb-4">Editar paciente</h3>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            {% if current_user.rol == "superadmin" %}
+            <div class="mb-3">
+            <label class="form-label">Registro Interno</label>
+            <input type="number"
+                    name="registro_interno"
+                    class="form-control"
+                    value="{{ paciente.registro_interno if paciente.registro_interno else '' }}">
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+            {{ form.nombre.label(class="form-label") }}
+            {{ form.nombre(class="form-control") }}
+            {% for error in form.nombre.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+            </div>
+
+            <div class="mb-3">
+            {{ form.fecha_nacimiento.label(class="form-label") }}
+            {{ form.fecha_nacimiento(class="form-control") }}
+            {% for error in form.fecha_nacimiento.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+            </div>
+
+            <div class="mb-3">
+            {{ form.genero.label(class="form-label") }}
+            {{ form.genero(class="form-select") }}
+            {% for error in form.genero.errors %}
+                <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+            </div>
+
+            <div class="d-grid">
+            <button type="submit" class="btn btn-primary">
+                Guardar cambios
+            </button>
+            </div>
+
+        </form>
+
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}

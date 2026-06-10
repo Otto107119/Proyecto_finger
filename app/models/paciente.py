@@ -6,6 +6,7 @@ class Paciente(db.Model):
     __tablename__ = "paciente"
 
     id = db.Column(db.Integer, primary_key=True)
+    registro_interno = db.Column(db.Integer, unique=True, nullable=True)
     nombre = db.Column(db.String(120), nullable=False)
     fecha_nacimiento = db.Column(db.Date, nullable=True)
     genero = db.Column(db.String(20), nullable=False)

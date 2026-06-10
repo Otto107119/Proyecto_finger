@@ -24,6 +24,7 @@
         <table class="table table-striped align-middle">
           <thead>
             <tr>
+              <th>Registro Interno</th>
               <th>Nombre</th>
               <th>Edad</th>
               <th>Género</th>
@@ -33,6 +34,13 @@
           <tbody>
             {% for p in pacientes %}
             <tr>
+              <td>
+                  {% if p.registro_interno %}
+                      {{ p.registro_interno }}
+                  {% else %}
+                      -
+                  {% endif %}
+              </td>
               <td>{{ p.nombre }}</td>
               <td>{{ p.edad }}</td>
               <td>{{ p.genero }}</td>
@@ -41,6 +49,12 @@
                     href="{{ url_for('pacientes.pacientes_detalle', paciente_id=p.id) }}">
                     Ver
                 </a>
+                {% if current_user.rol == "superadmin" %}
+                <a class="btn btn-warning btn-sm"
+                  href="{{ url_for('pacientes.pacientes_editar', paciente_id=p.id) }}">
+                    Editar
+                </a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}
@@ -59,7 +73,7 @@ document.getElementById("buscadorPacientes").addEventListener("keyup", function 
     let filas = document.querySelectorAll("tbody tr");
 
     filas.forEach(function(fila) {
-        let nombre = fila.cells[0].textContent.toLowerCase();
+        let nombre = fila.cells[1].textContent.toLowerCase();
 
         if (nombre.includes(filtro)) {
             fila.style.display = "";
