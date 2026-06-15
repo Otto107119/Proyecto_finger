@@ -4,3 +4,6 @@ from .padres_madres import ActividadSocialPadreMadre
 from .hermano import ActividadSocialHermano
 from .hijo import ActividadSocialHijo
 from .salud_mental import ActividadSocialSaludMental
+from .gds15 import ActividadSocialGDS15
+from .katz import ActividadSocialKatz
+from .lawton_brody import ActividadSocialLawtonBrody

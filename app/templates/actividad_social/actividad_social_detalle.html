@@ -202,7 +202,7 @@
                                             Agregar hijo
                                         </button>
 
-                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
+                                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='gds15') }}"
                                             class="btn btn-success">
                                             Siguiente
                                         </a>
@@ -222,7 +222,7 @@
                             Anterior
                         </a>
 
-                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='gds15') }}"
                             class="btn btn-success">
                             Siguiente
                         </a>
@@ -277,6 +277,209 @@
                 {% else %}
                     <p class="text-muted">No hay hijos registrados.</p>
                 {% endif %}
+
+                {% elif seccion == "gds15" %}
+                <hr>
+                <h5>Escala Geriátrica de Depresión GDS-15</h5>
+
+                <form method="POST">
+                    {{ gds15_form.hidden_tag() }}
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            {% for campo in [
+                                gds15_form.p1, gds15_form.p2, gds15_form.p3,
+                                gds15_form.p4, gds15_form.p5, gds15_form.p6,
+                                gds15_form.p7, gds15_form.p8, gds15_form.p9,
+                                gds15_form.p10, gds15_form.p11, gds15_form.p12,
+                                gds15_form.p13, gds15_form.p14, gds15_form.p15
+                            ] %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">{{ campo.label.text }}</label>
+                                    {% for subfield in campo %}
+                                        <div class="form-check">
+                                            {% if editable_social %}
+                                                {{ subfield(class="form-check-input") }}
+                                            {% else %}
+                                                {{ subfield(class="form-check-input", disabled=true) }}
+                                            {% endif %}
+                                            {{ subfield.label(class="form-check-label") }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            {% if actividad.gds15 %}
+                                <hr>
+                                <p><strong>Puntaje total:</strong> {{ actividad.gds15.puntaje_total if actividad.gds15.puntaje_total is not none else "Sin calcular" }}</p>
+                                <p><strong>Interpretación:</strong> {{ actividad.gds15.interpretacion or "Sin calcular" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='hijos') }}"
+                        class="btn btn-outline-secondary">
+                            Anterior
+                        </a>
+
+                        <div class="d-flex gap-2">
+                            {% if editable_social %}
+                                <button type="submit" name="accion" value="guardar" class="btn btn-primary">
+                                    Guardar
+                                </button>
+                                <button type="submit" name="accion" value="siguiente" class="btn btn-success">
+                                    Guardar y siguiente
+                                </button>
+                            {% else %}
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='katz') }}"
+                                class="btn btn-success">
+                                    Siguiente
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+
+                {% elif seccion == "katz" %}
+                <hr>
+                <h5>Índice de Katz</h5>
+
+                <form method="POST">
+                    {{ katz_form.hidden_tag() }}
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            {% for campo in [
+                                katz_form.bano,
+                                katz_form.vestido,
+                                katz_form.uso_sanitario,
+                                katz_form.transferencias,
+                                katz_form.continencia,
+                                katz_form.alimentacion
+                            ] %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">{{ campo.label.text }}</label>
+                                    {% for subfield in campo %}
+                                        <div class="form-check">
+                                            {% if editable_social %}
+                                                {{ subfield(class="form-check-input") }}
+                                            {% else %}
+                                                {{ subfield(class="form-check-input", disabled=true) }}
+                                            {% endif %}
+                                            {{ subfield.label(class="form-check-label") }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="mb-3">
+                                {{ katz_form.clasificacion_letra.label(class="form-label fw-bold") }}
+                                {% if editable_social %}
+                                    {{ katz_form.clasificacion_letra(class="form-select") }}
+                                {% else %}
+                                    {{ katz_form.clasificacion_letra(class="form-select", disabled=true) }}
+                                {% endif %}
+                            </div>
+
+                            {% if actividad.katz %}
+                                <hr>
+                                <p><strong>Puntaje total:</strong> {{ actividad.katz.puntaje_total if actividad.katz.puntaje_total is not none else "Sin calcular" }}</p>
+                                <p><strong>Clasificación:</strong> {{ actividad.katz.clasificacion_letra or "Sin capturar" }}</p>
+                                <p><strong>Interpretación:</strong> {{ actividad.katz.interpretacion or "Sin calcular" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='gds15') }}"
+                        class="btn btn-outline-secondary">
+                            Anterior
+                        </a>
+
+                        <div class="d-flex gap-2">
+                            {% if editable_social %}
+                                <button type="submit" name="accion" value="guardar" class="btn btn-primary">
+                                    Guardar
+                                </button>
+                                <button type="submit" name="accion" value="siguiente" class="btn btn-success">
+                                    Guardar y siguiente
+                                </button>
+                            {% else %}
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='lawton_brody') }}"
+                                class="btn btn-success">
+                                    Siguiente
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
+
+                {% elif seccion == "lawton_brody" %}
+                <hr>
+                <h5>Escala de Lawton y Brody</h5>
+                <p class="text-muted">I = Independiente, A = Con asistencia, D = Dependiente.</p>
+
+                <form method="POST">
+                    {{ lawton_brody_form.hidden_tag() }}
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            {% for campo in [
+                                lawton_brody_form.telefono,
+                                lawton_brody_form.transporte,
+                                lawton_brody_form.compras,
+                                lawton_brody_form.preparacion_alimentos,
+                                lawton_brody_form.quehaceres_hogar,
+                                lawton_brody_form.medicacion,
+                                lawton_brody_form.manejo_dinero
+                            ] %}
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">{{ campo.label.text }}</label>
+                                    {% for subfield in campo %}
+                                        <div class="form-check">
+                                            {% if editable_social %}
+                                                {{ subfield(class="form-check-input") }}
+                                            {% else %}
+                                                {{ subfield(class="form-check-input", disabled=true) }}
+                                            {% endif %}
+                                            {{ subfield.label(class="form-check-label") }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+
+                            {% if actividad.lawton_brody %}
+                                <hr>
+                                <p><strong>Puntaje total:</strong> {{ actividad.lawton_brody.puntaje_total if actividad.lawton_brody.puntaje_total is not none else "Sin calcular" }}</p>
+                                <p><strong>Interpretación:</strong> {{ actividad.lawton_brody.interpretacion or "Sin calcular" }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='katz') }}"
+                        class="btn btn-outline-secondary">
+                            Anterior
+                        </a>
+
+                        <div class="d-flex gap-2">
+                            {% if editable_social %}
+                                <button type="submit" name="accion" value="guardar" class="btn btn-primary">
+                                    Guardar
+                                </button>
+                                <button type="submit" name="accion" value="siguiente" class="btn btn-success">
+                                    Guardar y siguiente
+                                </button>
+                            {% else %}
+                                <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
+                                class="btn btn-success">
+                                    Siguiente
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </form>
 
                             {% elif seccion == "salud_mental" %}
                 <hr>
@@ -528,6 +731,41 @@
 
                                 <div class="card mb-4">
                     <div class="card-body">
+
+                        <h6 class="mb-3">Escala Geriátrica de Depresión GDS-15</h6>
+
+                        {% if actividad.gds15 %}
+                            <p><strong>Puntaje total:</strong> {{ actividad.gds15.puntaje_total if actividad.gds15.puntaje_total is not none else "Sin calcular" }}</p>
+                            <p><strong>Interpretación:</strong> {{ actividad.gds15.interpretacion or "Sin calcular" }}</p>
+                        {% else %}
+                            <p class="text-muted">No se ha capturado GDS-15.</p>
+                        {% endif %}
+
+                        <hr>
+
+                        <h6 class="mb-3">Índice de Katz</h6>
+
+                        {% if actividad.katz %}
+                            <p><strong>Puntaje total:</strong> {{ actividad.katz.puntaje_total if actividad.katz.puntaje_total is not none else "Sin calcular" }}</p>
+                            <p><strong>Clasificación:</strong> {{ actividad.katz.clasificacion_letra or "Sin capturar" }}</p>
+                            <p><strong>Interpretación:</strong> {{ actividad.katz.interpretacion or "Sin calcular" }}</p>
+                        {% else %}
+                            <p class="text-muted">No se ha capturado Índice de Katz.</p>
+                        {% endif %}
+
+                        <hr>
+
+                        <h6 class="mb-3">Escala de Lawton y Brody</h6>
+
+                        {% if actividad.lawton_brody %}
+                            <p><strong>Puntaje total:</strong> {{ actividad.lawton_brody.puntaje_total if actividad.lawton_brody.puntaje_total is not none else "Sin calcular" }}</p>
+                            <p><strong>Interpretación:</strong> {{ actividad.lawton_brody.interpretacion or "Sin calcular" }}</p>
+                        {% else %}
+                            <p class="text-muted">No se ha capturado Lawton y Brody.</p>
+                        {% endif %}
+
+                        <hr>
+
                         <h6 class="mb-3">Salud mental y funcionalidad</h6>
 
                         {% if actividad.salud_mental %}
@@ -564,7 +802,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between mt-4">
-                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='salud_mental') }}"
+                    <a href="{{ url_for('actividad_social.actividad_social_detalle', paciente_id=paciente.id, actividad_id=actividad.id, seccion='lawton_brody') }}"
                         class="btn btn-outline-secondary">
                         Anterior
                     </a>

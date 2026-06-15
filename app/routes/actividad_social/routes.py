@@ -10,20 +10,35 @@ from app.models import (
     ActividadSocialPadreMadre,
     ActividadSocialHermano,
     ActividadSocialHijo,
-    ActividadSocialSaludMental
+    ActividadSocialSaludMental,
+    ActividadSocialGDS15,
+    ActividadSocialKatz,
+    ActividadSocialLawtonBrody,
 )
 
 from app.forms.actividad_social import (
     ActividadSocialForm,
     HermanoForm,
     HijoForm,
-    ActividadSocialSaludMentalForm
+    ActividadSocialSaludMentalForm,
+    ActividadSocialGDS15Form,
+    ActividadSocialKatzForm,
+    ActividadSocialLawtonBrodyForm,
 )
 
 from app.routes.actividad_social.salud_mental_utils import (
     interpretar_gds,
     calcular_katz_total,
     interpretar_katz
+)
+
+from app.routes.actividad_social.escalas_utils import (
+    calcular_gds15_total,
+    interpretar_gds15,
+    calcular_katz_total as calcular_katz_total_nuevo,
+    interpretar_katz as interpretar_katz_nuevo,
+    calcular_lawton_total,
+    interpretar_lawton
 )
 
 from app.utils.permisos import (
@@ -122,6 +137,9 @@ def actividad_social_detalle(paciente_id, actividad_id):
     hermano_form = HermanoForm()
     hijo_form = HijoForm()
     salud_mental_form = ActividadSocialSaludMentalForm()
+    gds15_form = ActividadSocialGDS15Form()
+    katz_form = ActividadSocialKatzForm()
+    lawton_brody_form = ActividadSocialLawtonBrodyForm()
 
     # Bloqueo real de edición por backend
     if request.method == "POST" and not editable_social:
@@ -199,6 +217,28 @@ def actividad_social_detalle(paciente_id, actividad_id):
             salud_mental_form.katz_continencia.data = actividad.salud_mental.katz_continencia
             salud_mental_form.katz_alimentacion.data = actividad.salud_mental.katz_alimentacion
             salud_mental_form.katz_letra.data = actividad.salud_mental.katz_letra
+            
+        if actividad.gds15:
+            for i in range(1, 16):
+                getattr(gds15_form, f"p{i}").data = getattr(actividad.gds15, f"p{i}")
+
+        if actividad.katz:
+            katz_form.bano.data = str(actividad.katz.bano) if actividad.katz.bano is not None else None
+            katz_form.vestido.data = str(actividad.katz.vestido) if actividad.katz.vestido is not None else None
+            katz_form.uso_sanitario.data = str(actividad.katz.uso_sanitario) if actividad.katz.uso_sanitario is not None else None
+            katz_form.transferencias.data = str(actividad.katz.transferencias) if actividad.katz.transferencias is not None else None
+            katz_form.continencia.data = str(actividad.katz.continencia) if actividad.katz.continencia is not None else None
+            katz_form.alimentacion.data = str(actividad.katz.alimentacion) if actividad.katz.alimentacion is not None else None
+            katz_form.clasificacion_letra.data = actividad.katz.clasificacion_letra
+
+        if actividad.lawton_brody:
+            lawton_brody_form.telefono.data = str(actividad.lawton_brody.telefono) if actividad.lawton_brody.telefono is not None else None
+            lawton_brody_form.transporte.data = str(actividad.lawton_brody.transporte) if actividad.lawton_brody.transporte is not None else None
+            lawton_brody_form.compras.data = str(actividad.lawton_brody.compras) if actividad.lawton_brody.compras is not None else None
+            lawton_brody_form.preparacion_alimentos.data = str(actividad.lawton_brody.preparacion_alimentos) if actividad.lawton_brody.preparacion_alimentos is not None else None
+            lawton_brody_form.quehaceres_hogar.data = str(actividad.lawton_brody.quehaceres_hogar) if actividad.lawton_brody.quehaceres_hogar is not None else None
+            lawton_brody_form.medicacion.data = str(actividad.lawton_brody.medicacion) if actividad.lawton_brody.medicacion is not None else None
+            lawton_brody_form.manejo_dinero.data = str(actividad.lawton_brody.manejo_dinero) if actividad.lawton_brody.manejo_dinero is not None else None
 
     # Guardar hermanos
     if editable_social and seccion == "hermanos" and hermano_form.validate_on_submit():
@@ -415,6 +455,151 @@ def actividad_social_detalle(paciente_id, actividad_id):
             seccion="salud_mental"
         ))
 
+    # =========================
+    # GDS-15
+    # =========================
+    if editable_social and seccion == "gds15" and gds15_form.validate_on_submit():
+        if not actividad.gds15:
+            actividad.gds15 = ActividadSocialGDS15(
+                actividad_social_id=actividad.id
+            )
+            db.session.add(actividad.gds15)
+
+        respuestas = {}
+
+        for i in range(1, 16):
+            valor = getattr(gds15_form, f"p{i}").data
+            setattr(actividad.gds15, f"p{i}", valor)
+            respuestas[f"p{i}"] = valor
+
+        actividad.gds15.puntaje_total = calcular_gds15_total(respuestas)
+        actividad.gds15.interpretacion = interpretar_gds15(
+            actividad.gds15.puntaje_total
+        )
+
+        db.session.commit()
+
+        flash("Escala GDS-15 guardada correctamente.", "success")
+
+        accion = request.form.get("accion")
+        if accion == "siguiente":
+            return redirect(url_for(
+                "actividad_social.actividad_social_detalle",
+                paciente_id=paciente.id,
+                actividad_id=actividad.id,
+                seccion="katz"
+            ))
+
+        return redirect(url_for(
+            "actividad_social.actividad_social_detalle",
+            paciente_id=paciente.id,
+            actividad_id=actividad.id,
+            seccion="gds15"
+        ))
+        
+    # =========================
+    # KATZ
+    # =========================
+    if editable_social and seccion == "katz" and katz_form.validate_on_submit():
+        if not actividad.katz:
+            actividad.katz = ActividadSocialKatz(
+                actividad_social_id=actividad.id
+            )
+            db.session.add(actividad.katz)
+
+        actividad.katz.bano = int(katz_form.bano.data) if katz_form.bano.data else None
+        actividad.katz.vestido = int(katz_form.vestido.data) if katz_form.vestido.data else None
+        actividad.katz.uso_sanitario = int(katz_form.uso_sanitario.data) if katz_form.uso_sanitario.data else None
+        actividad.katz.transferencias = int(katz_form.transferencias.data) if katz_form.transferencias.data else None
+        actividad.katz.continencia = int(katz_form.continencia.data) if katz_form.continencia.data else None
+        actividad.katz.alimentacion = int(katz_form.alimentacion.data) if katz_form.alimentacion.data else None
+        actividad.katz.clasificacion_letra = katz_form.clasificacion_letra.data
+
+        actividad.katz.puntaje_total = calcular_katz_total_nuevo(
+            actividad.katz.bano,
+            actividad.katz.vestido,
+            actividad.katz.uso_sanitario,
+            actividad.katz.transferencias,
+            actividad.katz.continencia,
+            actividad.katz.alimentacion
+        )
+
+        actividad.katz.interpretacion = interpretar_katz_nuevo(
+            actividad.katz.puntaje_total
+        )
+
+        db.session.commit()
+
+        flash("Índice de Katz guardado correctamente.", "success")
+
+        accion = request.form.get("accion")
+        if accion == "siguiente":
+            return redirect(url_for(
+                "actividad_social.actividad_social_detalle",
+                paciente_id=paciente.id,
+                actividad_id=actividad.id,
+                seccion="lawton_brody"
+            ))
+
+        return redirect(url_for(
+            "actividad_social.actividad_social_detalle",
+            paciente_id=paciente.id,
+            actividad_id=actividad.id,
+            seccion="katz"
+        ))
+        
+    # =========================
+    # LAWTON Y BRODY
+    # =========================
+    if editable_social and seccion == "lawton_brody" and lawton_brody_form.validate_on_submit():
+        if not actividad.lawton_brody:
+            actividad.lawton_brody = ActividadSocialLawtonBrody(
+                actividad_social_id=actividad.id
+            )
+            db.session.add(actividad.lawton_brody)
+
+        actividad.lawton_brody.telefono = int(lawton_brody_form.telefono.data) if lawton_brody_form.telefono.data else None
+        actividad.lawton_brody.transporte = int(lawton_brody_form.transporte.data) if lawton_brody_form.transporte.data else None
+        actividad.lawton_brody.compras = int(lawton_brody_form.compras.data) if lawton_brody_form.compras.data else None
+        actividad.lawton_brody.preparacion_alimentos = int(lawton_brody_form.preparacion_alimentos.data) if lawton_brody_form.preparacion_alimentos.data else None
+        actividad.lawton_brody.quehaceres_hogar = int(lawton_brody_form.quehaceres_hogar.data) if lawton_brody_form.quehaceres_hogar.data else None
+        actividad.lawton_brody.medicacion = int(lawton_brody_form.medicacion.data) if lawton_brody_form.medicacion.data else None
+        actividad.lawton_brody.manejo_dinero = int(lawton_brody_form.manejo_dinero.data) if lawton_brody_form.manejo_dinero.data else None
+
+        actividad.lawton_brody.puntaje_total = calcular_lawton_total(
+            actividad.lawton_brody.telefono,
+            actividad.lawton_brody.transporte,
+            actividad.lawton_brody.compras,
+            actividad.lawton_brody.preparacion_alimentos,
+            actividad.lawton_brody.quehaceres_hogar,
+            actividad.lawton_brody.medicacion,
+            actividad.lawton_brody.manejo_dinero
+        )
+
+        actividad.lawton_brody.interpretacion = interpretar_lawton(
+            actividad.lawton_brody.puntaje_total
+        )
+
+        db.session.commit()
+
+        flash("Escala de Lawton y Brody guardada correctamente.", "success")
+
+        accion = request.form.get("accion")
+        if accion == "siguiente":
+            return redirect(url_for(
+                "actividad_social.actividad_social_detalle",
+                paciente_id=paciente.id,
+                actividad_id=actividad.id,
+                seccion="resumen"
+            ))
+
+        return redirect(url_for(
+            "actividad_social.actividad_social_detalle",
+            paciente_id=paciente.id,
+            actividad_id=actividad.id,
+            seccion="lawton_brody"
+        ))
+
     return render_template(
         "actividad_social/actividad_social_detalle.html",
         paciente=paciente,
@@ -432,6 +617,9 @@ def actividad_social_detalle(paciente_id, actividad_id):
         puede_eliminar=puede_eliminar_area(current_user, AREA),
         puede_pdf=puede_descargar_pdf_area(current_user, AREA),
         salud_mental_form=salud_mental_form,
+        gds15_form=gds15_form,
+        katz_form=katz_form,
+        lawton_brody_form=lawton_brody_form,
     )
 
 

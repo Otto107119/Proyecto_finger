@@ -14,6 +14,9 @@ from .actividad_social import (
     ActividadSocialHermano,
     ActividadSocialHijo,
     ActividadSocialSaludMental,
+    ActividadSocialGDS15,
+    ActividadSocialKatz,
+    ActividadSocialLawtonBrody,
 )
 from .historial_clinico import (
     HistorialClinico,

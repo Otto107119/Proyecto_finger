@@ -339,6 +339,103 @@
 </div>
 
 <div class="section">
+    <div class="section-title">Escala Geriátrica de Depresión GDS-15</div>
+
+    {% if actividad.gds15 %}
+        <table>
+            <tr>
+                <td class="label">Puntaje total</td>
+                <td>{{ actividad.gds15.puntaje_total if actividad.gds15.puntaje_total is not none else "Sin calcular" }}/15</td>
+            </tr>
+            <tr>
+                <td class="label">Interpretación</td>
+                <td>{{ actividad.gds15.interpretacion or "Sin calcular" }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p class="text-muted">No hay información capturada de GDS-15.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-title">Índice de Katz</div>
+
+    {% if actividad.katz %}
+        <table>
+            <tr>
+                <td class="label">Baño</td>
+                <td>{{ actividad.katz.bano if actividad.katz.bano is not none else "Sin capturar" }}</td>
+                <td class="label">Vestido</td>
+                <td>{{ actividad.katz.vestido if actividad.katz.vestido is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Uso de sanitario</td>
+                <td>{{ actividad.katz.uso_sanitario if actividad.katz.uso_sanitario is not none else "Sin capturar" }}</td>
+                <td class="label">Transferencias</td>
+                <td>{{ actividad.katz.transferencias if actividad.katz.transferencias is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Continencia</td>
+                <td>{{ actividad.katz.continencia if actividad.katz.continencia is not none else "Sin capturar" }}</td>
+                <td class="label">Alimentación</td>
+                <td>{{ actividad.katz.alimentacion if actividad.katz.alimentacion is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Puntaje total</td>
+                <td>{{ actividad.katz.puntaje_total if actividad.katz.puntaje_total is not none else "Sin calcular" }}/6</td>
+                <td class="label">Clasificación</td>
+                <td>{{ actividad.katz.clasificacion_letra or "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Interpretación</td>
+                <td colspan="3">{{ actividad.katz.interpretacion or "Sin calcular" }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p class="text-muted">No hay información capturada del Índice de Katz.</p>
+    {% endif %}
+</div>
+
+<div class="section">
+    <div class="section-title">Escala de Lawton y Brody</div>
+
+    {% if actividad.lawton_brody %}
+        <table>
+            <tr>
+                <td class="label">Teléfono</td>
+                <td>{{ actividad.lawton_brody.telefono if actividad.lawton_brody.telefono is not none else "Sin capturar" }}</td>
+                <td class="label">Transporte</td>
+                <td>{{ actividad.lawton_brody.transporte if actividad.lawton_brody.transporte is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Compras</td>
+                <td>{{ actividad.lawton_brody.compras if actividad.lawton_brody.compras is not none else "Sin capturar" }}</td>
+                <td class="label">Preparación de alimentos</td>
+                <td>{{ actividad.lawton_brody.preparacion_alimentos if actividad.lawton_brody.preparacion_alimentos is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Quehaceres del hogar</td>
+                <td>{{ actividad.lawton_brody.quehaceres_hogar if actividad.lawton_brody.quehaceres_hogar is not none else "Sin capturar" }}</td>
+                <td class="label">Medicación</td>
+                <td>{{ actividad.lawton_brody.medicacion if actividad.lawton_brody.medicacion is not none else "Sin capturar" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Manejo de dinero</td>
+                <td>{{ actividad.lawton_brody.manejo_dinero if actividad.lawton_brody.manejo_dinero is not none else "Sin capturar" }}</td>
+                <td class="label">Puntaje total</td>
+                <td>{{ actividad.lawton_brody.puntaje_total if actividad.lawton_brody.puntaje_total is not none else "Sin calcular" }}/21</td>
+            </tr>
+            <tr>
+                <td class="label">Interpretación</td>
+                <td colspan="3">{{ actividad.lawton_brody.interpretacion or "Sin calcular" }}</td>
+            </tr>
+        </table>
+    {% else %}
+        <p class="text-muted">No hay información capturada de Lawton y Brody.</p>
+    {% endif %}
+</div>
+
+<div class="section">
     <div class="section-title">Salud mental y funcionalidad</div>
 
     {% if actividad.salud_mental %}

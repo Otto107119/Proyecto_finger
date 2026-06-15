@@ -46,6 +46,27 @@ class ActividadSocial(db.Model):
         cascade="all, delete-orphan"
     )
 
+    gds15 = db.relationship(
+        "ActividadSocialGDS15",
+        back_populates="actividad_social",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+    katz = db.relationship(
+        "ActividadSocialKatz",
+        back_populates="actividad_social",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+    lawton_brody = db.relationship(
+        "ActividadSocialLawtonBrody",
+        back_populates="actividad_social",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
     padres = db.relationship(
         "ActividadSocialPadreMadre",
         back_populates="actividad_social",
